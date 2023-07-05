@@ -23,7 +23,7 @@ export const ThemeControllerProvider = ({ children }) => {
   const initialState = {
     openSidenav: false,
     sidenavType: 'dark',
-    sidenavColor: 'blue',
+    sidenavColor: 'white',
   }
 
   const [controller, dispatch] = React.useReducer(reducer, initialState)
