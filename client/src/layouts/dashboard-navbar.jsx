@@ -39,6 +39,7 @@ export const DashboardNavbar = () => {
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
         </div>
+        <div>Deadline</div>
         <div className="flex items-center">
           <Link to="/auth/sign-in">
             <Button

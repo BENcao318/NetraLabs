@@ -4,6 +4,7 @@ import {
   DocumentChartBarIcon,
   Square3Stack3DIcon,
   SquaresPlusIcon,
+  UserGroupIcon,
 } from '@heroicons/react/24/outline'
 import {
   HomeIcon,
@@ -39,6 +40,12 @@ export const routes = [
         icon: <BriefcaseIcon {...icon} />,
         name: 'My Project',
         path: '/my-project',
+        element: <Myproject />,
+      },
+      {
+        icon: <UserGroupIcon {...icon} />,
+        name: 'My Team',
+        path: '/my-team',
         element: <Myproject />,
       },
       {
