@@ -8,12 +8,16 @@ const session = require('express-session')
 const cors = require('cors')
 const app = express()
 
+const userRouter = require('./routes/users')
+
 // const userRouter = require('./routes/users')
 // const taskRouter = require('./routes/tasks')
 
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+app.use('/users', userRouter)
 
 app.use(function (req, res, next) {
   const allowedDomains = ['http://localhost:3000']
