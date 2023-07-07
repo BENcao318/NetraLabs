@@ -21,6 +21,7 @@ import { Schedule } from './pages/dashboard/schedule'
 import { Resources } from './pages/dashboard/resources'
 import { Participants } from './pages/dashboard/participants'
 import { Submissions } from './pages/dashboard/submissions'
+import { Myteam } from './pages/dashboard/myteam'
 
 const icon = {
   className: 'w-6 h-6 text-inherit',
@@ -46,7 +47,7 @@ export const routes = [
         icon: <UserGroupIcon {...icon} />,
         name: 'My Team',
         path: '/my-team',
-        element: <Myproject />,
+        element: <Myteam />,
       },
       {
         icon: <TableCellsIcon {...icon} />,
