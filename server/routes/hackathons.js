@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const users = require('../controller/user.controller')
+const hackathons = require('../controller/hackathon.controller')
 
-router.get('/', (req, res) => {
-  res.send('User List')
-})
+router.get('/', hackathons.findLatestHackathon)
 
 module.exports = router

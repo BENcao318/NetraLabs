@@ -6,21 +6,22 @@ module.exports = (sequelize, DataTypes) => {
   class UserTeam extends Model {
     static associate(models) {
       UserTeam.belongsTo(models.User, {
-        foreignKey: 'userId',
+        foreignKey: 'user_id',
       });
       UserTeam.belongsTo(models.Team, {
-        foreignKey: 'teamId',
+        foreignKey: 'team_id',
       });
     }
   }
 
   UserTeam.init(
     {
-      userId: DataTypes.INTEGER,
-      teamId: DataTypes.INTEGER,
+      user_id: DataTypes.INTEGER,
+      team_id: DataTypes.INTEGER,
     },
     {
       sequelize,
+      tableName: 'user_teams',
       modelName: 'UserTeam',
     }
   );

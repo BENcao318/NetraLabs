@@ -1,8 +1,8 @@
 import React from 'react'
 import { Sidenav } from '../widgets/layout/sidenav'
 import routes from '../routes'
-import { DashboardNavbar } from './dashboard-navbar'
 import { Route, Routes } from 'react-router-dom'
+import { DashboardNavbar } from '../widgets/layout/dashboard-navbar'
 
 export const Dashboard = () => {
   return (
