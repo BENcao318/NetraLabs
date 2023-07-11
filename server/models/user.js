@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsToMany(models.Team, {
         through: models.UserTeam,
-        foreignKey: 'userId',
+        foreignKey: 'user_id',
       });
     }
   }
@@ -16,15 +16,16 @@ module.exports = (sequelize, DataTypes) => {
     {
       username: DataTypes.STRING,
       role: DataTypes.STRING,
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
+      first_name: DataTypes.STRING,
+      last_name: DataTypes.STRING,
       skills: DataTypes.ARRAY(DataTypes.STRING),
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      createdAt: DataTypes.DATE,
+      created_at: DataTypes.DATE,
     },
     {
       sequelize,
+      tableName: 'users',
       modelName: 'User',
     }
   );

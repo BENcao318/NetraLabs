@@ -27,9 +27,6 @@ module.exports = {
       manager_email: {
         type: Sequelize.STRING,
       },
-      themes: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
-      },
       time_zone: {
         type: Sequelize.STRING,
       },

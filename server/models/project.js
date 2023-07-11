@@ -15,13 +15,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Project.init({
     name: DataTypes.STRING,
-    challengeId: DataTypes.INTEGER,
-    submissionVideoUrl: DataTypes.STRING,
+    challenge_id: DataTypes.INTEGER,
+    submission_video_url: DataTypes.STRING,
     pitch: DataTypes.TEXT,
-    teamId: DataTypes.INTEGER,
-    createdAt: DataTypes.DATE
+    team_id: DataTypes.INTEGER,
+    created_at: DataTypes.DATE
   }, {
     sequelize,
+    tableName: 'projects',
     modelName: 'Project',
   });
   return Project;

@@ -11,13 +11,13 @@ const app = express()
 const userRouter = require('./routes/users')
 
 // const userRouter = require('./routes/users')
-// const taskRouter = require('./routes/tasks')
+const hackathonRouter = require('./routes/hackathons')
 
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use('/users', userRouter)
+app.use('/hackathons', hackathonRouter)
 
 app.use(function (req, res, next) {
   const allowedDomains = ['http://localhost:3000']
@@ -62,6 +62,8 @@ app.use(
     },
   })
 )
+
+app.use('/hackathons', userRouter)
 
 // const db = require('./models')
 

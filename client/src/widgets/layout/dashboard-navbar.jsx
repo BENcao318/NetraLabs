@@ -1,5 +1,5 @@
 import React from 'react'
-import { setOpenSidenav, useThemeController } from '../context'
+import { setOpenSidenav, useThemeController } from '../../context'
 import {
   Button,
   IconButton,
@@ -24,6 +24,7 @@ export const DashboardNavbar = () => {
 
   return (
     <Navbar
+      color="transparent"
       variant="gradient"
       className="sticky top rounded-lg transition-all px-0 py-0"
       fullWidth

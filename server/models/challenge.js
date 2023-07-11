@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   class Challenge extends Model {
     static associate(models) {
       Challenge.belongsTo(models.Hackathon, {
-        foreignKey: 'hackathonId',
+        foreignKey: 'hackathon_id',
       });
       Challenge.hasMany(models.Project, {
-        foreignKey: 'challengeId',
+        foreignKey: 'challenge_id',
       });
       Challenge.belongsTo(models.Team, {
-        foreignKey: 'challengeId',
+        foreignKey: 'challenge_id',
       });
     }
   }
@@ -24,10 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         comment: 'description of the challenge',
       },
-      createdAt: DataTypes.DATE,
+      created_at: DataTypes.DATE,
     },
     {
       sequelize,
+      tableName: 'challenges',
       modelName: 'Challenge',
     }
   );
