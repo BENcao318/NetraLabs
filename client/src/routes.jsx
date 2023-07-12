@@ -56,12 +56,6 @@ export const routes = [
         element: <Rules />,
       },
       {
-        icon: <ClockIcon {...icon} />,
-        name: 'Schedule',
-        path: '/schedule',
-        element: <Schedule />,
-      },
-      {
         icon: <DocumentChartBarIcon {...icon} />,
         name: 'Resources',
         path: '/resources',

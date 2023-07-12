@@ -1,5 +1,5 @@
-import React from 'react'
-import { setOpenSidenav, useThemeController } from '../../context'
+import React, { useContext } from 'react'
+import { setOpenSidenav, useThemeController } from '../../context/themeContext'
 import {
   Button,
   IconButton,
@@ -13,14 +13,20 @@ import {
 import {
   Bars3Icon,
   BellIcon,
+  CalendarIcon,
   ClockIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import { hackathonContext } from '../../context/hackathonContext'
+import { convertDateString } from '../../helpers/util'
 
 export const DashboardNavbar = () => {
   const [controller, dispatch] = useThemeController()
   const { openSidenav } = controller
+  const { hackathon } = useContext(hackathonContext)
+
+  const formattedDate = hackathon ? convertDateString(hackathon.deadline) : null
 
   return (
     <Navbar
@@ -40,7 +46,7 @@ export const DashboardNavbar = () => {
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
         </div>
-        <div>Deadline</div>
+        <div className="flex items-center"> <CalendarIcon className="h-6 w-6 text-gray-900 mr-2"/>  <strong>Deadline</strong> : {hackathon && formattedDate}</div>
         <div className="flex items-center">
           <Link to="/auth/sign-in">
             <Button
