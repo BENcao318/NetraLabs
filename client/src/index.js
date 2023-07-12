@@ -4,13 +4,16 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { ThemeProvider } from '@material-tailwind/react'
-import { ThemeControllerProvider } from './context'
+import { ThemeControllerProvider } from './context/themeContext'
+import HackathonProvider from './context/hackathonContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <ThemeProvider>
     <ThemeControllerProvider>
-      <App />
+      <HackathonProvider>
+        <App />
+      </HackathonProvider>
     </ThemeControllerProvider>
   </ThemeProvider>
 )
