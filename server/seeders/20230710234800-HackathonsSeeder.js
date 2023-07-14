@@ -33,7 +33,7 @@ On the Day 1 of the hackathon, five thematic challenges will be announced for te
         deadline: new Date('2023-07-31'),
         first_prize_amount: 2500,
         second_prize_amount: 1500,
-        third_prize_amount: 500,
+        third_prize_amount: 500, 
         first_prize: 'First Prize',
         second_prize: 'Second Prize',
         third_prize: 'Third Prize',

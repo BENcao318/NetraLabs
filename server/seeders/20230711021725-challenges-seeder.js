@@ -27,7 +27,7 @@ module.exports = {
         body: 'In the rapidly evolving landscape of finance, the optimization of investment portfolios has become increasingly intricate. This FinTech challenge focuses on leveraging the capabilities of Large Language Models (LLMs) like ChatGPT4 to revolutionize investment portfolio optimization. Participants will explore how LLMs can analyze vast amounts of financial data, apply advanced natural language processing techniques, and utilize machine learning algorithms to provide sophisticated insights and recommendations. By harnessing the power of LLMs, participants will develop innovative solutions that empower investors to make informed decisions and optimize their portfolios in the dynamic world of finance.',
         created_at: new Date(),
       },
-      // Add more challenge data as needed
+      // Add more challenge data as needed 
     ]);
   },
 
