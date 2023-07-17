@@ -8,7 +8,7 @@ exports.findLatestHackathon = async (req, res) => {
     });
 
     res.status(200).json(latestRecord);
-    console.log('Latest Record:', latestRecord);
+
   } catch (error) {
     console.error('Error fetching latest record:', error);
   }
