@@ -2,6 +2,7 @@ import {
   BriefcaseIcon,
   ClockIcon,
   DocumentChartBarIcon,
+  PlusCircleIcon,
   Square3Stack3DIcon,
   SquaresPlusIcon,
   UserGroupIcon,
@@ -22,6 +23,7 @@ import { Resources } from './pages/dashboard/resources'
 import { Participants } from './pages/dashboard/participants'
 import { Submissions } from './pages/dashboard/submissions'
 import { Myteam } from './pages/dashboard/myteam'
+import { Createhackathon } from './pages/management/createhackathon'
 
 const icon = {
   className: 'w-6 h-6 text-inherit',
@@ -72,6 +74,12 @@ export const routes = [
         name: 'Submissions',
         path: '/submissions',
         element: <Submissions />,
+      },
+      {
+        icon: <PlusCircleIcon  {...icon} />,
+        name: 'Create A Hackathon',
+        path: '/hackathon/new',
+        element: <Createhackathon />,
       },
     ],
   },
