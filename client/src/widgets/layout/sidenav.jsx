@@ -21,7 +21,7 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
     <aside
       className={`${sidenavTypes[sidenavType]} ${
         openSidenav ? 'translate-x-0' : '-translate-x-80'
-      } fixed inset-0 z-50 h-100vh w-72 transition-transform duration-300 xl:translate-x-0`}
+      } fixed inset-0 z-40 h-100vh w-72 transition-transform duration-300 xl:translate-x-0`}
     >
       <div
         className={`relative border-b ${

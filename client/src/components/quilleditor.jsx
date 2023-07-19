@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 
-export const Quilleditor = ({ text, setText }) => {
-  const handleChange = (html) => {
-    setText(html)
-  }
+export const Quilleditor = ({ value, onChange }) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -15,39 +12,19 @@ export const Quilleditor = ({ text, setText }) => {
         { indent: '-1' },
         { indent: '+1' },
       ],
+      [{ size: [] }],
       ['link', 'image'],
       ['clean'],
     ],
   }
-  const formats = [
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'color',
-    'background',
-    'script',
-    'header',
-    'blockquote',
-    'code-block',
-    'indent',
-    'list',
-    'direction',
-    'align',
-    'link',
-    'image',
-    'formula',
-  ]
 
   return (
     <>
       <ReactQuill
-        value={text}
-        onChange={handleChange}
+        value={value}
+        onChange={onChange}
         modules={modules}
-        formats={formats}
+        className="h-60 mt-1"
       />
     </>
   )
