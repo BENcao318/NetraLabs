@@ -5,6 +5,7 @@ import { Quilleditor } from '../../components/quilleditor'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import serverAPI from '../../hooks/useAxios'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
@@ -15,19 +16,12 @@ export const Createhackathon = () => {
     description: yup.string().min(8).required(),
     requirements: yup.string().min(8).required(),
     rules: yup.string().min(8).required(),
-    startDate: yup.string().required('Start date is needed for hackathon'),
+    startDate: yup.date().required('Start date is needed for hackathon'),
     endDate: yup
-      .string()
+      .date()
       .min(yup.ref('startDate'), 'End date need to be later')
       .required('End date is needed for hackathon'),
-    // endDate: yup
-    //   .date()
-    //   .min(yup.ref('startDate'), 'End date has to be more than start date'),
   })
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString()
-  }
 
   const {
     register,
@@ -65,7 +59,11 @@ export const Createhackathon = () => {
   }
 
   const onSubmit = (data) => {
-    console.log(data)
+    serverAPI
+      .post('/hackathons/new', {
+        hackathonData: data,
+      })
+      .then((res) => [console.log(res)])
   }
 
   const descriptionEditorContent = watch('description')
@@ -265,7 +263,7 @@ export const Createhackathon = () => {
             {errors.judges && 'The hackathon judges must be edited'}
           </p>
         </div>
-        <div name="hackathon_start_date">
+        <div name="hackathon_schedule">
           <h1 className="text-lg font-semibold dark:text-white">
             Hackathon schedule
           </h1>
