@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -52,7 +52,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       judges: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.TEXT,
       },
       skills_needed: {
         type: Sequelize.ARRAY(Sequelize.STRING),
@@ -61,7 +61,7 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
       },
       requirements: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.TEXT,
       },
       about: {
         type: Sequelize.TEXT,
@@ -69,10 +69,10 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
       },
-    });
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('hackathons');
+    await queryInterface.dropTable('hackathons')
   },
-};
+}

@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-const { Model } = require('sequelize');
+const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
   class Hackathon extends Model {
@@ -32,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       first_prize: DataTypes.STRING,
       second_prize: DataTypes.STRING,
       third_prize: DataTypes.STRING,
-      judges: DataTypes.ARRAY(DataTypes.STRING),
+      judges: DataTypes.TEXT,
       skills_needed: DataTypes.ARRAY(DataTypes.STRING),
       criteria: DataTypes.ARRAY(DataTypes.STRING),
-      requirements: DataTypes.ARRAY(DataTypes.STRING),
+      requirements: DataTypes.TEXT,
       about: DataTypes.TEXT,
       created_at: DataTypes.DATE,
     },
@@ -47,5 +47,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
 
-  return Hackathon;
-};
+  return Hackathon
+}
