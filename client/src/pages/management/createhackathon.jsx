@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import serverAPI from '../../hooks/useAxios'
+import { Prize, PrizeForm } from '../../components/prizeForm'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
@@ -31,12 +33,33 @@ export const Createhackathon = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
+  const [prizelist, setPrizelist] = useState([])
+
   useEffect(() => {
     register('description')
     register('requirements')
     register('rules')
     register('resources')
   }, [register])
+
+  const addPrize = () => {
+    const prize = {
+      number: prizelist.length + 1,
+      value: 0,
+      numberOfWinningTeams: 1,
+      description: '',
+    }
+
+    setPrizelist(prizelist.concat(prize))
+  }
+
+  const removeElement = (prize, prizelist, setPrizelist) => {
+    const newPrizelist = prizelist.filter(
+      (item) => item.number !== prize.number
+    )
+    console.log(newPrizelist)
+    setPrizelist(newPrizelist)
+  }
 
   const onDescriptionEditorStateChange = (editorState) => {
     setValue('description', editorState)
@@ -59,11 +82,7 @@ export const Createhackathon = () => {
   }
 
   const onSubmit = (data) => {
-    serverAPI
-      .post('/hackathons/new', {
-        hackathonData: data,
-      })
-      .then((res) => [console.log(res)])
+    serverAPI.post('/hackathons/new', data).then((res) => [console.log(res)])
   }
 
   const descriptionEditorContent = watch('description')
@@ -262,6 +281,27 @@ export const Createhackathon = () => {
           <p className="mt-12 text-normal font-bold text-red-600">
             {errors.judges && 'The hackathon judges must be edited'}
           </p>
+        </div>
+        <div>
+          <h1 className="mb-1 text-lg font-semibold dark:text-white">Prizes</h1>
+          {prizelist.map((prize) => {
+            return (
+              <PrizeForm
+                prize={prize}
+                removeElement={removeElement}
+                prizelist={prizelist}
+                setPrizelist={setPrizelist}
+                key={prize.number}
+              />
+            )
+          })}
+          <Button
+            type="submit"
+            onClick={addPrize}
+            className="flex items-center gap-4"
+          >
+            <PlusCircleIcon strokeWidth={2} className="h-4 w-4" /> Add new Prize
+          </Button>
         </div>
         <div name="hackathon_schedule">
           <h1 className="text-lg font-semibold dark:text-white">
