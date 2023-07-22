@@ -57,7 +57,6 @@ export const Createhackathon = () => {
     const newPrizelist = prizelist.filter(
       (item) => item.number !== prize.number
     )
-    console.log(newPrizelist)
     setPrizelist(newPrizelist)
   }
 
