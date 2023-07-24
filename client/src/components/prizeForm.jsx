@@ -1,64 +1,87 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Button, Input } from '@material-tailwind/react'
-import React, { useState } from 'react'
+import { Button } from '@material-tailwind/react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 export const PrizeForm = ({
   prize,
   removeElement,
-  prizelist,
-  setPrizelist,
+  prizeList,
+  setPrizeList,
 }) => {
   const schema = yup.object().shape({
-    prizeName: yup.string().required(),
-    prizeCashValue: yup.number().required(),
+    name: yup.string().required(),
+    value: yup.number().required(),
     numOfWinningTeams: yup.number().required(),
-    description: yup.string().min(8),
+    description: yup.string(),
   })
 
-  const [prizeData, setPrizeData] = useState({ ...prize })
+  const onSubmit = (data) => {
+    const prizeData = { ...data, editting: false }
+    const index = prizeList.findIndex((elm) => elm.id === prize.id)
+    const newPrizeList = [...prizeList]
+    newPrizeList[index] = { ...newPrizeList[index], ...prizeData }
+    setPrizeList(newPrizeList)
+  }
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
+  useEffect(() => {
+    setValue('name', prize.name)
+    setValue('value', prize.value)
+    setValue('numOfWinningTeams', prize.numOfWinningTeams)
+    setValue('description', prize.description)
+  }, [prize])
+
   return (
-    <div className="bg-orange-100 p-6 rounded-xl mb-6 flex flex-col gap-2">
-      <div>
+    <div className="bg-orange-100 p-6 rounded-2xl flex flex-col gap-4 w-[60rem]">
+      <div className="w-1/3">
         <h1 className="mb-1 font-semibold italic dark:text-white">Name</h1>
-        <Input color="black" label="Name" />
+        <input
+          {...register('name')}
+          type="text"
+          className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
+          focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
+        />
+        <p className="mt-2 text-normal font-bold text-red-600">
+          {errors.name && 'Cannot be empty.'}
+        </p>
       </div>
-      <div className="text-xl">
-        <h1 className="mb-1 font-semibold italic dark:text-white">
-          {prizeData.number}
-        </h1>
-      </div>
-      <div>
+      <div className="w-[16rem]">
         <h1 className="mb-1 font-semibold italic dark:text-white">
           Cash value
         </h1>
         <input
+          {...register('value')}
           className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
           type="number"
         />
+        <p className="mt-2 text-normal font-bold text-red-600">
+          {errors.value && 'Cannot be empty.'}
+        </p>
       </div>
-      <div>
+      <div className="w-[16rem]">
         <h1 className="mb-1 font-semibold italic dark:text-white">
           Number of winning teams
         </h1>
         <input
+          {...register('numOfWinningTeams')}
           className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
           type="number"
         />
+        <p className="mt-2 text-normal font-bold text-red-600">
+          {errors.numOfWinningTeams && 'Cannot be empty.'}
+        </p>
       </div>
-      <div>
+      <div className="w-1/2">
         <h1 className="mb-1 font-semibold italic dark:text-white">
           Description
         </h1>
@@ -66,15 +89,18 @@ export const PrizeForm = ({
           Create details of your hackathon prize.
         </label>
         <textarea
+          {...register('description')}
           type="text"
           className="resize rounded-lg w-full p-3  border border-gray-600 rounded-md text-sm focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
         />
       </div>
-      <div className="flex gap-6">
-        <Button className="bg-orange-600">Add Prize</Button>
+      <div className="flex gap-6 items-center">
+        <Button className="bg-orange-600" onClick={handleSubmit(onSubmit)}>
+          Add Prize
+        </Button>
         <a
-          onClick={() => removeElement(prize, prizelist, setPrizelist)}
-          className="click"
+          onClick={() => removeElement(prize, prizeList, setPrizeList)}
+          className="font-medium text-blue-600 dark:text-blue-500 hover:underline cursor-pointer"
         >
           Cancel
         </a>
