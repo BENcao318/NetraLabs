@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
-import ReactQuill from 'react-quill'
+import ReactQuill, { Quill } from 'react-quill'
+import ImageResize from 'quill-image-resize-module-react'
+
+Quill.register('modules/imageResize', ImageResize)
 
 export const Quilleditor = ({ value, onChange }) => {
   const modules = {
     toolbar: [
-      [{ header: [1, 2, false] }],
+      [{ header: '1' }, { header: '2' }, { font: [] }],
+      [{ size: [] }],
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [
         { list: 'ordered' },
@@ -12,20 +16,40 @@ export const Quilleditor = ({ value, onChange }) => {
         { indent: '-1' },
         { indent: '+1' },
       ],
-      [{ size: [] }],
       ['link', 'image'],
       ['clean'],
     ],
+    imageResize: {
+      parchment: Quill.import('parchment'),
+      modules: ['Resize', 'DisplaySize'],
+    },
   }
 
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'video',
+  ]
+
   return (
-    <>
-      <ReactQuill
-        value={value}
-        onChange={onChange}
-        modules={modules}
-        className="h-60 mt-1"
-      />
-    </>
+    <ReactQuill
+      theme="snow"
+      value={value}
+      onChange={(content, delta, source, editor) => onChange(editor.getHTML())}
+      modules={modules}
+      formats={formats}
+      className="h-60 mt-1"
+    />
   )
 }

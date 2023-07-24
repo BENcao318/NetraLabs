@@ -6,8 +6,10 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import serverAPI from '../../hooks/useAxios'
-import { Prize, PrizeForm } from '../../components/prizeForm'
+import { PrizeForm } from '../../components/prizeForm'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import { PrizeTag } from '../../components/prizeTag'
+import { v4 as uuidv4 } from 'uuid'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
@@ -33,7 +35,7 @@ export const Createhackathon = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
-  const [prizelist, setPrizelist] = useState([])
+  const [prizeList, setPrizeList] = useState([])
 
   useEffect(() => {
     register('description')
@@ -44,20 +46,20 @@ export const Createhackathon = () => {
 
   const addPrize = () => {
     const prize = {
-      number: prizelist.length + 1,
+      id: uuidv4(),
+      name: '',
       value: 0,
-      numberOfWinningTeams: 1,
+      numOfWinningTeams: 1,
       description: '',
+      editting: true,
     }
 
-    setPrizelist(prizelist.concat(prize))
+    setPrizeList(prizeList.concat(prize))
   }
 
-  const removeElement = (prize, prizelist, setPrizelist) => {
-    const newPrizelist = prizelist.filter(
-      (item) => item.number !== prize.number
-    )
-    setPrizelist(newPrizelist)
+  const removeElement = (prize, prizeList, setPrizeList) => {
+    const newPrizeList = prizeList.filter((elm) => elm.id !== prize.id)
+    setPrizeList(newPrizeList)
   }
 
   const onDescriptionEditorStateChange = (editorState) => {
@@ -81,7 +83,11 @@ export const Createhackathon = () => {
   }
 
   const onSubmit = (data) => {
-    serverAPI.post('/hackathons/new', data).then((res) => [console.log(res)])
+    const formData = { ...data, prizes: prizeList }
+    console.log(formData)
+    serverAPI
+      .post('/hackathons/new', formData)
+      .then((res) => [console.log(res)])
   }
 
   const descriptionEditorContent = watch('description')
@@ -100,7 +106,7 @@ export const Createhackathon = () => {
 
   return (
     <>
-      <div className="mt-12 mb-8 flex flex-col gap-12 w-[80rem] mx-auto">
+      <div className="mt-12 mb-8 flex flex-col gap-12 w-[60rem] mx-auto">
         <div name="hackathon_name">
           <h1 className="mb-1 text-lg font-semibold dark:text-white">
             Hackathon name
@@ -111,7 +117,7 @@ export const Createhackathon = () => {
           <input
             {...register('hackathonName')}
             type="text"
-            id="hackathon_name"
+            id="name"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
             required
@@ -200,11 +206,13 @@ export const Createhackathon = () => {
             Description of the hackathon. e.g. Introduction, about the company,
             schedules.
           </label>
+
           <Quilleditor
             value={descriptionEditorContent}
             onChange={onDescriptionEditorStateChange}
             id="description"
           />
+
           <p className="mt-12 text-normal font-bold text-red-600">
             {errors.description && 'The hackathon description must be edited'}
           </p>
@@ -283,21 +291,31 @@ export const Createhackathon = () => {
         </div>
         <div>
           <h1 className="mb-1 text-lg font-semibold dark:text-white">Prizes</h1>
-          {prizelist.map((prize) => {
-            return (
-              <PrizeForm
-                prize={prize}
-                removeElement={removeElement}
-                prizelist={prizelist}
-                setPrizelist={setPrizelist}
-                key={prize.number}
-              />
-            )
-          })}
+          <div className="flex flex-col gap-2">
+            {prizeList.map((prize) => {
+              return prize.editting ? (
+                <PrizeForm
+                  prize={prize}
+                  removeElement={removeElement}
+                  prizeList={prizeList}
+                  setPrizeList={setPrizeList}
+                  key={prize.id}
+                />
+              ) : (
+                <PrizeTag
+                  key={prize.id}
+                  prize={prize}
+                  removeElement={removeElement}
+                  prizeList={prizeList}
+                  setPrizeList={setPrizeList}
+                />
+              )
+            })}
+          </div>
           <Button
             type="submit"
             onClick={addPrize}
-            className="flex items-center gap-4"
+            className="flex items-center gap-4 mt-6"
           >
             <PlusCircleIcon strokeWidth={2} className="h-4 w-4" /> Add new Prize
           </Button>
