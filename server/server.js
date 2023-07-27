@@ -29,22 +29,22 @@ app.use('/hackathons', hackathonRouter)
 //   if (allowedDomains.indexOf(origin) > -1) {
 //     res.setHeader('Access-Control-Allow-Origin', origin)
 //   }
-  //set CORS
-  // cors({
-  //   origin: 'http://localhost:3000',
-  //   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
-  //   credentials: true,
-  // })
+//set CORS
+// cors({
+//   origin: 'http://localhost:3000',
+//   methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
+//   credentials: true,
+// })
 
-  // res.setHeader(
-  //   'Access-Control-Allow-Methods',
-  //   'GET, POST, OPTIONS, PUT, PATCH, DELETE'
-  // )
-  // res.setHeader(
-  //   'Access-Control-Allow-Headers',
-  //   'X-Requested-With,content-type, Accept'
-  // )
-  // res.setHeader('Access-Control-Allow-Credentials', true)
+// res.setHeader(
+//   'Access-Control-Allow-Methods',
+//   'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+// )
+// res.setHeader(
+//   'Access-Control-Allow-Headers',
+//   'X-Requested-With,content-type, Accept'
+// )
+// res.setHeader('Access-Control-Allow-Credentials', true)
 
 //   next()
 // })
@@ -70,7 +70,7 @@ app.use('/hackathons', hackathonRouter)
 
 app.use('/users', userRouter)
 
-// const db = require('./models')
+const db = require('./models')
 
 // const isAuth = (req, res, next) => {
 //   if (req.session.user) {
@@ -97,7 +97,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(PORT, async () => {
+  await db.sequelize.authenticate()
+  console.log('Connection to the database has been established successfully.')
   console.log(`App listening on port: ${PORT}`)
-  // await db.sequelize.authenticate()
-  console.log('Database Connected!')
 })
