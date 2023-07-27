@@ -25,7 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       tagline: DataTypes.STRING,
       manager_email: DataTypes.STRING,
       time_zone: DataTypes.STRING,
-      deadline: DataTypes.DATE,
+      start_time: DataTypes.TIMESTAMP, // new
+      deadline: DataTypes.TIMESTAMP, // new
+      challenges: DataTypes.JSON,
+      prizes: DataTypes.JSON,
       first_prize_amount: DataTypes.INTEGER,
       second_prize_amount: DataTypes.INTEGER,
       third_prize_amount: DataTypes.INTEGER,
