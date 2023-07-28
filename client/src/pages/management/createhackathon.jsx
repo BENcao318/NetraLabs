@@ -2,9 +2,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { Button } from '@material-tailwind/react'
 import { Quilleditor } from '../../components/quilleditor'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import timezones from '../../data/timezones.json'
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated'
 import serverAPI from '../../hooks/useAxios'
 import { PrizeForm } from '../../components/prizeForm'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
@@ -13,15 +16,25 @@ import { v4 as uuidv4 } from 'uuid'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
-    hackathonName: yup.string().required(),
-    hackathonTagline: yup.string().required(),
-    hackathonEmail: yup.string().email().required(),
-    hackathonLocation: yup.string().required(),
+    name: yup.string().required(),
+    tagline: yup.string().required(),
+    email: yup.string().email().required(),
+    location: yup.string().required(),
     description: yup.string().min(8).required(),
     requirements: yup.string().min(8).required(),
     rules: yup.string().min(8).required(),
+    timeZone: yup
+      .object()
+      .shape({
+        value: yup.string().required(),
+        label: yup.string(),
+        offset: yup.number(),
+        abbrev: yup.string(),
+        altNAme: yup.string(),
+      })
+      .required(),
     startDate: yup.date().required('Start date is needed for hackathon'),
-    endDate: yup
+    deadline: yup
       .date()
       .min(yup.ref('startDate'), 'End date need to be later')
       .required('End date is needed for hackathon'),
@@ -32,8 +45,11 @@ export const Createhackathon = () => {
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
+
+  const animatedComponents = makeAnimated()
 
   const [prizeList, setPrizeList] = useState([])
 
@@ -65,21 +81,20 @@ export const Createhackathon = () => {
   const onDescriptionEditorStateChange = (editorState) => {
     setValue('description', editorState)
   }
-
   const onRequirementsEditorStateChange = (editorState) => {
     setValue('requirements', editorState)
   }
-
   const onRulesEditorStateChange = (editorState) => {
     setValue('rules', editorState)
   }
-
   const onResourcesEditorStateChange = (editorState) => {
     setValue('resources', editorState)
   }
-
   const onJudgesEditorStateChange = (editorState) => {
     setValue('judges', editorState)
+  }
+  const onPartnersEditorStateChange = (editorState) => {
+    setValue('partners', editorState)
   }
 
   const onSubmit = (data) => {
@@ -95,6 +110,7 @@ export const Createhackathon = () => {
   const rulesEditorContent = watch('rules')
   const resourcesEditorContent = watch('resources')
   const judgesEditorContent = watch('judges')
+  const partnersEditorContent = watch('partners')
 
   const testContent = '<p><strong>123456</strong></p>'
 
@@ -115,7 +131,7 @@ export const Createhackathon = () => {
             Enter the name of your hackathon.
           </label>
           <input
-            {...register('hackathonName')}
+            {...register('name')}
             type="text"
             id="name"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
@@ -123,7 +139,7 @@ export const Createhackathon = () => {
             required
           />
           <p className="mt-2 text-normal font-bold text-red-600">
-            {errors.hackathonName && 'Name of the hackathon is required'}
+            {errors.name && 'Name of the hackathon is required'}
           </p>
         </div>
         <div name="hackathon_tagline">
@@ -137,7 +153,7 @@ export const Createhackathon = () => {
             Create a tagline for the hackathon.
           </label>
           <input
-            {...register('hackathonTagline')}
+            {...register('tagline')}
             type="text"
             id="tagline"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
@@ -145,7 +161,7 @@ export const Createhackathon = () => {
             required
           />
           <p className="mt-2 text-normal font-bold text-red-600">
-            {errors.hackathonTagline && 'Tagline of the hackathon is required'}
+            {errors.tagline && 'Tagline of the hackathon is required'}
           </p>
         </div>
         <div name="hoster_email">
@@ -160,7 +176,7 @@ export const Createhackathon = () => {
             hackathon.
           </label>
           <input
-            {...register('hackathonEmail')}
+            {...register('email')}
             type="email"
             id="manager_email"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
@@ -168,8 +184,7 @@ export const Createhackathon = () => {
             required
           />
           <p className="mt-2 text-normal font-bold text-red-600">
-            {errors.hackathonEmail &&
-              'A proper email address of the host is required'}
+            {errors.email && 'A proper email address of the host is required'}
           </p>
         </div>
         <div name="hackathon_location">
@@ -184,7 +199,7 @@ export const Createhackathon = () => {
             hackathon.
           </label>
           <input
-            {...register('hackathonLocation')}
+            {...register('location')}
             type="text"
             id="location"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
@@ -192,7 +207,7 @@ export const Createhackathon = () => {
             required
           />
           <p className="mt-2 text-normal font-bold text-red-600">
-            {errors.hackathonLocation && 'Address of the hackathon is required'}
+            {errors.location && 'Address of the hackathon is required'}
           </p>
         </div>
         <div name="hackathon_description">
@@ -289,7 +304,26 @@ export const Createhackathon = () => {
             {errors.judges && 'The hackathon judges must be edited'}
           </p>
         </div>
-        <div>
+        <div name="hackathon_partners">
+          <h1 className="mb-1 text-lg font-semibold dark:text-white">
+            Partners
+          </h1>
+          <label
+            htmlFor="resources"
+            className="text-sm text-gray-600 italic block"
+          >
+            Information of partners. e.g. name, description, link.
+          </label>
+          <Quilleditor
+            value={partnersEditorContent}
+            onChange={onPartnersEditorStateChange}
+            id="rules"
+          />
+          <p className="mt-12 text-normal font-bold text-red-600">
+            {errors.partners && 'The hackathon partners must be edited'}
+          </p>
+        </div>
+        <div name="hackathon_prizes">
           <h1 className="mb-1 text-lg font-semibold dark:text-white">Prizes</h1>
           <div className="flex flex-col gap-2">
             {prizeList.map((prize) => {
@@ -325,39 +359,68 @@ export const Createhackathon = () => {
             Hackathon schedule
           </h1>
           <label
-            htmlFor="start_date"
+            htmlFor="schedule"
             className="mb-3 text-sm text-gray-600 italic block"
           >
-            All times are in Eastern Time (US & Canada) (EDT)
+            Select time zone and start/end dates
           </label>
-          <h1 className="mb-1 text-sm font-mono font-semibold dark:text-white">
-            Start date
-          </h1>
-          <input
-            {...register('startDate')}
-            type="date"
-            id="start_date"
-            className="mt-1 block px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
+          <div className="">
+            <h1 className="mb-1 text-sm font-mono font-semibold dark:text-white">
+              Time zone
+            </h1>
+            <Controller
+              name="timeZone"
+              control={control}
+              render={({ field }) => (
+                <>
+                  <Select
+                    {...field}
+                    options={timezones}
+                    placeholder="Select time zone"
+                    components={animatedComponents}
+                    className="w-1/2"
+                  />
+                  <p className="mt-2 text-red-600">
+                    {errors.timeZone && 'Please pick time zone'}
+                  </p>
+                </>
+              )}
+            />
+          </div>
+          <div className="flex gap-12">
+            <div>
+              <h1 className="mb-1 text-sm font-mono font-semibold dark:text-white">
+                Start date
+              </h1>
+              <input
+                {...register('startDate')}
+                type="date"
+                id="start_date"
+                className="mt-1 block px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
-            required
-          />
-          <p className="mt-2 text-normal font-bold text-red-600">
-            {errors.startDate?.message}
-          </p>
-          <h1 className="mb-1 text-sm font-mono font-semibold dark:text-white">
-            Deadline
-          </h1>
-          <input
-            {...register('endDate')}
-            type="date"
-            id="end_date"
-            className="mt-1 block px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
+                required
+              />
+              <p className="mt-2 text-normal font-bold text-red-600">
+                {errors.startDate?.message}
+              </p>
+            </div>
+            <div>
+              <h1 className="mb-1 text-sm font-mono font-semibold dark:text-white">
+                Deadline
+              </h1>
+              <input
+                {...register('deadline')}
+                type="date"
+                id="end_date"
+                className="mt-1 block px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
-            required
-          />
-          <p className="mt-2 text-normal font-bold text-red-600">
-            {errors.endDate?.message}
-          </p>
+                required
+              />
+              <p className="mt-2 text-normal font-bold text-red-600">
+                {errors.deadline?.message}
+              </p>
+            </div>
+          </div>
         </div>
         <Button
           type="submit"
