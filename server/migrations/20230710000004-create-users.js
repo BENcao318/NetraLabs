@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       role: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSON,
       },
       first_name: {
         type: Sequelize.STRING,
@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       skills: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.JSON,
       },
       email: {
         type: Sequelize.STRING,
@@ -33,10 +33,10 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
       },
-    });
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('users')
   },
-};
+}

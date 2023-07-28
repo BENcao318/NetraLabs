@@ -18,28 +18,19 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      title: DataTypes.STRING,
-      company: DataTypes.STRING,
+      name: DataTypes.STRING,
       description: DataTypes.TEXT,
       rules: DataTypes.TEXT,
       tagline: DataTypes.STRING,
       manager_email: DataTypes.STRING,
       time_zone: DataTypes.STRING,
-      start_time: DataTypes.TIMESTAMP, // new
-      deadline: DataTypes.TIMESTAMP, // new
-      challenges: DataTypes.JSON,
+      start_time: DataTypes.DATE, // new
+      deadline: DataTypes.DATE, // new
       prizes: DataTypes.JSON,
-      first_prize_amount: DataTypes.INTEGER,
-      second_prize_amount: DataTypes.INTEGER,
-      third_prize_amount: DataTypes.INTEGER,
-      first_prize: DataTypes.STRING,
-      second_prize: DataTypes.STRING,
-      third_prize: DataTypes.STRING,
       judges: DataTypes.TEXT,
-      skills_needed: DataTypes.ARRAY(DataTypes.STRING),
-      criteria: DataTypes.ARRAY(DataTypes.STRING),
       requirements: DataTypes.TEXT,
       about: DataTypes.TEXT,
+      partners: DataTypes.TEXT,
       created_at: DataTypes.DATE,
     },
     {

@@ -1,6 +1,6 @@
-'use strict';
+'use strict'
 
-const { Model } = require('sequelize');
+const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -8,17 +8,17 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Team, {
         through: models.UserTeam,
         foreignKey: 'user_id',
-      });
+      })
     }
   }
 
   User.init(
     {
       username: DataTypes.STRING,
-      role: DataTypes.STRING,
+      role: DataTypes.JSON,
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
-      skills: DataTypes.ARRAY(DataTypes.STRING),
+      skills: JSON,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       created_at: DataTypes.DATE,
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'users',
       modelName: 'User',
     }
-  );
+  )
 
-  return User;
-};
+  return User
+}

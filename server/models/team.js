@@ -1,20 +1,23 @@
-'use strict';
+'use strict'
 
-const { Model } = require('sequelize');
+const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
   class Team extends Model {
     static associate(models) {
       Team.belongsTo(models.User, {
         foreignKey: 'teamLeader_id',
-      });
+      })
       Team.belongsTo(models.Challenge, {
         foreignKey: 'challenge_id',
-      });
+      })
+      Team.belongsTo(models.Hackathon, {
+        foreignKey: 'hackathon_id',
+      })
       Team.belongsToMany(models.User, {
         through: models.UserTeam,
         foreignKey: 'team_id',
-      });
+      })
     }
   }
 
@@ -28,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'teams',
       modelName: 'Team',
     }
-  );
+  )
 
-  return Team;
-};
+  return Team
+}
