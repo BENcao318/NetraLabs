@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
           key: 'id',
         },
       },
-      title: {
+      name: {
         type: Sequelize.STRING,
       },
       body: {
@@ -26,10 +26,10 @@ module.exports = {
       created_at: {
         type: Sequelize.DATE,
       },
-    });
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('challenges');
+    await queryInterface.dropTable('challenges')
   },
-};
+}

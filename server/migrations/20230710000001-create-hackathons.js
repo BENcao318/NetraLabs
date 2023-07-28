@@ -9,10 +9,7 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      title: {
-        type: Sequelize.STRING,
-      },
-      company: {
+      name: {
         type: Sequelize.STRING,
       },
       description: {
@@ -28,42 +25,27 @@ module.exports = {
         type: Sequelize.STRING,
       },
       time_zone: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
+      },
+      start_time: {
+        type: Sequelize.DATE,
       },
       deadline: {
         type: Sequelize.DATE,
       },
-      first_prize_amount: {
-        type: Sequelize.INTEGER,
-      },
-      second_prize_amount: {
-        type: Sequelize.INTEGER,
-      },
-      third_prize_amount: {
-        type: Sequelize.INTEGER,
-      },
-      first_prize: {
-        type: Sequelize.STRING,
-      },
-      second_prize: {
-        type: Sequelize.STRING,
-      },
-      third_prize: {
-        type: Sequelize.STRING,
+      prizes: {
+        type: Sequelize.JSON,
       },
       judges: {
         type: Sequelize.TEXT,
-      },
-      skills_needed: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
-      },
-      criteria: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
       },
       requirements: {
         type: Sequelize.TEXT,
       },
       about: {
+        type: Sequelize.TEXT,
+      },
+      partners: {
         type: Sequelize.TEXT,
       },
       created_at: {
