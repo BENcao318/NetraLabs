@@ -21,8 +21,14 @@ exports.createHackathon = async (req, res) => {
     console.log('hackathon36')
     console.log(req.body)
 
-    res.status(200)
+    res.status(200).send({
+      success: true,
+      message: 'yes',
+    })
   } catch (error) {
-    console.error('Error fetching latest record:', error)
+    res.status(500).send({
+      message:
+        err.message || 'Some error occurred while creating the hackathon',
+    })
   }
 }
