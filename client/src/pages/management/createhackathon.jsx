@@ -99,10 +99,16 @@ export const Createhackathon = () => {
 
   const onSubmit = (data) => {
     const formData = { ...data, prizes: prizeList }
-    console.log(formData)
     serverAPI
       .post('/hackathons/new', formData)
-      .then((res) => [console.log(res)])
+      .then((res) => {
+        if (res) {
+          console.log('yess')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const descriptionEditorContent = watch('description')
