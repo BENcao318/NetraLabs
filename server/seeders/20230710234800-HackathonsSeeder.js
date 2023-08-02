@@ -26,7 +26,7 @@ module.exports = {
         • Use of technologies provided`,
         tagline: 'Join us for an exciting hackathon!',
         manager_email: 'manager@example.com',
-        time_zone: 'EST',
+        time_zone: { EST: 'EST' },
         deadline: new Date('2023-07-31'),
         first_prize_amount: 2500,
         second_prize_amount: 1500,

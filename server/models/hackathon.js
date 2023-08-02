@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       rules: DataTypes.TEXT,
       tagline: DataTypes.STRING,
       manager_email: DataTypes.STRING,
-      time_zone: DataTypes.STRING,
+      time_zone: DataTypes.JSON,
       start_time: DataTypes.DATE, // new
       deadline: DataTypes.DATE, // new
       prizes: DataTypes.JSON,
