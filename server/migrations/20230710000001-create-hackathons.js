@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       time_zone: {
-        type: Sequelize.TEXT,
+        type: Sequelize.JSON,
       },
       start_time: {
         type: Sequelize.DATE,

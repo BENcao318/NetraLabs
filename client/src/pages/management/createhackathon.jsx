@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { Button } from '@material-tailwind/react'
 import { Quilleditor } from '../../components/quilleditor'
@@ -13,6 +13,12 @@ import { PrizeForm } from '../../components/prizeForm'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
+import { hackathonContext } from '../../context/hackathonContext'
+import {
+  convertDateObject,
+  convertDateString,
+  convertDateString2,
+} from '../../helpers/util'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
@@ -48,6 +54,8 @@ export const Createhackathon = () => {
     control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
+
+  const { hackathon } = useContext(hackathonContext)
 
   const animatedComponents = makeAnimated()
 
@@ -103,7 +111,7 @@ export const Createhackathon = () => {
       .post('/hackathons/new', formData)
       .then((res) => {
         if (res) {
-          console.log('yess')
+          console.log('create')
         }
       })
       .catch((err) => {
@@ -121,10 +129,23 @@ export const Createhackathon = () => {
   const testContent = '<p><strong>123456</strong></p>'
 
   useEffect(() => {
-    if (testContent) {
-      setValue('description', testContent)
+    if (hackathon) {
+      setValue('name', hackathon.name)
+      setValue('tagline', hackathon.tagline)
+      setValue('email', hackathon.manager_email)
+      setValue('location', hackathon.location)
+      setValue('description', hackathon.description)
+      setValue('requirements', hackathon.requirements)
+      setValue('rules', hackathon.rules)
+      setValue('resources', hackathon.resources)
+      setValue('judges', hackathon.judges)
+      setValue('partners', hackathon.partners)
+      setValue('timeZone', hackathon.time_zone)
+      setPrizeList(hackathon.prizes)
+      setValue('startDate', convertDateString2(hackathon.start_time))
+      setValue('deadline', convertDateString2(hackathon.deadline))
     }
-  }, [testContent])
+  }, [hackathon])
 
   return (
     <>
