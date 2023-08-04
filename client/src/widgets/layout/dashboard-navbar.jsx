@@ -26,7 +26,17 @@ export const DashboardNavbar = () => {
   const { openSidenav } = controller
   const { hackathon } = useContext(hackathonContext)
 
-  const formattedDate = hackathon ? convertDateString(hackathon.deadline) : null
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  }
+  const formattedDate = hackathon
+    ? convertDateString(hackathon.deadline, options)
+    : null
 
   return (
     <Navbar
@@ -46,7 +56,11 @@ export const DashboardNavbar = () => {
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
         </div>
-        <div className="flex items-center"> <CalendarIcon className="h-6 w-6 text-gray-900 mr-2"/>  <strong>Deadline</strong> : {hackathon && formattedDate}</div>
+        <div className="flex items-center">
+          {' '}
+          <CalendarIcon className="h-6 w-6 text-gray-900 mr-2" />{' '}
+          <strong>Deadline</strong> : {hackathon && formattedDate}
+        </div>
         <div className="flex items-center">
           <Link to="/auth/sign-in">
             <Button

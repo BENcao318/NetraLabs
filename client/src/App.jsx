@@ -5,16 +5,20 @@ import {
   Navigate,
 } from 'react-router-dom'
 import { Dashboard } from './layouts/dashboard'
+import { LandingPage } from './pages/landingPage'
+import { Auth } from './layouts/auth'
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
-        <Route
+        {/* <Route
           path="*"
           element={<Navigate to="/dashboard/overview" replace />}
-        />
+        /> */}
+        <Route path="/auth/*" element={<Auth />} />
       </Routes>
     </Router>
   )
