@@ -51,7 +51,7 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
       <div className="m-4">
         {routes.map(({ layout, title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
-            {title && (
+            {title === 'dashboard' && (
               <li className="mx-3.5 mt-4 mb-2">
                 <Typography
                   variant="small"
@@ -62,38 +62,43 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
                 </Typography>
               </li>
             )}
-            {pages.map(({ icon, name, path }) => (
-              <li key={name}>
-                <NavLink to={`/${layout}${path}`}>
-                  {({ isActive }) => (
-                    <Button
-                      variant={isActive ? 'gradient' : 'text'}
-                      color={
-                        isActive
-                          ? sidenavColor
-                          : sidenavType === 'dark'
-                          ? 'white'
-                          : 'blue-gray'
-                      }
-                      className="flex items-center gap-4 px-4 capitalize rounded-full"
-                      fullWidth
-                    >
-                      <div
-                        className={isActive ? 'text-orange-600' : 'text-white'}
-                      >
-                        {icon}
-                      </div>
-                      <Typography
-                        color={isActive ? 'orange' : 'white'}
-                        className="font-medium capitalize"
-                      >
-                        {name}
-                      </Typography>
-                    </Button>
-                  )}
-                </NavLink>
-              </li>
-            ))}
+            {pages.map(
+              ({ icon, name, path }) =>
+                layout === 'dashboard' && (
+                  <li key={name}>
+                    <NavLink to={`/${layout}${path}`}>
+                      {({ isActive }) => (
+                        <Button
+                          variant={isActive ? 'gradient' : 'text'}
+                          color={
+                            isActive
+                              ? sidenavColor
+                              : sidenavType === 'dark'
+                              ? 'white'
+                              : 'blue-gray'
+                          }
+                          className="flex items-center gap-4 px-4 capitalize rounded-full"
+                          fullWidth
+                        >
+                          <div
+                            className={
+                              isActive ? 'text-orange-600' : 'text-white'
+                            }
+                          >
+                            {icon}
+                          </div>
+                          <Typography
+                            color={isActive ? 'orange' : 'white'}
+                            className="font-medium capitalize"
+                          >
+                            {name}
+                          </Typography>
+                        </Button>
+                      )}
+                    </NavLink>
+                  </li>
+                )
+            )}
           </ul>
         ))}
       </div>

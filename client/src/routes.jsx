@@ -1,6 +1,5 @@
 import {
   BriefcaseIcon,
-  ClockIcon,
   DocumentChartBarIcon,
   PlusCircleIcon,
   Square3Stack3DIcon,
@@ -8,22 +7,21 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/24/outline'
 import {
-  HomeIcon,
   UserCircleIcon,
   TableCellsIcon,
-  BellIcon,
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/solid'
 import { Overview } from './pages/dashboard/overview'
 import { Myproject } from './pages/dashboard/myproject'
 import { Rules } from './pages/dashboard/rules'
-import { Schedule } from './pages/dashboard/schedule'
 import { Resources } from './pages/dashboard/resources'
 import { Participants } from './pages/dashboard/participants'
 import { Submissions } from './pages/dashboard/submissions'
 import { Myteam } from './pages/dashboard/myteam'
 import { Createhackathon } from './pages/management/createhackathon'
+import { SignIn, Signin } from './pages/auth/signin'
+import { SignUp } from './pages/auth/signup'
 
 const icon = {
   className: 'w-6 h-6 text-inherit',
@@ -76,7 +74,7 @@ export const routes = [
         element: <Submissions />,
       },
       {
-        icon: <PlusCircleIcon  {...icon} />,
+        icon: <PlusCircleIcon {...icon} />,
         name: 'Create A Hackathon',
         path: '/hackathon/new',
         element: <Createhackathon />,
@@ -91,11 +89,13 @@ export const routes = [
         icon: <ArrowRightOnRectangleIcon {...icon} />,
         name: 'sign in',
         path: '/sign-in',
+        element: <SignIn />,
       },
       {
         icon: <UserPlusIcon {...icon} />,
         name: 'sign up',
         path: '/sign-up',
+        element: <SignUp />,
       },
     ],
   },
