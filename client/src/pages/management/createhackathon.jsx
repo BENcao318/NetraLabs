@@ -14,11 +14,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
 import { hackathonContext } from '../../context/hackathonContext'
-import {
-  convertDateObject,
-  convertDateString,
-  convertDateString2,
-} from '../../helpers/util'
+import { convertDateString2 } from '../../helpers/util'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
