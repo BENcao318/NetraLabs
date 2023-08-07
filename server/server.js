@@ -18,20 +18,20 @@ const hackathonRouter = require('./routes/hackathons')
 
 app.use(
   session({
-    // proxy: true,
+    proxy: true,
     secret: 'user-secret',
     resave: false,
     saveUninitialized: false,
-    // cookie: {
-    //   secure:
-    //     process.env.NODE_ENV && process.env.NODE_ENV == 'production'
-    //       ? true
-    //       : false,
-    //   sameSite:
-    //     process.env.NODE_ENV && process.env.NODE_ENV == 'production'
-    //       ? 'none'
-    //       : 'lax',
-    // },
+    cookie: {
+      secure:
+        process.env.NODE_ENV && process.env.NODE_ENV == 'production'
+          ? true
+          : false,
+      sameSite:
+        process.env.NODE_ENV && process.env.NODE_ENV == 'production'
+          ? 'none'
+          : 'lax',
+    },
   })
 )
 app.use(morgan('dev'))

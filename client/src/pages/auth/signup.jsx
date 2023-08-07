@@ -6,14 +6,18 @@ import {
   Input,
   Typography,
 } from '@material-tailwind/react'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import serverAPI from '../../hooks/useAxios'
+import { authContext } from '../../context/authContext'
 
 export const SignUp = () => {
+  const { setAuth } = useContext(authContext)
+  const navigate = useNavigate()
+
   const schema = yup.object().shape({
     name: yup.string().required('Name is required'),
     email: yup.string().email().required('Email is required'),
@@ -47,23 +51,24 @@ export const SignUp = () => {
     serverAPI
       .post('/users/sign-on', userData)
       .then((response) => {
-        console.log(response.data.message)
-        // if (response && response.data.success) {
-        //   setAuth((prev) => ({
-        //     ...prev,
-        //     isLoggedIn: true,
-        //     isLoading: false,
-        //     user: response.data.user,
-        //   }))
-        //   navigate('/home ')
-        //   toast.success(`Signed in. Welcome! 😊`, {
-        //     closeOnClick: true,
-        //     pauseOnHover: true,
-        //     draggable: true,
-        //   })
-        // }
+        if (response && response.data.success) {
+          setAuth((prev) => ({
+            ...prev,
+            isLoggedIn: true,
+            isLoading: false,
+            user: response.data.user,
+          }))
+          navigate('/dashboard')
+          console.log('yes')
+          // toast.success(`Signed in. Welcome! 😊`, {
+          //   closeOnClick: true,
+          //   pauseOnHover: true,
+          //   draggable: true,
+          // })
+        }
       })
       .catch((err) => {
+        // Same email address already in database, signup failed and set error on submit form
         if (err && err.response.status === 403) {
           setError('email', {
             type: 'manual',

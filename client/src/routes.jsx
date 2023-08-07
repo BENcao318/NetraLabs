@@ -29,7 +29,8 @@ const icon = {
 
 export const routes = [
   {
-    layout: 'dashboard',
+    title: 'User Dashboard',
+    layout: 'userDashboard',
     pages: [
       {
         icon: <SquaresPlusIcon {...icon} />,
@@ -72,6 +73,18 @@ export const routes = [
         name: 'Submissions',
         path: '/submissions',
         element: <Submissions />,
+      },
+    ],
+  },
+  {
+    title: 'Admin Dashboard',
+    layout: 'adminDashboard',
+    pages: [
+      {
+        icon: <SquaresPlusIcon {...icon} />,
+        name: 'Overview',
+        path: '/overview',
+        element: <Overview />,
       },
       {
         icon: <PlusCircleIcon {...icon} />,

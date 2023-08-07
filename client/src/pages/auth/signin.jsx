@@ -8,14 +8,19 @@ import {
   Input,
   Typography,
 } from '@material-tailwind/react'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import serverAPI from '../../hooks/useAxios'
+import { authContext } from '../../context/authContext'
 
 export const SignIn = () => {
+  const { setAuth } = useContext(authContext)
+  const navigate = useNavigate()
+  //todo Add forget password feature.
+
   const schema = yup.object().shape({
     email: yup.string().email().required('Email is required'),
     password: yup.string().required('Password is required'),
@@ -29,27 +34,26 @@ export const SignIn = () => {
   } = useForm({ resolver: yupResolver(schema) })
 
   const onSubmit = (data) => {
-    console.log(data)
     serverAPI.post('/users/sign-in', data).then((response) => {
-      setError('email', {
-        type: 'manual',
-        message: response.data.message2,
-      })
-      // if (!response.data.success) {
-      //   setSignInError(true)
-      // } else {
-      //   setAuth((prev) => ({
-      //     ...prev,
-      //     isLoggedIn: true,
-      //     user: response.data.user,
-      //   }))
-      //   navigate('/home ')
-      //   toast.success(`Signed in. Welcome! 😊`, {
-      //     closeOnClick: true,
-      //     pauseOnHover: true,
-      //     draggable: true,
-      //   })
-      // }
+      if (!response.data.success) {
+        setError('email', {
+          type: 'manual',
+          message: response.data.message2,
+        })
+      } else {
+        console.log(response.data.user)
+        setAuth((prev) => ({
+          ...prev,
+          isLoggedIn: true,
+          user: response.data.user,
+        }))
+        navigate('/dashboard ')
+        // toast.success(`Signed in. Welcome! 😊`, {
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        // })
+      }
     })
     // reset();
   }

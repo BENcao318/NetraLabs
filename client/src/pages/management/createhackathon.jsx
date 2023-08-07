@@ -74,7 +74,10 @@ export const Createhackathon = () => {
       editting: true,
     }
 
-    setPrizeList(prizeList.concat(prize))
+    const updatedPrizeList = Array.isArray(prizeList)
+      ? [...prizeList, prize]
+      : [prize]
+    setPrizeList(updatedPrizeList)
   }
 
   const removeElement = (prize, prizeList, setPrizeList) => {
@@ -349,25 +352,26 @@ export const Createhackathon = () => {
         <div name="hackathon_prizes">
           <h1 className="mb-1 text-lg font-semibold dark:text-white">Prizes</h1>
           <div className="flex flex-col gap-2">
-            {prizeList.map((prize) => {
-              return prize.editting ? (
-                <PrizeForm
-                  prize={prize}
-                  removeElement={removeElement}
-                  prizeList={prizeList}
-                  setPrizeList={setPrizeList}
-                  key={prize.id}
-                />
-              ) : (
-                <PrizeTag
-                  key={prize.id}
-                  prize={prize}
-                  removeElement={removeElement}
-                  prizeList={prizeList}
-                  setPrizeList={setPrizeList}
-                />
-              )
-            })}
+            {Array.isArray(prizeList) &&
+              prizeList.map((prize) => {
+                return prize.editting ? (
+                  <PrizeForm
+                    prize={prize}
+                    removeElement={removeElement}
+                    prizeList={prizeList}
+                    setPrizeList={setPrizeList}
+                    key={prize.id}
+                  />
+                ) : (
+                  <PrizeTag
+                    key={prize.id}
+                    prize={prize}
+                    removeElement={removeElement}
+                    prizeList={prizeList}
+                    setPrizeList={setPrizeList}
+                  />
+                )
+              })}
           </div>
           <Button
             type="submit"

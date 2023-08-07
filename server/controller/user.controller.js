@@ -53,63 +53,52 @@ exports.createUser = async (req, res) => {
 
 exports.signIn = async (req, res) => {
   const { email, password } = req.body
-  console.log(email, password)
+
   try {
-    res.send({
-      success: false,
-      message: 'Login Failed',
-      message2: 'Email and password did not match.',
+    const user = await User.findOne({
+      where: {
+        email,
+      },
     })
+
+    if (user) {
+      const passwordMatched = await compare(password, user.dataValues.password)
+
+      if (passwordMatched) {
+        const userData = {
+          email: user.dataValues.email,
+          name: user.dataValues.name,
+          role: user.dataValues.role,
+          skills: user.dataValues.skills,
+          // isAdmin: user.dataValues.isAdmin,
+          isAdmin: true,
+        }
+
+        req.session.user = userData
+        req.session.save()
+        res.status(200).send({
+          success: true,
+          message: 'Login success',
+          messge2: null,
+          user: userData,
+        })
+      } else {
+        res.send({
+          success: false,
+          message: 'Login Failed',
+          message2: 'Email and password did not match.',
+        })
+      }
+    } else {
+      res.send({
+        success: false,
+        message: 'Login Failed',
+        message2: 'Email and password did not match.',
+      })
+    }
   } catch (err) {
     res.status(500).send({
       message: `Error retrieving User with email=${email}, ${err}`,
     })
   }
-
-  // try {
-  //   const user = await User.findOne({
-  //     where: {
-  //       email,
-  //     },
-  //     include: ['admin'],
-  //   })
-
-  //   if (user) {
-  //     const passwordMatched = await compare(password, user.dataValues.password)
-
-  //     if (passwordMatched) {
-  //       const userData = {
-  //         email: user.dataValues.email,
-  //         first_name: user.dataValues.first_name,
-  //         last_name: user.dataValues.last_name,
-  //         company_name: user.dataValues.admin.dataValues.company_name,
-  //       }
-
-  //       req.session.user = userData
-  //       req.session.save()
-  //       res.status(200).send({
-  //         success: true,
-  //         message: 'Login success',
-  //         messge2: null,
-  //         user: userData,
-  //       })
-  //     } else {
-  //       res.send({
-  //         success: false,
-  //         message: 'Login Failed',
-  //         message2: 'Email and password did not match.',
-  //       })
-  //     }
-  //   } else {
-  //     res.send({
-  //       success: false,
-  //       message: 'Login Failed',
-  //       message2: 'Email and password did not match.',
-  //     })
-  //   }
-  // } catch (err) {
-  //   res.status(500).send({
-  //     message: `Error retrieving User with email=${email}, ${err}`,
-  //   })
-  // }
 }
