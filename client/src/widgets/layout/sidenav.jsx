@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { setOpenSidenav, useThemeController } from '../../context/themeContext'
 import { Link, NavLink } from 'react-router-dom'
 import {
@@ -8,10 +8,18 @@ import {
   Typography,
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { authContext } from '../../context/authContext'
 
 export const Sidenav = ({ brandImg, brandName, routes }) => {
   const [controller, dispatch] = useThemeController()
   const { sidenavColor, sidenavType, openSidenav } = controller
+  const [dashboardLayout, setDashboardLayout] = useState('userDashboard')
+  const { auth } = useContext(authContext)
+
+  useEffect(() => {
+    setDashboardLayout(auth.user.isAdmin ? 'adminDashboard' : 'userDashboard')
+  }, [auth])
+
   const sidenavTypes = {
     dark: 'bg-gradient-to-br from-blue-gray-800 to-blue-gray-900',
     white: 'bg-white shadow-lg',
@@ -51,22 +59,11 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
       <div className="m-4">
         {routes.map(({ layout, title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
-            {title === 'dashboard' && (
-              <li className="mx-3.5 mt-4 mb-2">
-                <Typography
-                  variant="small"
-                  color={sidenavType === 'dark' ? 'white' : 'blue-gray'}
-                  className="font-black uppercase opacity-75"
-                >
-                  {title}
-                </Typography>
-              </li>
-            )}
             {pages.map(
               ({ icon, name, path }) =>
-                layout === 'dashboard' && (
+                layout === dashboardLayout && (
                   <li key={name}>
-                    <NavLink to={`/${layout}${path}`}>
+                    <NavLink to={`/${'dashboard'}${path}`}>
                       {({ isActive }) => (
                         <Button
                           variant={isActive ? 'gradient' : 'text'}
