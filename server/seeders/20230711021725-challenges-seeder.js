@@ -15,7 +15,7 @@ module.exports = {
     await queryInterface.bulkInsert('challenges', [
       {
         id: 1,
-        hackathon_id: 1,
+        hackathon_id: 'd8f1c0f5-40d0-4f62-8f65-392cbdd049f9',
         name: 'Climate Finance: Harmonizing ESG Investing to Support Net Zero Targets',
         body: 'As the world strives to achieve net-zero emissions, sustainable finance plays a crucial role in funding climate-related initiatives. The Climate Finance challenge focuses on Environmental, Social, and Governance (ESG) investing, aiming to harmonize ESG criteria and metrics to support net-zero targets. Participants will explore how technology can enable better assessment, reporting, and integration of ESG factors into investment decision-making processes.',
         created_at: new Date(),

@@ -1,5 +1,6 @@
 const db = require('../models')
 const { Hackathon } = db
+const users = require('./user.controller')
 
 exports.findLatestHackathon = async (req, res) => {
   try {
@@ -16,6 +17,7 @@ exports.findLatestHackathon = async (req, res) => {
 //todo Add owner_id reference to hackathon to connect to users table
 exports.createHackathon = async (req, res) => {
   const hackathonData = req.body
+  console.log(hackathonData.user)
 
   try {
     const newHackathon = await Hackathon.create({
@@ -24,16 +26,15 @@ exports.createHackathon = async (req, res) => {
       rules: hackathonData.rules,
       tagline: hackathonData.tagline,
       manager_email: hackathonData.email,
+      location: hackathonData.location,
       time_zone: hackathonData.timeZone,
-      start_time: hackathonData.startDate, //todo change to startTime
+      start_time: hackathonData.startTime,
       deadline: hackathonData.deadline,
       prizes: hackathonData.prizes,
       judges: hackathonData.judges,
       requirements: hackathonData.requirements,
-      about: hackathonData.about, //todo not needed
       partners: hackathonData.partners,
-
-      //todo add location and uuid
+      user_id: 2, //todo
     })
 
     console.log('Hackathon created: ', newHackathon.toJSON())
@@ -56,10 +57,12 @@ exports.getHackathonList = async (req, res) => {
   const testList = [
     {
       name: 'Virtual Inter-University Coding Hackathon',
+      tagline: 'Join us for an exciting hackathon!',
       manager_email: 'manager@example.com',
       time_zone: JSON.stringify({ EST: 'Eastern Standard Time' }),
       start_time: new Date('2023-08-06T08:00:00Z'),
       deadline: new Date('2023-08-08T23:59:59Z'),
+      prizes: JSON.stringify({ first_place: '$1000', second_place: '$500' }),
     },
   ]
 

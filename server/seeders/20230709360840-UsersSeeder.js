@@ -4,11 +4,23 @@ module.exports = {
   up: async (queryInterface, DataTypes) => {
     const usersData = [
       {
+        id: 1,
         isAdmin: false,
         role: ['fulltack engineer'],
         name: 'John Doe',
         skills: ['JavaScript', 'Node.js', 'Sequelize'],
         email: 'john.doe@example.com',
+        password: 'hashed_password_here', // Replace with the hashed password
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        isAdmin: true,
+        role: ['project manager'],
+        name: 'Jane Doe',
+        skills: ['JavaScript', 'Node.js', 'Sequelize'],
+        email: 'jane.doe@example.com',
         password: 'hashed_password_here', // Replace with the hashed password
         createdAt: new Date(),
         updatedAt: new Date(),
