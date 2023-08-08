@@ -22,7 +22,7 @@ export const HackathonOverview = () => {
 
   return (
     <>
-      <div className="mt-36 flex mx-36 w-[60rem] mx-auto">
+      <div className="mt-36 flex flex-wrap">
         {hackathonList.length === 0 && (
           <div>
             <h3>You haven't created any hackathons yet.</h3>

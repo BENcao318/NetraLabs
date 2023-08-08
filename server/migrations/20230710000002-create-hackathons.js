@@ -5,9 +5,9 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('hackathons', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         primaryKey: true,
-        autoIncrement: true,
+        defaultValue: Sequelize.UUIDV4,
       },
       name: {
         type: Sequelize.STRING,
@@ -23,6 +23,9 @@ module.exports = {
       },
       manager_email: {
         type: Sequelize.STRING,
+      },
+      location: {
+        type: Sequelize.TEXT,
       },
       time_zone: {
         type: Sequelize.JSON,
@@ -50,6 +53,13 @@ module.exports = {
       },
       created_at: {
         type: Sequelize.DATE,
+      },
+      user_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       },
     })
   },

@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         through: models.UserTeam,
         foreignKey: 'user_id',
       })
+      User.hasMany(models.Team, { foreignKey: 'team_leader_id' })
     }
   }
 

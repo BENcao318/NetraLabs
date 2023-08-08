@@ -19,6 +19,13 @@ module.exports = {
           key: 'id',
         },
       },
+      hackathon_id: {
+        type: Sequelize.UUID,
+        references: {
+          model: 'hackathons',
+          key: 'id',
+        },
+      },
       story: {
         type: Sequelize.TEXT,
       },

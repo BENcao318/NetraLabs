@@ -10,7 +10,7 @@ module.exports = {
         autoIncrement: true,
       },
       hackathon_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'hackathons',
           key: 'id',

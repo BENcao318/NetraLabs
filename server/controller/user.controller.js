@@ -102,3 +102,17 @@ exports.signIn = async (req, res) => {
     })
   }
 }
+
+exports.getUserByEmail = async (email) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+    })
+    console.log('user+++++++++++++++aa:', user)
+    return user
+  } catch (error) {
+    throw error
+  }
+}

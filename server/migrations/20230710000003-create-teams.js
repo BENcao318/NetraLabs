@@ -14,6 +14,10 @@ module.exports = {
       },
       team_leader_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       },
       challenge_id: {
         type: Sequelize.INTEGER,
@@ -23,7 +27,7 @@ module.exports = {
         },
       },
       hackathon_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
           model: 'hackathons',
           key: 'id',

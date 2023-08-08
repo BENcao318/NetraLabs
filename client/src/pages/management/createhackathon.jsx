@@ -15,6 +15,7 @@ import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
 import { hackathonContext } from '../../context/hackathonContext'
 import { convertDateString2 } from '../../helpers/util'
+import { authContext } from '../../context/authContext'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
@@ -35,10 +36,10 @@ export const Createhackathon = () => {
         altNAme: yup.string(),
       })
       .required(),
-    startDate: yup.date().required('Start date is needed for hackathon'),
+    startTime: yup.date().required('Start date is needed for hackathon'),
     deadline: yup
       .date()
-      .min(yup.ref('startDate'), 'End date need to be later')
+      .min(yup.ref('startTime'), 'End date need to be later')
       .required('End date is needed for hackathon'),
   })
 
@@ -50,6 +51,8 @@ export const Createhackathon = () => {
     control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
+
+  const { auth } = useContext(authContext)
 
   const { hackathon } = useContext(hackathonContext)
 
@@ -105,7 +108,11 @@ export const Createhackathon = () => {
   }
 
   const onSubmit = (data) => {
-    const formData = { ...data, prizes: prizeList }
+    const formData = {
+      ...data,
+      prizes: prizeList,
+      user: auth.user,
+    }
     serverAPI
       .post('/hackathons/new', formData)
       .then((res) => {
@@ -125,8 +132,6 @@ export const Createhackathon = () => {
   const judgesEditorContent = watch('judges')
   const partnersEditorContent = watch('partners')
 
-  const testContent = '<p><strong>123456</strong></p>'
-
   useEffect(() => {
     if (hackathon) {
       setValue('name', hackathon.name)
@@ -141,7 +146,7 @@ export const Createhackathon = () => {
       setValue('partners', hackathon.partners)
       setValue('timeZone', hackathon.time_zone)
       setPrizeList(hackathon.prizes)
-      setValue('startDate', convertDateString2(hackathon.start_time))
+      setValue('startTime', convertDateString2(hackathon.start_time))
       setValue('deadline', convertDateString2(hackathon.deadline))
     }
   }, [hackathon])
@@ -420,7 +425,7 @@ export const Createhackathon = () => {
                 Start date
               </h1>
               <input
-                {...register('startDate')}
+                {...register('startTime')}
                 type="date"
                 id="start_date"
                 className="mt-1 block px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
@@ -428,7 +433,7 @@ export const Createhackathon = () => {
                 required
               />
               <p className="mt-2 text-normal font-bold text-red-600">
-                {errors.startDate?.message}
+                {errors.startTime?.message}
               </p>
             </div>
             <div>

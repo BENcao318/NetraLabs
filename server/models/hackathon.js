@@ -8,21 +8,28 @@ module.exports = (sequelize, DataTypes) => {
       Hackathon.hasMany(models.Challenge, {
         foreignKey: 'hackathon_id',
       })
+      Hackathon.hasMany(models.Project, {
+        foreignKey: 'hackathon_id',
+      })
+      Hackathon.belongsTo(models.User, {
+        foreignKey: 'user_id',
+      })
     }
   }
 
   Hackathon.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       name: DataTypes.STRING,
       description: DataTypes.TEXT,
       rules: DataTypes.TEXT,
       tagline: DataTypes.STRING,
       manager_email: DataTypes.STRING,
+      location: DataTypes.TEXT,
       time_zone: DataTypes.JSON,
       start_time: DataTypes.DATE, // new
       deadline: DataTypes.DATE, // new
@@ -32,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       about: DataTypes.TEXT,
       partners: DataTypes.TEXT,
       created_at: DataTypes.DATE,
+      user_id: DataTypes.INTEGER,
     },
     {
       sequelize,

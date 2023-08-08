@@ -1,22 +1,26 @@
 import { PlusCircleIcon, UserPlusIcon } from '@heroicons/react/24/outline'
-import { Button, Typography } from '@material-tailwind/react'
+import { Button, Card, Typography } from '@material-tailwind/react'
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 export const CreateAHackathonCard = () => {
+  const navigate = useNavigate()
+
+  const directToCreationPage = () => {
+    navigate('/dashboard/hackathon/new')
+  }
+
   return (
     <>
-      <NavLink to={'/dashboard/hackathon/new'}>
-        <Button
-          className="flex items-center gap-4 px-4 capitalize rounded-full bg-orange-600"
-          fullWidth
-        >
-          <PlusCircleIcon className="w-6 h-6 text-gray-800" />
-          <Typography className="font-semibold text-gray-800 uppercase">
-            Create A Hackathon
-          </Typography>
-        </Button>
-      </NavLink>
+      <Card
+        className="w-[36rem] h-full flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl hover:scale-105 items-center justify-center group cursor-pointer hover:bg-orange-50 "
+        onClick={directToCreationPage}
+      >
+        <PlusCircleIcon className="w-16 h-16 text-gray-600 group-hover:text-gray-800" />
+        <Typography className="font-semibold text-gray-600 uppercase text-3xl  group-hover:text-gray-800">
+          Create A Hackathon
+        </Typography>
+      </Card>
     </>
   )
 }
