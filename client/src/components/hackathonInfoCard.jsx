@@ -5,11 +5,20 @@ import {
   CardFooter,
   Typography,
 } from '@material-tailwind/react'
-import React from 'react'
+import React, { useState } from 'react'
 import { convertDateString } from '../helpers/util'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { HackathonPreview } from './hackathonPreview'
+import { HackathonLaunchDialog } from './hackathonLaunchDialog'
 
 export const HackathonInfoCard = ({ hackathon }) => {
+  const [openHackathonPreview, setOpenHackathonPreview] = useState(false)
+  const [openLaunchDialog, setOpenLaunchDialog] = useState(false)
+
+  const handleOpenHackathonPreview = () =>
+    setOpenHackathonPreview(!openHackathonPreview)
+  const handleOpenLaunchDialog = () => setOpenLaunchDialog(!openLaunchDialog)
+
   const options = {
     year: 'numeric',
     month: 'long',
@@ -30,7 +39,7 @@ export const HackathonInfoCard = ({ hackathon }) => {
     },
     {
       name: 'Time zone:',
-      content: Object.values(JSON.parse(hackathon.time_zone))[0],
+      content: Object.values(hackathon.time_zone)[0],
     },
     {
       name: 'Start time:',
@@ -42,9 +51,19 @@ export const HackathonInfoCard = ({ hackathon }) => {
     },
   ]
 
+  const navigate = useNavigate()
+
+  const onClick = () => {
+    navigate(
+      `/dashboard/hackathon/update/?data=${encodeURIComponent(
+        JSON.stringify(hackathon)
+      )}`
+    )
+  }
+
   return (
     <>
-      <Card className="w-[36rem] flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl">
+      <Card className="w-[30rem] flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl">
         <CardBody className="flex flex-col">
           <div>
             <Typography
@@ -91,17 +110,36 @@ export const HackathonInfoCard = ({ hackathon }) => {
         </CardBody>
         <CardFooter className="pt-0 flex justify-between mx-12">
           <div className="flex gap-6 items-center">
-            <Button className="rounded-lg">Preview</Button>
-            <a className="font-medium text-blue-600 hover:underline cursor-pointer text-center">
+            <Button onClick={handleOpenHackathonPreview} className="rounded-lg">
+              Preview
+            </Button>
+            <a
+              className="font-medium text-blue-600 hover:underline cursor-pointer text-center"
+              onClick={onClick}
+            >
               Edit
             </a>
           </div>
 
-          <Button className="rounded-full bg-orange-300 hover:-translate-y-1 text-gray-800 font-semibold">
+          <Button
+            className="rounded-full bg-orange-300 hover:-translate-y-1 text-gray-800 font-semibold"
+            onClick={handleOpenLaunchDialog}
+          >
             Launch
           </Button>
         </CardFooter>
       </Card>
+
+      <HackathonPreview
+        open={openHackathonPreview}
+        handleOpen={handleOpenHackathonPreview}
+        hackathon={hackathon}
+      />
+      <HackathonLaunchDialog
+        open={openLaunchDialog}
+        handleOpen={handleOpenLaunchDialog}
+        hackathon={hackathon}
+      />
     </>
   )
 }

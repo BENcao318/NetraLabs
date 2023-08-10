@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'user_id',
       })
       User.hasMany(models.Team, { foreignKey: 'team_leader_id' })
+      User.hasMany(models.Hackathon, { foreignKey: 'user_id' })
     }
   }
 

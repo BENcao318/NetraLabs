@@ -13,7 +13,7 @@ export const CreateAHackathonCard = () => {
   return (
     <>
       <Card
-        className="w-[36rem] h-full flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl hover:scale-105 items-center justify-center group cursor-pointer hover:bg-orange-50 "
+        className="w-[30rem] min-h-[20rem] flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl hover:scale-105 items-center justify-center group cursor-pointer hover:bg-orange-50 "
         onClick={directToCreationPage}
       >
         <PlusCircleIcon className="w-16 h-16 text-gray-600 group-hover:text-gray-800" />

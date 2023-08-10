@@ -10,7 +10,8 @@ module.exports = {
         name: 'John Doe',
         skills: ['JavaScript', 'Node.js', 'Sequelize'],
         email: 'john.doe@example.com',
-        password: 'hashed_password_here', // Replace with the hashed password
+        password:
+          '$2b$10$mFaxo0BsAtrfOiji2D1DCO7jPnCxgigOvhabJ4SqNH7RMDa0U4pSa', // Replace with the hashed password
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -20,8 +21,9 @@ module.exports = {
         role: ['project manager'],
         name: 'Jane Doe',
         skills: ['JavaScript', 'Node.js', 'Sequelize'],
-        email: 'jane.doe@example.com',
-        password: 'hashed_password_here', // Replace with the hashed password
+        email: 'benc.netrascale@gmail.com',
+        password:
+          '$2b$10$z2PlLvdppNciH7NWBG0SHOuQmI3BDoRNiBCQgbmz7012L7C9kA6eC', // Replace with the hashed password
         createdAt: new Date(),
         updatedAt: new Date(),
       },

@@ -13,12 +13,11 @@ import { PrizeForm } from '../../components/prizeForm'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
-import { hackathonContext } from '../../context/hackathonContext'
 import { convertDateString2 } from '../../helpers/util'
 import { authContext } from '../../context/authContext'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
-export const Createhackathon = () => {
+export const Edithackathon = () => {
   const schema = yup.object().shape({
     name: yup.string().required(),
     tagline: yup.string().required(),
@@ -53,11 +52,12 @@ export const Createhackathon = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
-  const { auth } = useContext(authContext)
+  const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const objectString = queryParams.get('data')
+  const hackathon = JSON.parse(decodeURIComponent(objectString))
 
   const navigate = useNavigate()
-
-  // const { hackathon } = useContext(hackathonContext)
 
   const animatedComponents = makeAnimated()
 
@@ -114,14 +114,15 @@ export const Createhackathon = () => {
     const formData = {
       ...data,
       prizes: prizeList,
-      user: auth.user,
+      user: hackathon.user,
+      id: hackathon.id,
     }
-    // console.log(formData.deadline)
+
     serverAPI
-      .post('/hackathons/new', formData)
+      .post('/hackathons/update', formData)
       .then((res) => {
         if (res) {
-          console.log('create')
+          navigate('/dashboard')
         }
       })
       .catch((err) => {
@@ -136,24 +137,24 @@ export const Createhackathon = () => {
   const judgesEditorContent = watch('judges')
   const partnersEditorContent = watch('partners')
 
-  // useEffect(() => {
-  //   if (hackathon) {
-  //     setValue('name', hackathon.name)
-  //     setValue('tagline', hackathon.tagline)
-  //     setValue('email', hackathon.manager_email)
-  //     setValue('location', hackathon.location)
-  //     setValue('description', hackathon.description)
-  //     setValue('requirements', hackathon.requirements)
-  //     setValue('rules', hackathon.rules)
-  //     setValue('resources', hackathon.resources)
-  //     setValue('judges', hackathon.judges)
-  //     setValue('partners', hackathon.partners)
-  //     setValue('timeZone', hackathon.time_zone)
-  //     setPrizeList(hackathon.prizes)
-  //     setValue('startTime', convertDateString2(hackathon.start_time))
-  //     setValue('deadline', convertDateString2(hackathon.deadline))
-  //   }
-  // }, [hackathon])
+  useEffect(() => {
+    if (hackathon) {
+      setValue('name', hackathon.name)
+      setValue('tagline', hackathon.tagline)
+      setValue('email', hackathon.manager_email)
+      setValue('location', hackathon.location)
+      setValue('description', hackathon.description)
+      setValue('requirements', hackathon.requirements)
+      setValue('rules', hackathon.rules)
+      setValue('resources', hackathon.resources)
+      setValue('judges', hackathon.judges)
+      setValue('partners', hackathon.partners)
+      setValue('timeZone', hackathon.time_zone)
+      setPrizeList(hackathon.prizes)
+      setValue('startTime', convertDateString2(hackathon.start_time))
+      setValue('deadline', convertDateString2(hackathon.deadline))
+    }
+  }, [setValue, setPrizeList])
 
   return (
     <>
@@ -464,7 +465,7 @@ export const Createhackathon = () => {
             className="px-6 bg-orange-800 font-bold "
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            Update
           </Button>
           <a
             className="font-medium text-red-600 hover:underline cursor-pointer text-center"

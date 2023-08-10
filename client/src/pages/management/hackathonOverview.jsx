@@ -15,14 +15,20 @@ export const HackathonOverview = () => {
   }, [auth, setHackathonList])
 
   const getHackathonList = () => {
-    serverAPI.post('/hackathons/list', auth.user).then((response) => {
-      setHackathonList(response.data.message2)
-    })
+    serverAPI
+      .post('/hackathons/list', auth.user)
+      .then((response) => {
+        console.log(response.data.message2)
+        setHackathonList(response.data.message2)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
     <>
-      <div className="mt-36 flex flex-wrap">
+      <div className="mt-36 flex flex-wrap gap-12 items-center">
         {hackathonList.length === 0 && (
           <div>
             <h3>You haven't created any hackathons yet.</h3>
@@ -31,11 +37,13 @@ export const HackathonOverview = () => {
         )}
         {hackathonList.length !== 0 &&
           hackathonList.map((hackathon, key) => (
-            <ul key={key} className="mb-4 flex gap-12 items-center">
+            <ul key={key} className="h-full">
               <HackathonInfoCard hackathon={hackathon} />
-              <CreateAHackathonCard />
             </ul>
           ))}
+        <div className="h-full">
+          <CreateAHackathonCard />
+        </div>
       </div>
     </>
   )

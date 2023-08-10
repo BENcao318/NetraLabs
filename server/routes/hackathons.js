@@ -6,6 +6,8 @@ router.get('/', hackathons.findLatestHackathon)
 
 router.post('/new', hackathons.createHackathon)
 
-router.post('/list', hackathons.getHackathonList)
+router.post('/list', hackathons.getHackathonsByUserEmail)
+
+router.post('/update', hackathons.updateHackathonByUUID)
 
 module.exports = router
