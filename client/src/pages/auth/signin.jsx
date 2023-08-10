@@ -58,6 +58,34 @@ export const SignIn = () => {
     // reset();
   }
 
+  const adminSignIn = () => {
+    const data = {
+      email: 'benc.netrascale@gmail.com',
+      password: 'admin123',
+    }
+    serverAPI.post('/users/sign-in', data).then((response) => {
+      if (!response.data.success) {
+        setError('email', {
+          type: 'manual',
+          message: response.data.message2,
+        })
+      } else {
+        console.log(response.data.user)
+        setAuth((prev) => ({
+          ...prev,
+          isLoggedIn: true,
+          user: response.data.user,
+        }))
+        navigate('/dashboard ')
+        // toast.success(`Signed in. Welcome! 😊`, {
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        // })
+      }
+    })
+  }
+
   return (
     <>
       <img
@@ -111,6 +139,13 @@ export const SignIn = () => {
               <Button fullWidth className="bg-orange-600 text-sm" type="submit">
                 Sign In
               </Button>
+              {/* <Button
+                fullWidth
+                className="bg-orange-600 text-sm"
+                onClick={adminSignIn}
+              >
+                Admin Sign In
+              </Button> */}
               <Typography variant="small" className="mt-6 flex justify-center">
                 Don't have an account?
                 <Link to="/auth/sign-up">

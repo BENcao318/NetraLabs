@@ -9,6 +9,7 @@ import { authContext } from '../context/authContext'
 import { AdminDashboardNavbar } from '../widgets/layout/admin-dashboard-navbar'
 import { HackathonOverview } from '../pages/management/hackathonOverview'
 import { Createhackathon } from '../pages/management/createhackathon'
+import { Edithackathon } from '../pages/management/editHackathon'
 
 export const Dashboard = () => {
   const { hackathon, setHackathon } = useContext(hackathonContext)
@@ -79,6 +80,7 @@ export const Dashboard = () => {
           <Routes>
             <Route path="/" element={<HackathonOverview />} />
             <Route path="/hackathon/new" element={<Createhackathon />} />
+            <Route path="/hackathon/update" element={<Edithackathon />} />
           </Routes>
         </div>
       )}

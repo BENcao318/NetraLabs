@@ -39,18 +39,6 @@ export const routes = [
         element: <Overview />,
       },
       {
-        icon: <BriefcaseIcon {...icon} />,
-        name: 'My Project',
-        path: '/my-project',
-        element: <Myproject />,
-      },
-      {
-        icon: <UserGroupIcon {...icon} />,
-        name: 'My Team',
-        path: '/my-team',
-        element: <Myteam />,
-      },
-      {
         icon: <TableCellsIcon {...icon} />,
         name: 'Rules',
         path: '/rules',
@@ -62,6 +50,18 @@ export const routes = [
         path: '/resources',
         element: <Resources />,
       },
+      {
+        icon: <BriefcaseIcon {...icon} />,
+        name: 'My Project',
+        path: '/my-project',
+        element: <Myproject />,
+      },
+      // {
+      //   icon: <UserGroupIcon {...icon} />,
+      //   name: 'My Team',
+      //   path: '/my-team',
+      //   element: <Myteam />,
+      // },
       {
         icon: <UserCircleIcon {...icon} />,
         name: 'Participants',

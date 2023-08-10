@@ -1,5 +1,5 @@
 const db = require('../models')
-const { User } = db
+const { User, Hackathon } = db
 const Op = db.Sequelize.Op
 const { hash, compare } = require('bcrypt')
 
@@ -70,8 +70,7 @@ exports.signIn = async (req, res) => {
           name: user.dataValues.name,
           role: user.dataValues.role,
           skills: user.dataValues.skills,
-          // isAdmin: user.dataValues.isAdmin,
-          isAdmin: true,
+          isAdmin: user.dataValues.isAdmin,
         }
 
         req.session.user = userData
@@ -110,8 +109,29 @@ exports.getUserByEmail = async (email) => {
         email: email,
       },
     })
-    console.log('user+++++++++++++++aa:', user)
+
     return user
+  } catch (error) {
+    throw error
+  }
+}
+
+exports.getHackathonsByUserEmail = async (email) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        email: email,
+      },
+      include: {
+        model: Hackathon,
+      },
+    })
+
+    if (user) {
+      return user.Hackathons
+    } else {
+      return null
+    }
   } catch (error) {
     throw error
   }

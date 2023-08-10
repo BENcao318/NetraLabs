@@ -1,5 +1,6 @@
 const db = require('../models')
-const { Hackathon } = db
+const hackathon = require('../models/hackathon')
+const { Hackathon, User } = db
 const users = require('./user.controller')
 
 exports.findLatestHackathon = async (req, res) => {
@@ -14,12 +15,12 @@ exports.findLatestHackathon = async (req, res) => {
   }
 }
 
-//todo Add owner_id reference to hackathon to connect to users table
 exports.createHackathon = async (req, res) => {
   const hackathonData = req.body
-  console.log(hackathonData.user)
 
   try {
+    const user = await users.getUserByEmail(hackathonData.user.email)
+
     const newHackathon = await Hackathon.create({
       name: hackathonData.name,
       description: hackathonData.description,
@@ -34,7 +35,7 @@ exports.createHackathon = async (req, res) => {
       judges: hackathonData.judges,
       requirements: hackathonData.requirements,
       partners: hackathonData.partners,
-      user_id: 2, //todo
+      user_id: user.dataValues.id,
     })
 
     console.log('Hackathon created: ', newHackathon.toJSON())
@@ -51,34 +52,80 @@ exports.createHackathon = async (req, res) => {
   }
 }
 
-exports.getHackathonList = async (req, res) => {
-  const userData = req.body
-
-  const testList = [
-    {
-      name: 'Virtual Inter-University Coding Hackathon',
-      tagline: 'Join us for an exciting hackathon!',
-      manager_email: 'manager@example.com',
-      time_zone: JSON.stringify({ EST: 'Eastern Standard Time' }),
-      start_time: new Date('2023-08-06T08:00:00Z'),
-      deadline: new Date('2023-08-08T23:59:59Z'),
-      prizes: JSON.stringify({ first_place: '$1000', second_place: '$500' }),
-    },
-  ]
-
+exports.getHackathonsByUserEmail = async (req, res) => {
   try {
-    console.log('user+++++++++++++:', userData)
-
-    res.status(200).send({
-      success: true,
-      message: 'success',
-      message2: testList,
+    const user = await User.findOne({
+      where: {
+        email: req.body.email,
+      },
+      include: {
+        model: Hackathon,
+      },
     })
+
+    if (user) {
+      const hackathons = user.Hackathons.map(
+        (hackathonData) => hackathonData.dataValues
+      ).map(({ user_id, ...rest }) => rest)
+      res.status(200).send({
+        success: true,
+        message: 'success',
+        message2: hackathons,
+      })
+    } else {
+      return null
+    }
   } catch (error) {
     console.log('Error getting the hackathon list:', error)
     res.status(500).send({
       message:
         error.message || 'Some error occurred while getting the hackathon list',
+    })
+  }
+}
+
+exports.updateHackathonByUUID = async (req, res) => {
+  const hackathonData = req.body
+
+  try {
+    const hackathon = await Hackathon.update(
+      {
+        name: hackathonData.name,
+        description: hackathonData.description,
+        rules: hackathonData.rules,
+        tagline: hackathonData.tagline,
+        manager_email: hackathonData.manager_email,
+        location: hackathonData.location,
+        time_zone: hackathonData.time_zone,
+        start_time: hackathonData.start_time, // new
+        deadline: hackathonData.deadline, // new
+        prizes: hackathonData.prizes,
+        judges: hackathonData.judges,
+        requirements: hackathonData.requirements,
+        about: hackathonData.about,
+        partners: hackathonData.partners,
+        resources: hackathonData.resources,
+      },
+      {
+        where: {
+          id: hackathonData.id,
+        },
+      }
+    )
+    if (hackathon) {
+      res.status(200).send({
+        success: true,
+        message: 'success',
+        message2: null,
+      })
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.log('Error updating the hackathon:', error)
+    res.status(500).send({
+      message:
+        error.message || 'Some error occurred while updating the hackathon',
     })
   }
 }

@@ -51,6 +51,9 @@ module.exports = {
       partners: {
         type: Sequelize.TEXT,
       },
+      resources: {
+        type: Sequelize.TEXT,
+      },
       created_at: {
         type: Sequelize.DATE,
       },
