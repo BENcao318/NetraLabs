@@ -11,10 +11,10 @@ import {
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/solid'
-import { Overview } from './pages/dashboard/overview'
+import { Overview } from './pages/dashboard/hackathons/overview'
 import { Myproject } from './pages/dashboard/myproject'
-import { Rules } from './pages/dashboard/rules'
-import { Resources } from './pages/dashboard/resources'
+import { Rules } from './pages/dashboard/hackathons/rules'
+import { Resources } from './pages/dashboard/hackathons/resources'
 import { Participants } from './pages/dashboard/participants'
 import { Submissions } from './pages/dashboard/submissions'
 import { Myteam } from './pages/dashboard/myteam'

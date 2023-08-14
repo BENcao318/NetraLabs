@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Sidenav } from '../widgets/layout/sidenav'
 import routes from '../routes'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import { DashboardNavbar } from '../widgets/layout/dashboard-navbar'
+import { DashboardNavbar } from '../widgets/layout/dashboardNavbar'
 import serverAPI from '../hooks/useAxios'
 import { hackathonContext } from '../context/hackathonContext'
 import { authContext } from '../context/authContext'
-import { AdminDashboardNavbar } from '../widgets/layout/admin-dashboard-navbar'
+import { AdminDashboardNavbar } from '../widgets/layout/adminDashboardNavbar'
 import { HackathonOverview } from '../pages/management/hackathonOverview'
 import { Createhackathon } from '../pages/management/createhackathon'
 import { Edithackathon } from '../pages/management/editHackathon'
@@ -60,7 +60,7 @@ export const Dashboard = () => {
   return (
     <>
       {dashboardLayout === 'userDashboard' && (
-        <div className="min-h-screen bg-blue-gray-50/50">
+        <div className="h-full">
           <Sidenav
             brandImg={'/img/brandImg.png'}
             brandName={'NetraLabs'}
@@ -76,7 +76,7 @@ export const Dashboard = () => {
                     <Route exact path={path} element={element} />
                   ))
               )}
-              <Route path="/hackthon/detail" element={<HackathonDetail />} />
+              <Route path="/hackathons/detail" element={<HackathonDetail />} />
             </Routes>
           </div>
         </div>

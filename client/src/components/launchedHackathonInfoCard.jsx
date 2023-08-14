@@ -31,7 +31,7 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
   const onClick = () => {
     console.log('first')
     navigate(
-      `/dashboard/hackathon/detail/?data=${encodeURIComponent(
+      `/dashboard/hackathons/detail/?data=${encodeURIComponent(
         JSON.stringify(hackathon)
       )}`
     )
