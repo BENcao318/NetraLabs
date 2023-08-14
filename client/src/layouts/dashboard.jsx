@@ -2,14 +2,16 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Sidenav } from '../widgets/layout/sidenav'
 import routes from '../routes'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import { DashboardNavbar } from '../widgets/layout/dashboard-navbar'
+import { DashboardNavbar } from '../widgets/layout/dashboardNavbar'
 import serverAPI from '../hooks/useAxios'
 import { hackathonContext } from '../context/hackathonContext'
 import { authContext } from '../context/authContext'
-import { AdminDashboardNavbar } from '../widgets/layout/admin-dashboard-navbar'
+import { AdminDashboardNavbar } from '../widgets/layout/adminDashboardNavbar'
 import { HackathonOverview } from '../pages/management/hackathonOverview'
 import { Createhackathon } from '../pages/management/createhackathon'
 import { Edithackathon } from '../pages/management/editHackathon'
+import { HackathonList } from '../pages/dashboard/hackathons/hackathonList'
+import { HackathonDetail } from '../pages/dashboard/hackathons/hackathonDetail'
 
 export const Dashboard = () => {
   const { hackathon, setHackathon } = useContext(hackathonContext)
@@ -37,6 +39,10 @@ export const Dashboard = () => {
   }, [setAuth])
 
   useEffect(() => {
+    navigate('/dashboard/hackathons')
+  }, [])
+
+  useEffect(() => {
     serverAPI
       .get('/hackathons')
       .then((res) => {
@@ -54,7 +60,7 @@ export const Dashboard = () => {
   return (
     <>
       {dashboardLayout === 'userDashboard' && (
-        <div className="min-h-screen bg-blue-gray-50/50">
+        <div className="h-full">
           <Sidenav
             brandImg={'/img/brandImg.png'}
             brandName={'NetraLabs'}
@@ -70,6 +76,7 @@ export const Dashboard = () => {
                     <Route exact path={path} element={element} />
                   ))
               )}
+              <Route path="/hackathons/detail" element={<HackathonDetail />} />
             </Routes>
           </div>
         </div>
@@ -78,7 +85,7 @@ export const Dashboard = () => {
         <div className="p-3 mx-36">
           <AdminDashboardNavbar />
           <Routes>
-            <Route path="/" element={<HackathonOverview />} />
+            <Route path="/hackathons" element={<HackathonOverview />} />
             <Route path="/hackathon/new" element={<Createhackathon />} />
             <Route path="/hackathon/update" element={<Edithackathon />} />
           </Routes>

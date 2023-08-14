@@ -54,6 +54,9 @@ module.exports = {
       resources: {
         type: Sequelize.TEXT,
       },
+      launched: {
+        type: Sequelize.BOOLEAN,
+      },
       created_at: {
         type: Sequelize.DATE,
       },

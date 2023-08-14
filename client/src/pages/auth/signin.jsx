@@ -70,7 +70,33 @@ export const SignIn = () => {
           message: response.data.message2,
         })
       } else {
-        console.log(response.data.user)
+        setAuth((prev) => ({
+          ...prev,
+          isLoggedIn: true,
+          user: response.data.user,
+        }))
+        navigate('/dashboard ')
+        // toast.success(`Signed in. Welcome! 😊`, {
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        // })
+      }
+    })
+  }
+
+  const userSignIn = () => {
+    const data = {
+      email: 'john.doe@example.com',
+      password: 'test1234',
+    }
+    serverAPI.post('/users/sign-in', data).then((response) => {
+      if (!response.data.success) {
+        setError('email', {
+          type: 'manual',
+          message: response.data.message2,
+        })
+      } else {
         setAuth((prev) => ({
           ...prev,
           isLoggedIn: true,
@@ -139,13 +165,20 @@ export const SignIn = () => {
               <Button fullWidth className="bg-orange-600 text-sm" type="submit">
                 Sign In
               </Button>
-              {/* <Button
+              <Button
                 fullWidth
                 className="bg-orange-600 text-sm"
                 onClick={adminSignIn}
               >
                 Admin Sign In
-              </Button> */}
+              </Button>
+              <Button
+                fullWidth
+                className="bg-orange-600 text-sm"
+                onClick={userSignIn}
+              >
+                User Sign In
+              </Button>
               <Typography variant="small" className="mt-6 flex justify-center">
                 Don't have an account?
                 <Link to="/auth/sign-up">

@@ -4,7 +4,6 @@ import * as DOMPurify from 'dompurify'
 import { convertDateString } from '../helpers/util'
 
 export const HackathonPreview = ({ open, handleOpen, hackathon }) => {
-  console.log('hackathon:', hackathon)
   const sanitizeHTML = (htmlString) => {
     return DOMPurify.sanitize(htmlString)
   }

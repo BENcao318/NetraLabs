@@ -16,6 +16,7 @@ export const Quilleditor = ({ value, onChange }) => {
         { indent: '-1' },
         { indent: '+1' },
       ],
+      [{ align: [] }, { color: [] }, { background: [] }],
       ['link', 'image'],
       ['clean'],
     ],
@@ -39,7 +40,9 @@ export const Quilleditor = ({ value, onChange }) => {
     'indent',
     'link',
     'image',
-    'video',
+    'align',
+    'color',
+    'background',
   ]
 
   return (
