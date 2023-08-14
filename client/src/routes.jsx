@@ -8,7 +8,6 @@ import {
 } from '@heroicons/react/24/outline'
 import {
   UserCircleIcon,
-  TableCellsIcon,
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/solid'
@@ -22,6 +21,7 @@ import { Myteam } from './pages/dashboard/myteam'
 import { Createhackathon } from './pages/management/createhackathon'
 import { SignIn, Signin } from './pages/auth/signin'
 import { SignUp } from './pages/auth/signup'
+import { HackathonList } from './pages/dashboard/hackathons/hackathonList'
 
 const icon = {
   className: 'w-6 h-6 text-inherit',
@@ -32,23 +32,29 @@ export const routes = [
     title: 'User Dashboard',
     layout: 'userDashboard',
     pages: [
+      // {
+      //   icon: <SquaresPlusIcon {...icon} />,
+      //   name: 'Overview',
+      //   path: '/overview',
+      //   element: <Overview />,
+      // },
+      // {
+      //   icon: <TableCellsIcon {...icon} />,
+      //   name: 'Rules',
+      //   path: '/rules',
+      //   element: <Rules />,
+      // },
+      // {
+      //   icon: <DocumentChartBarIcon {...icon} />,
+      //   name: 'Resources',
+      //   path: '/resources',
+      //   element: <Resources />,
+      // },
       {
         icon: <SquaresPlusIcon {...icon} />,
-        name: 'Overview',
-        path: '/overview',
-        element: <Overview />,
-      },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: 'Rules',
-        path: '/rules',
-        element: <Rules />,
-      },
-      {
-        icon: <DocumentChartBarIcon {...icon} />,
-        name: 'Resources',
-        path: '/resources',
-        element: <Resources />,
+        name: 'Hackathons',
+        path: '/hackathons',
+        element: <HackathonList />,
       },
       {
         icon: <BriefcaseIcon {...icon} />,
@@ -73,24 +79,6 @@ export const routes = [
         name: 'Submissions',
         path: '/submissions',
         element: <Submissions />,
-      },
-    ],
-  },
-  {
-    title: 'Admin Dashboard',
-    layout: 'adminDashboard',
-    pages: [
-      {
-        icon: <SquaresPlusIcon {...icon} />,
-        name: 'Overview',
-        path: '/overview',
-        element: <Overview />,
-      },
-      {
-        icon: <PlusCircleIcon {...icon} />,
-        name: 'Create A Hackathon',
-        path: '/hackathon/new',
-        element: <Createhackathon />,
       },
     ],
   },

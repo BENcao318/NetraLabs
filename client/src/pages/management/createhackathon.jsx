@@ -14,9 +14,13 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
 import { hackathonContext } from '../../context/hackathonContext'
-import { convertDateString2 } from '../../helpers/util'
+import {
+  convertDateObjectToUTCString,
+  convertDateString2,
+} from '../../helpers/util'
 import { authContext } from '../../context/authContext'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
 
 export const Createhackathon = () => {
   const schema = yup.object().shape({
@@ -56,8 +60,6 @@ export const Createhackathon = () => {
   const { auth } = useContext(authContext)
 
   const navigate = useNavigate()
-
-  // const { hackathon } = useContext(hackathonContext)
 
   const animatedComponents = makeAnimated()
 
@@ -113,19 +115,54 @@ export const Createhackathon = () => {
   const onSubmit = (data) => {
     const formData = {
       ...data,
+      startTime: convertDateObjectToUTCString(
+        data.startTime,
+        data.timeZone.value
+      ),
+      deadline: convertDateObjectToUTCString(
+        data.deadline,
+        data.timeZone.value
+      ),
       prizes: prizeList,
       user: auth.user,
+      launched: false,
     }
     // console.log(formData.deadline)
     serverAPI
       .post('/hackathons/new', formData)
       .then((res) => {
         if (res) {
-          console.log('create')
+          // console.log(res.status)
+          toast.success(`${formData.name} is created! 🏆🏆🏆`, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          })
+          navigate('/dashboard/hackathons')
         }
       })
       .catch((err) => {
-        console.log(err)
+        if (err.response && err.response.status === 400) {
+          console.log('Bad Request - Status Code 400')
+          toast.warning(`${formData.name} is taken. Pick a different name.`, {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          })
+          // Handle the specific error case for status code 400
+        } else {
+          console.log('An error occurred:', err)
+        }
       })
   }
 
@@ -474,6 +511,17 @@ export const Createhackathon = () => {
           </a>
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3600}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+      />
     </>
   )
 }

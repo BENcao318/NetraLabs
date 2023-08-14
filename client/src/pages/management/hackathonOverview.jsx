@@ -3,6 +3,8 @@ import { authContext } from '../../context/authContext'
 import serverAPI from '../../hooks/useAxios'
 import { HackathonInfoCard } from '../../components/hackathonInfoCard'
 import { CreateAHackathonCard } from '../../components/createAHackathonCard'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export const HackathonOverview = () => {
   const { auth, setAuth } = useContext(authContext)
@@ -31,8 +33,9 @@ export const HackathonOverview = () => {
       <div className="mt-36 flex flex-wrap gap-12 items-center">
         {hackathonList.length === 0 && (
           <div>
-            <h3>You haven't created any hackathons yet.</h3>
-            <CreateAHackathonCard />
+            <h3 className="text-center text-2xl">
+              You haven't created any hackathons yet.
+            </h3>
           </div>
         )}
         {hackathonList.length !== 0 &&
@@ -45,6 +48,17 @@ export const HackathonOverview = () => {
           <CreateAHackathonCard />
         </div>
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3600}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+      />
     </>
   )
 }

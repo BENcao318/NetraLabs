@@ -61,6 +61,7 @@ module.exports = {
         requirements:
           '<ul><li><span class="ql-size-large">Business innovation </span></li><li><span class="ql-size-large">Contribution to society</span></li><li><span class="ql-size-large">Originality</span></li><li><span class="ql-size-large">End-user experience</span></li><li><span class="ql-size-large">Team collaboration</span></li><li><span class="ql-size-large">Use of technologies provided</span></li></ul>',
         resources: '<h4><strong>TECHNICAL RESOURCES</strong></h4><p>	Links</p>',
+        launched: false,
         partners:
           '<h2><strong>Lighthouse Labs</strong></h2><h2><a href="https://www.givesome.com/" rel="noopener noreferrer" target="_blank"><strong>Givesome</strong></a></h2>',
         created_at: new Date(),
@@ -114,6 +115,7 @@ module.exports = {
         requirements:
           '<ul><li><span class="ql-size-large">Business innovation </span></li><li><span class="ql-size-large">Contribution to society</span></li><li><span class="ql-size-large">Originality</span></li><li><span class="ql-size-large">End-user experience</span></li><li><span class="ql-size-large">Team collaboration</span></li><li><span class="ql-size-large">Use of technologies provided</span></li></ul>',
         resources: '<h4><strong>TECHNICAL RESOURCES</strong></h4><p>	Links</p>',
+        launched: false,
         partners:
           '<h2><strong>Lighthouse Labs</strong></h2><h2><a href="https://www.givesome.com/" rel="noopener noreferrer" target="_blank"><strong>Givesome</strong></a></h2>',
         created_at: new Date(),

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'hackathon_id',
       })
       Hackathon.belongsTo(models.User, {
-        foreignKey: 'id',
+        foreignKey: 'user_id',
       })
     }
   }
@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       about: DataTypes.TEXT,
       partners: DataTypes.TEXT,
       resources: DataTypes.TEXT,
+      launched: DataTypes.BOOLEAN,
       created_at: DataTypes.DATE,
       user_id: DataTypes.INTEGER,
     },

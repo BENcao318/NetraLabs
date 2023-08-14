@@ -5,7 +5,7 @@ import {
   CardFooter,
   Typography,
 } from '@material-tailwind/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { convertDateString } from '../helpers/util'
 import { Link, useNavigate } from 'react-router-dom'
 import { HackathonPreview } from './hackathonPreview'
@@ -14,6 +14,7 @@ import { HackathonLaunchDialog } from './hackathonLaunchDialog'
 export const HackathonInfoCard = ({ hackathon }) => {
   const [openHackathonPreview, setOpenHackathonPreview] = useState(false)
   const [openLaunchDialog, setOpenLaunchDialog] = useState(false)
+  const [launched, setLaunched] = useState(false)
 
   const handleOpenHackathonPreview = () =>
     setOpenHackathonPreview(!openHackathonPreview)
@@ -29,10 +30,10 @@ export const HackathonInfoCard = ({ hackathon }) => {
   }
 
   const TABLE_ROWS = [
-    {
-      name: 'Tagline:',
-      content: hackathon.tagline,
-    },
+    // {
+    //   name: 'Tagline:',
+    //   content: hackathon.tagline,
+    // },
     {
       name: 'Email:',
       content: hackathon.manager_email,
@@ -61,9 +62,13 @@ export const HackathonInfoCard = ({ hackathon }) => {
     )
   }
 
+  useEffect(() => {
+    setLaunched(hackathon.launched)
+  }, [setLaunched, hackathon])
+
   return (
     <>
-      <Card className="w-[30rem] flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl">
+      <Card className="w-[30rem] flex flex-col outline outline-2 outline-offset-2 outline-gray-600 hover:shadow-xl break-all">
         <CardBody className="flex flex-col">
           <div>
             <Typography
@@ -74,13 +79,13 @@ export const HackathonInfoCard = ({ hackathon }) => {
             </Typography>
           </div>
           <div className="border border-solid border-1 border-gray-400"></div>
-          <table className="w-full min-w-max table-auto text-left">
+          <table className="w-full min-w-max text-left">
             <tbody>
               {TABLE_ROWS.map(({ name, content }, index) => {
                 const isLast = index === TABLE_ROWS.length - 1
                 const classes = isLast
                   ? 'p-4'
-                  : 'p-4 border-b border-blue-gray-50'
+                  : 'p-4 border-b border-blue-gray-50l'
 
                 return (
                   <tr key={name} className="even:bg-blue-gray-50/50">
@@ -97,7 +102,7 @@ export const HackathonInfoCard = ({ hackathon }) => {
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal font-serif text-md"
+                        className="font-normal font-roboto"
                       >
                         {content}
                       </Typography>
@@ -120,13 +125,18 @@ export const HackathonInfoCard = ({ hackathon }) => {
               Edit
             </a>
           </div>
-
-          <Button
-            className="rounded-full bg-orange-300 hover:-translate-y-1 text-gray-800 font-semibold"
-            onClick={handleOpenLaunchDialog}
-          >
-            Launch
-          </Button>
+          {launched ? (
+            <div className="flex uppercase items-center font-bold text-green-600">
+              launched
+            </div>
+          ) : (
+            <Button
+              className="rounded-full bg-orange-300 hover:-translate-y-1 text-gray-800 font-semibold"
+              onClick={handleOpenLaunchDialog}
+            >
+              Launch
+            </Button>
+          )}
         </CardFooter>
       </Card>
 
@@ -139,6 +149,7 @@ export const HackathonInfoCard = ({ hackathon }) => {
         open={openLaunchDialog}
         handleOpen={handleOpenLaunchDialog}
         hackathon={hackathon}
+        setLaunched={setLaunched}
       />
     </>
   )

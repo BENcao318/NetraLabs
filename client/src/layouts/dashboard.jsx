@@ -10,6 +10,8 @@ import { AdminDashboardNavbar } from '../widgets/layout/admin-dashboard-navbar'
 import { HackathonOverview } from '../pages/management/hackathonOverview'
 import { Createhackathon } from '../pages/management/createhackathon'
 import { Edithackathon } from '../pages/management/editHackathon'
+import { HackathonList } from '../pages/dashboard/hackathons/hackathonList'
+import { HackathonDetail } from '../pages/dashboard/hackathons/hackathonDetail'
 
 export const Dashboard = () => {
   const { hackathon, setHackathon } = useContext(hackathonContext)
@@ -35,6 +37,10 @@ export const Dashboard = () => {
       }
     })
   }, [setAuth])
+
+  useEffect(() => {
+    navigate('/dashboard/hackathons')
+  }, [])
 
   useEffect(() => {
     serverAPI
@@ -70,6 +76,7 @@ export const Dashboard = () => {
                     <Route exact path={path} element={element} />
                   ))
               )}
+              <Route path="/hackthon/detail" element={<HackathonDetail />} />
             </Routes>
           </div>
         </div>
@@ -78,7 +85,7 @@ export const Dashboard = () => {
         <div className="p-3 mx-36">
           <AdminDashboardNavbar />
           <Routes>
-            <Route path="/" element={<HackathonOverview />} />
+            <Route path="/hackathons" element={<HackathonOverview />} />
             <Route path="/hackathon/new" element={<Createhackathon />} />
             <Route path="/hackathon/update" element={<Edithackathon />} />
           </Routes>

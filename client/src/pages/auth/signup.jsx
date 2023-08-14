@@ -58,7 +58,7 @@ export const SignUp = () => {
             isLoading: false,
             user: response.data.user,
           }))
-          navigate('/dashboard')
+          navigate('/dashboard/hackathons')
           console.log('yes')
           // toast.success(`Signed in. Welcome! 😊`, {
           //   closeOnClick: true,

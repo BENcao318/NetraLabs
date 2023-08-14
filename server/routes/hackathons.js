@@ -10,4 +10,8 @@ router.post('/list', hackathons.getHackathonsByUserEmail)
 
 router.post('/update', hackathons.updateHackathonByUUID)
 
+router.post('/launch', hackathons.launchHackathon)
+
+router.get('/launched-hackathons', hackathons.getListOfLaunchedHackathons)
+
 module.exports = router
