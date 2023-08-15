@@ -7,7 +7,8 @@ module.exports = {
         id: 1,
         isAdmin: false,
         role: ['fulltack engineer'],
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         skills: ['JavaScript', 'Node.js', 'Sequelize'],
         email: 'john.doe@example.com',
         password:
@@ -19,7 +20,9 @@ module.exports = {
         id: 2,
         isAdmin: true,
         role: ['project manager'],
-        name: 'Jane Doe',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        company: 'NestraLabs',
         skills: ['JavaScript', 'Node.js', 'Sequelize'],
         email: 'benc.netrascale@gmail.com',
         password:

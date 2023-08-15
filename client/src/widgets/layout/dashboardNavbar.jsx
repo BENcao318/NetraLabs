@@ -1,6 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { setOpenSidenav, useThemeController } from '../../context/themeContext'
 import {
+  Avatar,
   Button,
   IconButton,
   Menu,
@@ -13,30 +14,48 @@ import {
 import {
   Bars3Icon,
   BellIcon,
-  CalendarIcon,
   ClockIcon,
   UserCircleIcon,
+  PowerIcon,
+  ChevronDownIcon,
+  Cog6ToothIcon,
 } from '@heroicons/react/24/outline'
-import { Link } from 'react-router-dom'
-import { hackathonContext } from '../../context/hackathonContext'
-import { convertDateString } from '../../helpers/util'
+import { Link, useNavigate } from 'react-router-dom'
+import { authContext } from '../../context/authContext'
+import { UserProfileImg } from '../../components/userProfileImg'
 
 export const DashboardNavbar = () => {
   const [controller, dispatch] = useThemeController()
   const { openSidenav } = controller
-  const { hackathon } = useContext(hackathonContext)
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const { auth } = useContext(authContext)
 
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
+  console.log(auth)
+
+  const closeProfileMenu = () => setIsProfileMenuOpen(false)
+
+  const goToMyProfile = () => {
+    navigate('/dashboard/profile')
+    closeProfileMenu()
   }
-  const formattedDate = hackathon
-    ? convertDateString(hackathon.deadline, options)
-    : null
+
+  const signout = () => {
+    console.log('signout')
+  }
+
+  const profileMenuItems = [
+    {
+      label: 'My Profile',
+      icon: Cog6ToothIcon,
+      action: goToMyProfile,
+    },
+    {
+      label: 'Sign Out',
+      icon: PowerIcon,
+      action: signout,
+    },
+  ]
 
   return (
     <Navbar
@@ -57,53 +76,72 @@ export const DashboardNavbar = () => {
           </IconButton>
         </div>
         <div className="flex items-center">
-          {' '}
-          <CalendarIcon className="h-6 w-6 text-gray-900 mr-2" />{' '}
-          <strong>Deadline</strong> : {hackathon && formattedDate}
-        </div>
-        <div className="flex items-center">
-          <Link to="/auth/sign-in">
-            <Button
-              variant="text"
-              color="blue-gray"
-              className="hidden items-center gap-1 px-4 xl:flex"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-              Sign In
-            </Button>
-            <IconButton
-              variant="text"
-              color="blue-gray"
-              className="grid xl:hidden"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-            </IconButton>
-          </Link>
-          <Menu>
+          <Menu
+            open={isProfileMenuOpen}
+            handler={setIsProfileMenuOpen}
+            placement="bottom-end"
+          >
             <MenuHandler>
-              <IconButton variant="text" color="blue-gray">
-                <BellIcon className="h-5 w-5 text-blue-gray-500" />
-              </IconButton>
+              <Button
+                variant="text"
+                color="blue-gray"
+                className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto ring-1 ring-gray-300"
+              >
+                {auth.user.avatar ? (
+                  <Avatar
+                    variant="circular"
+                    size="sm"
+                    alt="tania andrew"
+                    className="border border-gray-900 p-0.5 mr-6"
+                    src={`data:image/png;base64,${btoa(
+                      String.fromCharCode(...auth.user.avatar.data)
+                    )}`}
+                  />
+                ) : (
+                  <UserProfileImg
+                    firstName={auth.user.firstName}
+                    lastName={auth.user.lastName}
+                    width={8}
+                    height={8}
+                  />
+                )}
+
+                <ChevronDownIcon
+                  strokeWidth={2.5}
+                  className={`h-3 w-3 transition-transform ${
+                    isProfileMenuOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </Button>
             </MenuHandler>
-            <MenuList className="w-max border-0">
-              <MenuItem className="flex items-center gap-3">
-                <div>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="mb-1 font-normal"
+            <MenuList className="p-1">
+              {profileMenuItems.map(({ label, icon, action }, key) => {
+                const isLastItem = key === profileMenuItems.length - 1
+                return (
+                  <MenuItem
+                    key={label}
+                    onClick={action}
+                    className={`flex items-center gap-2 rounded ${
+                      isLastItem
+                        ? 'hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10'
+                        : ''
+                    }`}
                   >
-                    <strong>New message</strong> from Chris B
-                  </Typography>
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="flex items-center gap-1 text-xs font-normal opacity-60"
-                  >
-                    <ClockIcon className="h-3.5 w-3.5" /> 16 minutes ago
-                  </Typography>
-                </div>
-              </MenuItem>
+                    {React.createElement(icon, {
+                      className: `h-4 w-4 ${isLastItem ? 'text-red-500' : ''}`,
+                      strokeWidth: 2,
+                    })}
+                    <Typography
+                      as="span"
+                      variant="small"
+                      className="font-normal"
+                      color={isLastItem ? 'red' : 'inherit'}
+                    >
+                      {label}
+                    </Typography>
+                  </MenuItem>
+                )
+              })}
             </MenuList>
           </Menu>
         </div>

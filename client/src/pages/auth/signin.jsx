@@ -87,8 +87,8 @@ export const SignIn = () => {
 
   const userSignIn = () => {
     const data = {
-      email: 'john.doe@example.com',
-      password: 'test1234',
+      email: 'bencao@gmail.com',
+      password: 'bensde123',
     }
     serverAPI.post('/users/sign-in', data).then((response) => {
       if (!response.data.success) {

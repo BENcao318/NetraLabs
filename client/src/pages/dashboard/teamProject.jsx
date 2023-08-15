@@ -8,7 +8,7 @@ import * as yup from 'yup'
 import options from '../../data/options.json'
 import { Quilleditor } from '../../components/quilleditor'
 
-export const Myproject = () => {
+export const TeamProject = () => {
   const schema = yup.object().shape({
     name: yup.string().required('Enter project name'),
     tagline: yup.string().required('Enter project tagline'),

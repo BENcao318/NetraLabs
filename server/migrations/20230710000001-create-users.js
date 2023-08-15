@@ -18,9 +18,21 @@ module.exports = {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
       },
-      name: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      avatar: {
+        type: DataTypes.BLOB('long'),
+        allowNull: true,
+      },
+      company: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       skills: {
         type: DataTypes.ARRAY(DataTypes.STRING),
