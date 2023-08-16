@@ -24,20 +24,21 @@ exports.createUser = async (req, res) => {
     }
 
     let hashedPassword = await hash(req.body.password, 10)
-    let avatarBuffer = await generateAvatar(
-      req.body.firstName,
-      req.body.lastName
-    )
+    // let avatarBuffer = await generateAvatar(
+    //   req.body.firstName,
+    //   req.body.lastName
+    // )
 
     const userInfo = {
       email: req.body.email.toLowerCase(),
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: hashedPassword,
-      avatar: avatarBuffer,
+      // avatar: avatarBuffer,
     }
 
     const userData = await User.create(userInfo)
+    console.log('userData+++++++++++++++++ ', userData)
 
     req.session.user = {
       email: userData.email,
@@ -144,5 +145,51 @@ exports.getHackathonsByUserEmail = async (email) => {
     }
   } catch (error) {
     throw error
+  }
+}
+
+exports.updateUserData = async (req, res) => {
+  const { firstName, lastName, avatar, role, skills } = req.body
+
+  try {
+    const userData = await User.update(
+      {
+        firstName: firstName,
+        lastName: lastName,
+        avatar: avatar,
+        role: role,
+        skills: skills,
+      },
+      {
+        where: {
+          email: req.session.user.email,
+        },
+        returning: true,
+      }
+    )
+
+    if (userData) {
+      const userDataValues = userData[1][0].dataValues
+      const attributesToOmit = ['id', 'password', 'createdAt', 'updatedAt']
+      const returnToFEUserData = { ...userDataValues }
+
+      attributesToOmit.forEach((attribute) => {
+        delete returnToFEUserData[attribute]
+      })
+
+      res.status(200).send({
+        success: true,
+        message: 'Update user data success',
+        messge2: null,
+        userData: returnToFEUserData,
+      })
+    } else {
+      return null
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: `Error updating User data: ${err}`,
+    })
+    console.log(err.message)
   }
 }

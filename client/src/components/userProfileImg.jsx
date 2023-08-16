@@ -26,7 +26,7 @@ export const UserProfileImg = ({ firstName, lastName, width, height }) => {
 
   return (
     <div
-      className={`w-${width} h-${height} rounded-full flex justify-center items-center text-white text-xl font-bold bg-green-600`}
+      className={`w-${width} h-${height} rounded-full flex justify-center items-center text-white text-xl font-bold bg-green-600 mr-6`}
     >
       {initials}
     </div>

@@ -63,11 +63,6 @@ export const SignUp = () => {
           }))
           navigate('/dashboard/hackathons')
           console.log('yes')
-          // toast.success(`Signed in. Welcome! 😊`, {
-          //   closeOnClick: true,
-          //   pauseOnHover: true,
-          //   draggable: true,
-          // })
         }
       })
       .catch((err) => {

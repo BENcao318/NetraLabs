@@ -2,66 +2,129 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Avatar, Button } from '@material-tailwind/react'
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+} from '@material-tailwind/react'
 import { useNavigate } from 'react-router-dom'
 import { UserProfileImg } from '../../components/userProfileImg'
 import serverAPI from '../../hooks/useAxios'
 import { authContext } from '../../context/authContext'
+import { UploadAvatar } from '../../components/uploadAvatar'
+import { ToastContainer, toast } from 'react-toastify'
+import { CheckboxList } from '../../components/checkboxList'
+import options from '../../data/options.json'
+import makeAnimated from 'react-select/animated'
+import Select from 'react-select'
 
 export const Profile = () => {
-  const [user, setUser] = useState(null)
-  const { auth } = useContext(authContext)
+  const { auth, setAuth } = useContext(authContext)
+  const [selectedSpecialtyItem, setSelectedSpecialtyItem] = useState(null)
+  const [openAvatarEditor, setOpenAvatarEditor] = useState(false)
+  const [preview, setPreview] = useState(null)
+  const [avatarImg, setAvatarImg] = useState(null)
+  const animatedComponents = makeAnimated()
 
   const schema = yup.object().shape({
     firstName: yup.string().required('Enter first name'),
     lastName: yup.string().required('Enter last name'),
-    // story: yup.string().required(),
-    // techStack: yup
-    //   .array()
-    //   .of(
-    //     yup.object().shape({
-    //       value: yup.string().required('Please select a tag.'),
-    //       label: yup.string().required('Please select a tag.'),
-    //     })
-    //   )
-    //   .required(),
-    // videoUrl: yup
-    //   .string()
-    //   .url('Invalid URL format.')
-    //   .required('Please enter website'),
-    // repositoryUrl: yup
-    //   .string()
-    //   .matches(
-    //     /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-    //     'Enter correct url!'
-    //   ),
+    techStack: yup
+      .array()
+      .of(
+        yup.object().shape({
+          value: yup.string().required('Please select a tag.'),
+          label: yup.string().required('Please select a tag.'),
+        })
+      )
+      .required(),
   })
 
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
+  const handleOpenAvatarEditor = () => setOpenAvatarEditor(!openAvatarEditor)
+  const handleConfirmAvatarEditor = () => {
+    setAvatarImg(preview)
+    handleOpenAvatarEditor()
+  }
+
   const navigate = useNavigate()
 
   const onSubmit = (data) => {
-    // console.log(data)
-    const name = {
-      firstName: 'Ben',
-      lastName: 'Cao',
+    const userData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      avatar: avatarImg ? avatarImg : auth.user.avatar,
+      role: selectedSpecialtyItem,
+      skills: data.techStack,
     }
-    serverAPI.post('/users/create-photo', name).then((response) => {
-      setUser(response.data.message2)
-      // console.log('first')
+
+    serverAPI.post('/users/update-user-data', userData).then((response) => {
+      if (response.data.success) {
+        setAuth((prev) => ({
+          ...prev,
+          user: response.data.userData,
+        }))
+        toast.success(`Success! Updated user data😊`, {
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
+      }
     })
   }
 
-  const replaceAvatar = () => {}
-  const removeAvatar = () => {}
+  const removeAvatar = () => {
+    setAvatarImg(null)
+    const user = { ...auth.user, avatar: null }
+    setAuth((prev) => ({
+      ...prev,
+      user,
+    }))
+  }
+
+  const onCancel = () => {
+    serverAPI.get('/me').then((response) => {
+      if (response.data.success) {
+        setAuth((prev) => ({
+          ...prev,
+          isLoading: false,
+          isLoggedIn: true,
+          user: response.data.user,
+        }))
+      } else {
+        navigate('/auth/sign-in')
+      }
+    })
+    navigate('/dashboard/hackathons')
+  }
+
+  const checkboxList = [
+    { value: 'Full-stack developer', label: 'Full-stack developer' },
+    { value: 'Front-end developer', label: 'Front-end developer' },
+    { value: 'Back-end developer', label: 'Back-end developer' },
+    { value: 'UI Designer', label: 'UI Designer' },
+    { value: 'Data Scientist', label: 'Data Scientist' },
+    { value: 'Product Manager', label: 'Product Manager' },
+    { value: 'Business Manager', label: 'Business Manager' },
+  ]
+
+  useEffect(() => {
+    if (auth.user) {
+      setValue('firstName', auth.user.firstName)
+      setValue('lastName', auth.user.lastName)
+      setSelectedSpecialtyItem(auth.user.role)
+      setValue('techStack', auth.user.skills)
+    }
+  }, [auth.user])
 
   // console.log(user.data)
 
@@ -102,24 +165,21 @@ export const Profile = () => {
         <div className="flex flex-col mt-6">
           <h1 className="text-lg font-medium dark:text-white mb-2">Avatar</h1>
           <div className="flex gap-6 items-center">
-            {auth.user.avatar ? (
-              <img
-                className="w-20 h-20"
-                src={`data:image/png;base64,${btoa(
-                  String.fromCharCode(...auth.user.avatar.data)
-                )}`}
-              />
-            ) : (
-              <UserProfileImg
-                firstName={auth.user.firstName}
-                lastName={auth.user.lastName}
-                width={20}
-                height={20}
-              />
-            )}
+            {!avatarImg &&
+              (auth.user.avatar ? (
+                <img className="w-20 h-20" src={auth.user.avatar} />
+              ) : (
+                <UserProfileImg
+                  firstName={auth.user.firstName}
+                  lastName={auth.user.lastName}
+                  width={20}
+                  height={20}
+                />
+              ))}
+            {avatarImg && <img className="w-20 h-20" src={avatarImg} />}
             <div className="flex flex-col justify-between items-center h-full gap-6">
               <a
-                onClick={replaceAvatar}
+                onClick={handleOpenAvatarEditor}
                 className="font-semibold  dark:text-blue-600 text-blue-600 cursor-pointer"
               >
                 Replace Avatar
@@ -134,22 +194,99 @@ export const Profile = () => {
           </div>
         </div>
 
-        <div className="flex mx-auto items-center gap-12 mt-36">
-          <Button
-            type="submit"
-            className="w-20 self-center"
-            onClick={handleSubmit(onSubmit)}
+        <div className="flex flex-col mt-6">
+          <h1 className="text-lg font-medium dark:text-white mb-2">
+            Your Specialties
+          </h1>
+          <div>
+            <CheckboxList
+              list={checkboxList}
+              selectedItem={selectedSpecialtyItem}
+              setSelectedItem={setSelectedSpecialtyItem}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1 mt-6">
+          <h1 className="text-lg font-medium dark:text-white">Tech stack</h1>
+          <label
+            htmlFor="techStack"
+            className="text-sm text-gray-600 italic block"
           >
-            Save
-          </Button>
-          <a
-            className="font-medium text-red-600 hover:underline cursor-pointer text-center"
-            onClick={() => navigate('/dashboard/hackathons')}
-          >
-            Cancel
-          </a>
+            What languages, frameworks, databases are you good at?
+          </label>
+          <Controller
+            name="techStack"
+            control={control}
+            render={({ field }) => (
+              <>
+                <Select
+                  {...field}
+                  isMulti
+                  options={options}
+                  placeholder="Select tags..."
+                  components={animatedComponents}
+                  className="w-full max-w-[40rem]"
+                />
+                <p className="mt-2 text-red-600">
+                  {errors.techStack && "Can't be blank"}
+                </p>
+              </>
+            )}
+          />
         </div>
       </div>
+
+      <div className="flex mx-auto items-center gap-6 mt-12 w-full justify-center">
+        <Button
+          type="submit"
+          className="w-20 self-center"
+          onClick={handleSubmit(onSubmit)}
+        >
+          Save
+        </Button>
+        <a
+          className="font-medium text-red-600 hover:underline cursor-pointer text-center"
+          onClick={onCancel}
+        >
+          Cancel
+        </a>
+      </div>
+
+      <Dialog open={openAvatarEditor} handler={handleOpenAvatarEditor}>
+        <DialogHeader>Set and Upload your customized avatar.</DialogHeader>
+        <DialogBody divider>
+          <UploadAvatar setPreview={setPreview} preview={preview} />
+        </DialogBody>
+        <DialogFooter>
+          <Button
+            variant="text"
+            color="red"
+            onClick={handleOpenAvatarEditor}
+            className="mr-1"
+          >
+            <span>Cancel</span>
+          </Button>
+          <Button
+            variant="gradient"
+            color="green"
+            onClick={handleConfirmAvatarEditor}
+          >
+            <span>Confirm</span>
+          </Button>
+        </DialogFooter>
+      </Dialog>
+      <ToastContainer
+        position="top-center"
+        autoClose={3600}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+      />
     </>
   )
 }

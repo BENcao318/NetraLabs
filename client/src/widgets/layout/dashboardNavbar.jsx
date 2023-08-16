@@ -88,15 +88,7 @@ export const DashboardNavbar = () => {
                 className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto ring-1 ring-gray-300"
               >
                 {auth.user.avatar ? (
-                  <Avatar
-                    variant="circular"
-                    size="sm"
-                    alt="tania andrew"
-                    className="border border-gray-900 p-0.5 mr-6"
-                    src={`data:image/png;base64,${btoa(
-                      String.fromCharCode(...auth.user.avatar.data)
-                    )}`}
-                  />
+                  <img className="w-12 h-12 mr-6" src={auth.user.avatar} />
                 ) : (
                   <UserProfileImg
                     firstName={auth.user.firstName}
