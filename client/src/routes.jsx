@@ -12,7 +12,7 @@ import {
   UserPlusIcon,
 } from '@heroicons/react/24/solid'
 import { Overview } from './pages/dashboard/hackathons/overview'
-import { Myproject } from './pages/dashboard/myproject'
+import { TeamProject } from './pages/dashboard/teamProject'
 import { Rules } from './pages/dashboard/hackathons/rules'
 import { Resources } from './pages/dashboard/hackathons/resources'
 import { Participants } from './pages/dashboard/participants'
@@ -58,9 +58,9 @@ export const routes = [
       },
       {
         icon: <BriefcaseIcon {...icon} />,
-        name: 'My Project',
-        path: '/my-project',
-        element: <Myproject />,
+        name: 'Team Project',
+        path: '/team-project',
+        element: <TeamProject />,
       },
       // {
       //   icon: <UserGroupIcon {...icon} />,

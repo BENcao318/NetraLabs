@@ -194,7 +194,7 @@ exports.getListOfLaunchedHackathons = async (req, res) => {
       },
       include: {
         model: User,
-        attributes: ['name'],
+        attributes: ['firstName', 'lastName'],
       },
     })
 

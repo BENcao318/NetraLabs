@@ -8,5 +8,6 @@ router.get('/', (req, res) => {
 
 router.post('/sign-in', users.signIn)
 router.post('/sign-on', users.createUser)
+router.post('/update-user-data', users.updateUserData)
 
 module.exports = router

@@ -20,9 +20,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      role: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
-      name: { type: DataTypes.STRING, allowNull: false },
-      skills: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
+      role: { type: DataTypes.TEXT, allowNull: true },
+      firstName: { type: DataTypes.STRING, allowNull: false },
+      lastName: { type: DataTypes.STRING, allowNull: false },
+      avatar: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      company: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      skills: { type: DataTypes.JSON, allowNull: true },
       email: {
         type: DataTypes.STRING,
         allowNull: false,

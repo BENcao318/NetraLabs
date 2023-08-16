@@ -15,15 +15,27 @@ module.exports = {
         defaultValue: false,
       },
       role: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.TEXT,
         allowNull: true,
       },
-      name: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      avatar: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      company: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       skills: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.JSON,
         allowNull: true,
       },
       email: {

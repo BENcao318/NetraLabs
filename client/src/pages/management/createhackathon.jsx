@@ -13,11 +13,7 @@ import { PrizeForm } from '../../components/prizeForm'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
-import { hackathonContext } from '../../context/hackathonContext'
-import {
-  convertDateObjectToUTCString,
-  convertDateString2,
-} from '../../helpers/util'
+import { convertDateObjectToUTCString } from '../../helpers/util'
 import { authContext } from '../../context/authContext'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
@@ -58,11 +54,8 @@ export const Createhackathon = () => {
   } = useForm({ resolver: yupResolver(schema) })
 
   const { auth } = useContext(authContext)
-
   const navigate = useNavigate()
-
   const animatedComponents = makeAnimated()
-
   const [prizeList, setPrizeList] = useState([])
 
   useEffect(() => {
@@ -127,12 +120,10 @@ export const Createhackathon = () => {
       user: auth.user,
       launched: false,
     }
-    // console.log(formData.deadline)
     serverAPI
       .post('/hackathons/new', formData)
       .then((res) => {
         if (res) {
-          // console.log(res.status)
           toast.success(`${formData.name} is created! 🏆🏆🏆`, {
             position: 'top-center',
             autoClose: 5000,
@@ -172,25 +163,6 @@ export const Createhackathon = () => {
   const resourcesEditorContent = watch('resources')
   const judgesEditorContent = watch('judges')
   const partnersEditorContent = watch('partners')
-
-  // useEffect(() => {
-  //   if (hackathon) {
-  //     setValue('name', hackathon.name)
-  //     setValue('tagline', hackathon.tagline)
-  //     setValue('email', hackathon.manager_email)
-  //     setValue('location', hackathon.location)
-  //     setValue('description', hackathon.description)
-  //     setValue('requirements', hackathon.requirements)
-  //     setValue('rules', hackathon.rules)
-  //     setValue('resources', hackathon.resources)
-  //     setValue('judges', hackathon.judges)
-  //     setValue('partners', hackathon.partners)
-  //     setValue('timeZone', hackathon.time_zone)
-  //     setPrizeList(hackathon.prizes)
-  //     setValue('startTime', convertDateString2(hackathon.start_time))
-  //     setValue('deadline', convertDateString2(hackathon.deadline))
-  //   }
-  // }, [hackathon])
 
   return (
     <>

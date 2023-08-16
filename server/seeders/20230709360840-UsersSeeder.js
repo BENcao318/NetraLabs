@@ -6,9 +6,14 @@ module.exports = {
       {
         id: 1,
         isAdmin: false,
-        role: ['fulltack engineer'],
-        name: 'John Doe',
-        skills: ['JavaScript', 'Node.js', 'Sequelize'],
+        role: 'full-stack developer',
+        firstName: 'John',
+        lastName: 'Doe',
+        skills: JSON.stringify([
+          { value: 'python', label: 'Python' },
+          { value: 'java', label: 'Java' },
+          { value: 'Node.js', label: 'Node.js' },
+        ]),
         email: 'john.doe@example.com',
         password:
           '$2b$10$mFaxo0BsAtrfOiji2D1DCO7jPnCxgigOvhabJ4SqNH7RMDa0U4pSa', // Replace with the hashed password
@@ -18,9 +23,15 @@ module.exports = {
       {
         id: 2,
         isAdmin: true,
-        role: ['project manager'],
-        name: 'Jane Doe',
-        skills: ['JavaScript', 'Node.js', 'Sequelize'],
+        role: 'product manager',
+        firstName: 'Jane',
+        lastName: 'Doe',
+        company: 'NestraLabs',
+        skills: JSON.stringify([
+          { value: 'javascript', label: 'javascript' },
+          { value: 'java', label: 'Java' },
+          { value: 'Node.js', label: 'Node.js' },
+        ]),
         email: 'benc.netrascale@gmail.com',
         password:
           '$2b$10$z2PlLvdppNciH7NWBG0SHOuQmI3BDoRNiBCQgbmz7012L7C9kA6eC', // Replace with the hashed password

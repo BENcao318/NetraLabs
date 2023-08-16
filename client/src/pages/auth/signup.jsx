@@ -13,13 +13,15 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import serverAPI from '../../hooks/useAxios'
 import { authContext } from '../../context/authContext'
+import { ToastContainer, toast } from 'react-toastify'
 
 export const SignUp = () => {
   const { setAuth } = useContext(authContext)
   const navigate = useNavigate()
 
   const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
+    firstName: yup.string().required('First name is required'),
+    lastName: yup.string().required('Last name is required'),
     email: yup.string().email().required('Email is required'),
     password: yup
       .string()
@@ -44,7 +46,8 @@ export const SignUp = () => {
   const onSubmit = (data) => {
     const userData = {
       email: data.email,
-      name: data.name,
+      firstName: data.firstName,
+      lastName: data.lastName,
       password: data.password,
     }
 
@@ -60,11 +63,6 @@ export const SignUp = () => {
           }))
           navigate('/dashboard/hackathons')
           console.log('yes')
-          // toast.success(`Signed in. Welcome! 😊`, {
-          //   closeOnClick: true,
-          //   pauseOnHover: true,
-          //   draggable: true,
-          // })
         }
       })
       .catch((err) => {
@@ -75,6 +73,11 @@ export const SignUp = () => {
             message: err.response.data.message,
           })
         }
+        toast.error(`Sign up error, try again`, {
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
       })
     // reset();
   }
@@ -99,17 +102,31 @@ export const SignUp = () => {
               </Typography>
               <Input
                 type="text"
-                label="Name"
+                label="First Name"
                 size="lg"
                 error={errors.name === undefined ? false : true}
-                {...register('name')}
+                {...register('firstName')}
               />
               <p
                 className={`-mt-2 text-red-600 ml-2 ${
-                  errors.name ? 'block' : 'hidden'
+                  errors.firstName ? 'block' : 'hidden'
                 }`}
               >
-                {errors.name?.message}
+                {errors.firstName?.message}
+              </p>
+              <Input
+                type="text"
+                label="Last Name"
+                size="lg"
+                error={errors.lastName === undefined ? false : true}
+                {...register('lastName')}
+              />
+              <p
+                className={`-mt-2 text-red-600 ml-2 ${
+                  errors.lastName ? 'block' : 'hidden'
+                }`}
+              >
+                {errors.lastName?.message}
               </p>
               <Input
                 type="email"
@@ -176,6 +193,17 @@ export const SignUp = () => {
           </Card>
         </form>
         //todo add pagination for account profile
+        <ToastContainer
+          position="top-center"
+          autoClose={3600}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          closeButton={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+        />
       </div>
     </>
   )

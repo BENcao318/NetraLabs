@@ -14,18 +14,18 @@ export const HackathonList = () => {
 
   return (
     <>
-      <div className="text-center mt-6 bg-orange-600 text-white font-bold text-2xl py-4 rounded-lg w-full">
+      <div className="text-center mt-6 bg-orange-600 text-white font-bold text-2xl py-4 rounded-lg w-full h-full">
         <h6>Explore the hackathons powered by NetraLabs</h6>
       </div>
-      <div className="flex flex-wrap gap-6 mt-16 mx-auto w-full">
-        {Array.isArray(hackathonList) ? (
+      <div className="flex flex-wrap gap-6 mt-16 mx-auto w-full h-full">
+        {Array.isArray(hackathonList) && hackathonList.length !== 0 ? (
           hackathonList.map((hackathon, key) => (
             <ul key={key} className="mx-auto">
               <LaunchedHackathonInfoCard hackathon={hackathon} />
             </ul>
           ))
         ) : (
-          <div className="text-center h-screen w-full flex flex-col justify-center">
+          <div className="text-center h-full w-full flex flex-col justify-center">
             <h1 className="text-2xl">No available hackacthon right now.</h1>
             <h1 className="text-2xl">Pelase check again.</h1>
           </div>

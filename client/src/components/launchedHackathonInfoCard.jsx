@@ -29,15 +29,12 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
   const [progressStatus, setProgressStatus] = useState('')
 
   const onClick = () => {
-    console.log('first')
     navigate(
       `/dashboard/hackathons/detail/?data=${encodeURIComponent(
         JSON.stringify(hackathon)
       )}`
     )
   }
-
-  console.log(hackathon.start_time)
 
   useEffect(() => {
     if (hackathon) {
@@ -70,13 +67,13 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
 
           <div className="grid grid-rows-2 grid-flow-col gap-4">
             <div className="flex gap-2">
-              <TrophyIcon class="h-6 w-6 text-gray-600" />
+              <TrophyIcon className="h-6 w-6 text-gray-600" />
               <div>{`$ ${calculateTotalPrize(
                 hackathon.prizes
               )} in prizes`}</div>
             </div>
             <div className="flex gap-2">
-              <GlobeAltIcon class="h-6 w-6 text-gray-600" />
+              <GlobeAltIcon className="h-6 w-6 text-gray-600" />
               <div>{hackathon.time_zone.value}</div>
             </div>
             <div className="flex gap-2">
@@ -98,7 +95,6 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
         <CardFooter className="pt-0 flex justify-between gap-16 h-full mx-auto px-12 items-center -my-2">
           {/* <div className="flex gap-6 items-center">{hackathon.start_time}</div> */}
           <Chip
-            variant="ghost"
             color={progressStatus !== 'hackathon has ended' ? 'green' : 'gray'}
             size="sm"
             value={progressStatus}
@@ -114,8 +110,8 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
           />
 
           <div className="flex gap-2">
-            <BuildingOffice2Icon class="h-6 w-6 text-gray-500" />
-            <p>{hackathon.User.name}</p>
+            <BuildingOffice2Icon className="h-6 w-6 text-gray-500" />
+            <p>{hackathon.User.company}</p>
           </div>
 
           {/* <div className="">

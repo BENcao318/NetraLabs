@@ -2,19 +2,30 @@ import React, { useContext, useEffect, useState } from 'react'
 import { setOpenSidenav, useThemeController } from '../../context/themeContext'
 import { Link, NavLink } from 'react-router-dom'
 import {
+  Alert,
   Avatar,
   Button,
+  Card,
+  CardBody,
   IconButton,
   Typography,
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { authContext } from '../../context/authContext'
+import { CubeTransparentIcon } from '@heroicons/react/24/solid'
+import netrachainImg from '../../img/NetraChain.png'
 
 export const Sidenav = ({ brandImg, brandName, routes }) => {
   const [controller, dispatch] = useThemeController()
   const { sidenavColor, sidenavType, openSidenav } = controller
   const [dashboardLayout, setDashboardLayout] = useState('userDashboard')
   const { auth } = useContext(authContext)
+  const [open, setOpen] = useState(0)
+  const [openAlert, setOpenAlert] = useState(true)
+
+  const handleOpen = (value) => {
+    setOpen(open === value ? 0 : value)
+  }
 
   useEffect(() => {
     setDashboardLayout(auth.user.isAdmin ? 'adminDashboard' : 'userDashboard')
@@ -29,12 +40,12 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
     <aside
       className={`${sidenavTypes[sidenavType]} ${
         openSidenav ? 'translate-x-0' : '-translate-x-80'
-      } fixed inset-0 z-40 h-100vh w-72 transition-transform duration-300 xl:translate-x-0`}
+      } fixed inset-0 z-40 h-100vh w-72 transition-transform duration-300 xl:translate-x-0 flex flex-col justify-between`}
     >
       <div
         className={`relative border-b ${
           sidenavType === 'dark' ? 'border-white/20' : 'border-blue-gray-50'
-        }`}
+        } mt-4`}
       >
         <Link to="/" className="flex items-center gap-4 py-6 px-8">
           <Avatar src={brandImg} size="sm" />
@@ -99,6 +110,31 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
           </ul>
         ))}
       </div>
+      <Card className="mt-auto mx-4 mb-4">
+        <CardBody className="flex flex-col">
+          <a href="https://www.netrascale.com/">
+            <img src={netrachainImg} className="w-3/4 h-3/4 mx-auto" />
+          </a>
+          <Typography variant="h6" className="mb-1 mt-2 text-center">
+            Join NetraChain for more
+          </Typography>
+          <Typography variant="small" className="font-normal opacity-80">
+            We empower you with game-changing R&D projects, hackathons, design
+            thinking labs and global connections that drive innovation, while
+            genuinely acknowledging and addressing the challenges you encounter.
+          </Typography>
+          <div className="mt-4 flex mx-auto">
+            <Typography
+              as="a"
+              href="https://www.netrascale.com/"
+              variant="small"
+              className="font-medium"
+            >
+              Go to NetraChain
+            </Typography>
+          </div>
+        </CardBody>
+      </Card>
     </aside>
   )
 }

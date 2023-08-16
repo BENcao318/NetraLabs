@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { Profiler, useContext, useEffect, useState } from 'react'
 import { Sidenav } from '../widgets/layout/sidenav'
 import routes from '../routes'
 import { Route, Routes, useNavigate } from 'react-router-dom'
@@ -12,6 +12,7 @@ import { Createhackathon } from '../pages/management/createhackathon'
 import { Edithackathon } from '../pages/management/editHackathon'
 import { HackathonList } from '../pages/dashboard/hackathons/hackathonList'
 import { HackathonDetail } from '../pages/dashboard/hackathons/hackathonDetail'
+import { Profile } from '../pages/dashboard/profile'
 
 export const Dashboard = () => {
   const { hackathon, setHackathon } = useContext(hackathonContext)
@@ -77,6 +78,7 @@ export const Dashboard = () => {
                   ))
               )}
               <Route path="/hackathons/detail" element={<HackathonDetail />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>
         </div>
