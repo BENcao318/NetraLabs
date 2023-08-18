@@ -5,16 +5,15 @@ import { HackathonInfoCard } from '../../components/hackathonInfoCard'
 import { CreateAHackathonCard } from '../../components/createAHackathonCard'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { hackathonListContext } from '../../context/hackathonListContext'
 
 export const HackathonOverview = () => {
   const { auth, setAuth } = useContext(authContext)
-  const [hackathonList, setHackathonList] = useState([])
+  const { hackathonList, setHackathonList } = useContext(hackathonListContext)
 
   useEffect(() => {
-    console.log(auth.user)
     getHackathonList()
-    console.log(hackathonList)
-  }, [auth, setHackathonList])
+  }, [setHackathonList, auth])
 
   const getHackathonList = () => {
     serverAPI
@@ -41,7 +40,10 @@ export const HackathonOverview = () => {
         {hackathonList.length !== 0 &&
           hackathonList.map((hackathon, key) => (
             <ul key={key} className="h-full">
-              <HackathonInfoCard hackathon={hackathon} />
+              <HackathonInfoCard
+                hackathon={hackathon}
+                hackathonList={hackathonList}
+              />
             </ul>
           ))}
         <div className="h-full">

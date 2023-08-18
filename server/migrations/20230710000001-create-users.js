@@ -47,6 +47,16 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      hackathons: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        defaultValue: [],
+      },
+      projects: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        defaultValue: [],
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

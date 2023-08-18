@@ -82,6 +82,7 @@ exports.signIn = async (req, res) => {
           role: user.dataValues.role,
           skills: user.dataValues.skills,
           isAdmin: user.dataValues.isAdmin,
+          hackathons: user.dataValues.hackathons,
         }
 
         req.session.user = userData
@@ -149,7 +150,7 @@ exports.getHackathonsByUserEmail = async (email) => {
 }
 
 exports.updateUserData = async (req, res) => {
-  const { firstName, lastName, avatar, role, skills } = req.body
+  const { firstName, lastName, avatar, role, skills, hackathons } = req.body
 
   try {
     const userData = await User.update(
@@ -159,6 +160,7 @@ exports.updateUserData = async (req, res) => {
         avatar: avatar,
         role: role,
         skills: skills,
+        hackathons: hackathons,
       },
       {
         where: {
@@ -192,4 +194,13 @@ exports.updateUserData = async (req, res) => {
     })
     console.log(err.message)
   }
+}
+
+exports.signOut = async (req, res) => {
+  req.session.destroy()
+  res.status(200).send({
+    success: true,
+    message: 'Signout success',
+    message2: null,
+  })
 }

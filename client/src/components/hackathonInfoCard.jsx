@@ -11,7 +11,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { HackathonPreview } from './hackathonPreview'
 import { HackathonLaunchDialog } from './hackathonLaunchDialog'
 
-export const HackathonInfoCard = ({ hackathon }) => {
+export const HackathonInfoCard = ({ hackathon, hackathonList }) => {
   const [openHackathonPreview, setOpenHackathonPreview] = useState(false)
   const [openLaunchDialog, setOpenLaunchDialog] = useState(false)
   const [launched, setLaunched] = useState(false)
@@ -55,11 +55,7 @@ export const HackathonInfoCard = ({ hackathon }) => {
   const navigate = useNavigate()
 
   const onClick = () => {
-    navigate(
-      `/dashboard/hackathon/update/?data=${encodeURIComponent(
-        JSON.stringify(hackathon)
-      )}`
-    )
+    navigate(`/dashboard/admin/hackathon/update/?data=${hackathon.id}`)
   }
 
   useEffect(() => {

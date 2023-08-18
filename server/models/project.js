@@ -9,10 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Project.belongsTo(models.Team, { foreignKey: 'team_id' })
+      Project.belongsTo(models.Hackathon, {
+        foreignKey: 'hackathon_id',
+      })
     }
   }
   Project.init(
     {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
+      },
       name: DataTypes.STRING,
       challenge_id: DataTypes.INTEGER,
       submission_video_url: DataTypes.STRING,

@@ -9,5 +9,6 @@ router.get('/', (req, res) => {
 router.post('/sign-in', users.signIn)
 router.post('/sign-on', users.createUser)
 router.post('/update-user-data', users.updateUserData)
+router.get('/sign-out', users.signOut)
 
 module.exports = router

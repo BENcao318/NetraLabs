@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { HackathonDetailNavbar } from '../../../widgets/layout/hackathonDetailNavbar'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Overview } from './overview'
 import { Rules } from './rules'
 import { Resources } from './resources'
+import { hackathonListContext } from '../../../context/hackathonListContext'
 
 export const HackathonDetail = () => {
   const [page, setPage] = useState('overview')
+  const { hackathonList } = useContext(hackathonListContext)
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const objectString = queryParams.get('data')
-  const hackathon = JSON.parse(decodeURIComponent(objectString))
+  const hackathon = hackathonList.find(
+    (hackathon) => hackathon.id === objectString
+  )
 
   return (
     <>
