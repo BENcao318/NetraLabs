@@ -1,6 +1,6 @@
 const db = require('../models')
 const hackathon = require('../models/hackathon')
-const { Hackathon, User } = db
+const { Hackathon, User, Project } = db
 const users = require('./user.controller')
 
 exports.findLatestHackathon = async (req, res) => {
@@ -224,5 +224,74 @@ const isHackathonNameTaken = async (name) => {
   } catch (error) {
     console.error('Error checking hackathon name:', error)
     throw error
+  }
+}
+
+exports.joinHackathon = async (req, res) => {
+  const { userEmail, hackathonId } = req.body
+
+  try {
+    // console.log(userEmail, hackathonID)
+    const user = await User.findOne({
+      where: {
+        email: userEmail,
+      },
+    })
+
+    if (user) {
+      if (!user.hackathons.find((hackathon) => (hackathon.id = hackathonId))) {
+        const updatedHackathons = [...user.hackathons, hackathonId]
+        await user.update({ hackathons: updatedHackathons })
+      } else {
+        return res
+          .status(403)
+          .send({ message: 'Hackathon has been signed by you.' })
+      }
+    }
+
+    res.status(200).send({
+      success: true,
+      message: 'success',
+    })
+  } catch (error) {
+    console.log('Error joining the hackathon:', error)
+    res.status(500).send({
+      message:
+        error.message || 'Some error occurred while joining the hackathon',
+    })
+  }
+}
+
+exports.getProjectByUserEmailAndHackathon = async (req, res) => {
+  const { userEmail, hackathonId } = req.body
+
+  try {
+    const projects = await Project.findAll({
+      where: {
+        '$user.email$': userEmail,
+        '$hackathon.id$': hackathonId,
+      },
+      include: [
+        {
+          model: User,
+        },
+        {
+          model: Hackathon,
+        },
+      ],
+    })
+
+    console.log('projects+++++++++++++++++++', projects)
+
+    res.status(200).send({
+      success: true,
+      message: 'success',
+    })
+  } catch (error) {
+    console.log('Error joining the hackathon:', error)
+    res.status(500).send({
+      message:
+        error.message || 'Some error occurred while joining the hackathon',
+    })
   }
 }

@@ -19,24 +19,10 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
-import { hackathonContext } from '../../context/hackathonContext'
+import { hackathonListContext } from '../../context/hackathonListContext'
 import { convertDateString } from '../../helpers/util'
 
 export const AdminDashboardNavbar = () => {
-  const { hackathon } = useContext(hackathonContext)
-
-  const options = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  }
-  const formattedDate = hackathon
-    ? convertDateString(hackathon.deadline, options)
-    : null
-
   return (
     <Navbar
       color="transparent"
@@ -47,8 +33,11 @@ export const AdminDashboardNavbar = () => {
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div></div>
         <div className="flex items-center">
-          <Link to="/dashboard" className="flex items-center gap-4 py-6 px-8">
-            <Avatar src={'../img/brandImg.png'} size="sm" />
+          <Link
+            to="/dashboard/admin/hackathons"
+            className="flex items-center gap-4 py-6 px-8"
+          >
+            <Avatar src={'../../img/brandImg.png'} size="sm" />
             <Typography variant="h4" color="blue-gray">
               NetraLabs
             </Typography>

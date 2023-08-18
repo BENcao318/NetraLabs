@@ -7,7 +7,7 @@ export const CreateAHackathonCard = () => {
   const navigate = useNavigate()
 
   const directToCreationPage = () => {
-    navigate('/dashboard/hackathon/new')
+    navigate('/dashboard/admin/hackathon/new')
   }
 
   return (

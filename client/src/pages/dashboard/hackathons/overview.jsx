@@ -1,12 +1,81 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as DOMPurify from 'dompurify'
 import { convertDateString } from '../../../helpers/util'
 import { Button } from '@material-tailwind/react'
+import serverAPI from '../../../hooks/useAxios'
+import { authContext } from '../../../context/authContext'
+import { ToastContainer, toast } from 'react-toastify'
 
 export const Overview = ({ hackathon }) => {
+  const { auth } = useContext(authContext)
+  const [hasJoined, setHasJoined] = useState(false)
+  const [project, setProject] = useState(null)
+
   const sanitizeHTML = (htmlString) => {
     return DOMPurify.sanitize(htmlString)
   }
+
+  const onClick = () => {
+    const hackathonSignUpData = {
+      userEmail: auth.user.email,
+      hackathonId: hackathon.id,
+    }
+
+    serverAPI
+      .post('/hackathons/join', hackathonSignUpData)
+      .then((response) => {
+        if (response.status === 403) {
+          console.log(response.data.message)
+        } else {
+          setHasJoined(true)
+          toast.success(
+            `You have joined this hackthon. Go ahead create a project!`,
+            {
+              position: 'top-center',
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'light',
+            }
+          )
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.error(`Error joining hackthon. Please try again!`, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
+      })
+  }
+
+  useEffect(() => {
+    if (Array.isArray(auth.user.hackathons)) {
+      if (auth.user.hackathons.includes(hackathon.id)) setHasJoined(true)
+    }
+  }, [auth, setHasJoined])
+
+  useEffect(() => {
+    if (hasJoined) {
+      const userData = {
+        userEmail: auth.user.email,
+        hackathonId: hackathon.id,
+      }
+      console.log('first')
+      serverAPI.post('/hackathons/get-project', userData).then((response) => {
+        console.log(response.data)
+      })
+    }
+  }, [hasJoined, project])
 
   return (
     hackathon && (
@@ -16,7 +85,13 @@ export const Overview = ({ hackathon }) => {
             {hackathon.name}
           </h6>
           <p className="text-lg -mt-3">{hackathon.tagline}</p>
-          <Button className="mt-6"> Join hackathon</Button>
+          <div>
+            {!hasJoined && (
+              <Button className="mt-6" onClick={onClick}>
+                Join hackathon
+              </Button>
+            )}
+          </div>
           <div className="text-sm flex mx-auto gap-4 w-full justify-center mt-6">
             <div className="flex gap-4">
               <div className="font-semibold">Start time:</div>
@@ -62,9 +137,9 @@ export const Overview = ({ hackathon }) => {
             Prizes
           </h1>
           <div className="flex gap-20 mt-6">
-            {hackathon.prizes.map((prize) => {
+            {hackathon.prizes.map((prize, index) => {
               return (
-                <div className="w-full mx-auto">
+                <div className="w-full mx-auto" key={index}>
                   <div>🏆 {prize.name}</div>
                   <div>🪙 ${prize.value}</div>
                   <div>{prize.numOfWinningTeams} winning teams</div>
@@ -83,6 +158,17 @@ export const Overview = ({ hackathon }) => {
             className="text-lg flex flex-col py-6"
           />
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3600}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          closeButton={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+        />
       </div>
     )
   )

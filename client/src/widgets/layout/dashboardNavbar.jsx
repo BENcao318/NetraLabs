@@ -23,15 +23,14 @@ import {
 import { Link, useNavigate } from 'react-router-dom'
 import { authContext } from '../../context/authContext'
 import { UserProfileImg } from '../../components/userProfileImg'
+import serverAPI from '../../hooks/useAxios'
 
 export const DashboardNavbar = () => {
   const [controller, dispatch] = useThemeController()
   const { openSidenav } = controller
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const navigate = useNavigate()
-  const { auth } = useContext(authContext)
-
-  console.log(auth)
+  const { auth, setAuth } = useContext(authContext)
 
   const closeProfileMenu = () => setIsProfileMenuOpen(false)
 
@@ -41,7 +40,17 @@ export const DashboardNavbar = () => {
   }
 
   const signout = () => {
-    console.log('signout')
+    serverAPI.get('/users/sign-out').then((response) => {
+      if (response.data.success) {
+        setAuth((prev) => ({
+          ...prev,
+          isLoading: true,
+          isLoggedIn: false,
+          user: {},
+        }))
+        navigate('/')
+      }
+    })
   }
 
   const profileMenuItems = [

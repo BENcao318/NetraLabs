@@ -22,7 +22,7 @@ import Select from 'react-select'
 
 export const Profile = () => {
   const { auth, setAuth } = useContext(authContext)
-  const [selectedSpecialtyItem, setSelectedSpecialtyItem] = useState(null)
+  const [selectedSpecialtyItem, setSelectedSpecialtyItem] = useState('')
   const [openAvatarEditor, setOpenAvatarEditor] = useState(false)
   const [preview, setPreview] = useState(null)
   const [avatarImg, setAvatarImg] = useState(null)

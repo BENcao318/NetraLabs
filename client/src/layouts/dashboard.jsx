@@ -4,25 +4,20 @@ import routes from '../routes'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import { DashboardNavbar } from '../widgets/layout/dashboardNavbar'
 import serverAPI from '../hooks/useAxios'
-import { hackathonContext } from '../context/hackathonContext'
+import { hackathonListContext } from '../context/hackathonListContext'
 import { authContext } from '../context/authContext'
 import { AdminDashboardNavbar } from '../widgets/layout/adminDashboardNavbar'
 import { HackathonOverview } from '../pages/management/hackathonOverview'
 import { Createhackathon } from '../pages/management/createhackathon'
-import { Edithackathon } from '../pages/management/editHackathon'
-import { HackathonList } from '../pages/dashboard/hackathons/hackathonList'
+import { EditHackathon } from '../pages/management/editHackathon'
 import { HackathonDetail } from '../pages/dashboard/hackathons/hackathonDetail'
 import { Profile } from '../pages/dashboard/profile'
 
 export const Dashboard = () => {
-  const { hackathon, setHackathon } = useContext(hackathonContext)
+  const { setHackathonList } = useContext(hackathonListContext)
   const { auth, setAuth } = useContext(authContext)
   const navigate = useNavigate()
   const [dashboardLayout, setDashboardLayout] = useState('userDashboard')
-
-  useEffect(() => {
-    setDashboardLayout(auth.user.isAdmin ? 'adminDashboard' : 'userDashboard')
-  }, [auth])
 
   useEffect(() => {
     serverAPI.get('/me').then((response) => {
@@ -40,26 +35,48 @@ export const Dashboard = () => {
   }, [setAuth])
 
   useEffect(() => {
-    navigate('/dashboard/hackathons')
-  }, [])
+    setDashboardLayout(auth.user.isAdmin ? 'adminDashboard' : 'userDashboard')
+  }, [auth])
 
   useEffect(() => {
-    serverAPI
-      .get('/hackathons')
-      .then((res) => {
-        if (res.status === 200) {
-          setHackathon(res.data)
-        } else {
-          throw new Error('Request failed.')
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [setHackathon])
+    if (auth.user.isAdmin) {
+      navigate('/dashboard/admin/hackathons')
+    } else {
+      navigate('/dashboard/hackathons')
+    }
+  }, [auth])
+
+  // useEffect(() => {
+  //   if (dashboardLayout === 'adminDashboard') {
+  //     console.log('yessssssssssssss')
+  //     serverAPI
+  //       .post('/hackathons/list', auth.user)
+  //       .then((res) => {
+  //         if (res.status === 200) {
+  //           console.log('res++++++++++++', res.data)
+  //           setHackathonList(res.data.message2)
+  //         } else {
+  //           throw new Error('Request failed.')
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //       })
+  //   }
+  // }, [setHackathonList, auth])
 
   return (
     <>
+      {dashboardLayout === 'adminDashboard' && (
+        <div className="p-3 mx-36">
+          <AdminDashboardNavbar />
+          <Routes>
+            <Route path="/admin/hackathons" element={<HackathonOverview />} />
+            <Route path="/admin/hackathon/new" element={<Createhackathon />} />
+            <Route path="/admin/hackathon/update" element={<EditHackathon />} />
+          </Routes>
+        </div>
+      )}
       {dashboardLayout === 'userDashboard' && (
         <div className="h-full">
           <Sidenav
@@ -81,16 +98,6 @@ export const Dashboard = () => {
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>
-        </div>
-      )}
-      {dashboardLayout === 'adminDashboard' && (
-        <div className="p-3 mx-36">
-          <AdminDashboardNavbar />
-          <Routes>
-            <Route path="/hackathons" element={<HackathonOverview />} />
-            <Route path="/hackathon/new" element={<Createhackathon />} />
-            <Route path="/hackathon/update" element={<Edithackathon />} />
-          </Routes>
         </div>
       )}
     </>

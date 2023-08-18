@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import serverAPI from '../../hooks/useAxios'
 import { authContext } from '../../context/authContext'
+import { toast } from 'react-toastify'
 
 export const SignIn = () => {
   const { setAuth } = useContext(authContext)
@@ -41,18 +42,17 @@ export const SignIn = () => {
           message: response.data.message2,
         })
       } else {
-        console.log(response.data.user)
         setAuth((prev) => ({
           ...prev,
           isLoggedIn: true,
           user: response.data.user,
         }))
         navigate('/dashboard ')
-        // toast.success(`Signed in. Welcome! 😊`, {
-        //   closeOnClick: true,
-        //   pauseOnHover: true,
-        //   draggable: true,
-        // })
+        toast.success(`Signed in. Welcome! 😊`, {
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
       }
     })
     // reset();

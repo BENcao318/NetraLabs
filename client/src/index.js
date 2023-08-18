@@ -5,15 +5,15 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { ThemeControllerProvider } from './context/themeContext'
 import AuthProvider from './context/authContext'
-import HackathonProvider from './context/hackathonContext'
+import HackathonListProvider from './context/hackathonListContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <AuthProvider>
     <ThemeControllerProvider>
-      <HackathonProvider>
+      <HackathonListProvider>
         <App />
-      </HackathonProvider>
+      </HackathonListProvider>
     </ThemeControllerProvider>
   </AuthProvider>
 )

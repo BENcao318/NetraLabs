@@ -29,11 +29,7 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
   const [progressStatus, setProgressStatus] = useState('')
 
   const onClick = () => {
-    navigate(
-      `/dashboard/hackathons/detail/?data=${encodeURIComponent(
-        JSON.stringify(hackathon)
-      )}`
-    )
+    navigate(`/dashboard/hackathons/detail/?data=${hackathon.id}`)
   }
 
   useEffect(() => {
@@ -51,7 +47,7 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
   return (
     <>
       <Card
-        className="w-[30rem] h-full flex flex-col hover:shadow-xl cursor-pointer border hover:border-t-4 hover:border-green-600 hover:border-b-8 rounded-none break-all rounded-md"
+        className="w-[30rem] h-full flex flex-col hover:shadow-xl cursor-pointer border hover:border-t-4 hover:border-green-600 hover:border-b-8  break-all rounded-md"
         onClick={onClick}
       >
         <CardBody className="flex flex-col">

@@ -14,10 +14,10 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import { PrizeTag } from '../../components/prizeTag'
 import { v4 as uuidv4 } from 'uuid'
 import { convertDateString2 } from '../../helpers/util'
-import { authContext } from '../../context/authContext'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { hackathonListContext } from '../../context/hackathonListContext'
 
-export const Edithackathon = () => {
+export const EditHackathon = () => {
   const schema = yup.object().shape({
     name: yup.string().required(),
     tagline: yup.string().required(),
@@ -52,10 +52,15 @@ export const Edithackathon = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
+  const { hackathonList } = useContext(hackathonListContext)
+  console.log('hackathonList+++++++++++++', hackathonList)
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const objectString = queryParams.get('data')
-  const hackathon = JSON.parse(decodeURIComponent(objectString))
+  console.log('objectString++++++++++++++++', objectString)
+  const hackathon = hackathonList.find(
+    (hackathon) => hackathon.id === objectString
+  )
 
   const navigate = useNavigate()
 
@@ -122,7 +127,7 @@ export const Edithackathon = () => {
       .post('/hackathons/update', formData)
       .then((res) => {
         if (res) {
-          navigate('/dashboard')
+          navigate('/dashboard/admin/hackathons')
         }
       })
       .catch((err) => {

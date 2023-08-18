@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import serverAPI from '../../../hooks/useAxios'
 import { LaunchedHackathonInfoCard } from '../../../components/launchedHackathonInfoCard'
+import { hackathonListContext } from '../../../context/hackathonListContext'
 
 export const HackathonList = () => {
-  const [hackathonList, setHackathonList] = useState(null)
+  const { hackathonList, setHackathonList } = useContext(hackathonListContext)
 
   useEffect(() => {
     serverAPI.get('/hackathons/launched-hackathons').then((response) => {
-      console.log('message2: ', response.data.message2)
       setHackathonList(response.data.message2)
     })
   }, [setHackathonList])
@@ -17,10 +17,10 @@ export const HackathonList = () => {
       <div className="text-center mt-6 bg-orange-600 text-white font-bold text-2xl py-4 rounded-lg w-full h-full">
         <h6>Explore the hackathons powered by NetraLabs</h6>
       </div>
-      <div className="flex flex-wrap gap-6 mt-16 mx-auto w-full h-full">
+      <div className=" mt-16 mx-auto h-full max-w-[70rem] grid lg:grid-cols-2  gap-6">
         {Array.isArray(hackathonList) && hackathonList.length !== 0 ? (
           hackathonList.map((hackathon, key) => (
-            <ul key={key} className="mx-auto">
+            <ul key={key}>
               <LaunchedHackathonInfoCard hackathon={hackathon} />
             </ul>
           ))

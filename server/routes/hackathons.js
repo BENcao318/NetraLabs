@@ -14,4 +14,8 @@ router.post('/launch', hackathons.launchHackathon)
 
 router.get('/launched-hackathons', hackathons.getListOfLaunchedHackathons)
 
+router.post('/join', hackathons.joinHackathon)
+
+router.post('/get-project', hackathons.getProjectByUserEmailAndHackathon)
+
 module.exports = router
