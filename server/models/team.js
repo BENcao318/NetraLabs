@@ -5,24 +5,19 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Team extends Model {
     static associate(models) {
-      Team.belongsTo(models.User, {
-        foreignKey: 'teamLeader_id',
-      })
-      Team.belongsTo(models.Challenge, {
-        foreignKey: 'challenge_id',
-      })
-      Team.belongsTo(models.Hackathon, {
-        foreignKey: 'hackathon_id',
-      })
-      Team.belongsToMany(models.User, {
-        through: models.UserTeam,
-        foreignKey: 'team_id',
-      })
+      Team.belongsTo(models.User, { foreignKey: 'team_leader_id' })
+      Team.belongsTo(models.Project, { foreignKey: 'project_id' })
+      Team.belongsTo(models.Hackathon, { foreignKey: 'hackathon_id' })
     }
   }
 
   Team.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       name: DataTypes.STRING,
       created_at: DataTypes.DATE,
     },

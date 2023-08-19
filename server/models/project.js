@@ -8,24 +8,29 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      Project.belongsTo(models.Team, { foreignKey: 'team_id' })
+      Project.belongsToMany(models.User, {
+        through: models.Team,
+        foreignKey: 'project_id',
+      })
+      Project.hasMany(models.Team, { foreignKey: 'project_id' })
       Project.belongsTo(models.Hackathon, {
         foreignKey: 'hackathon_id',
+        allowNull: false,
       })
     }
   }
   Project.init(
     {
       id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
+        autoIncrement: true,
       },
       name: DataTypes.STRING,
       challenge_id: DataTypes.INTEGER,
       submission_video_url: DataTypes.STRING,
       pitch: DataTypes.TEXT,
+      story: DataTypes.TEXT,
       tech_stack: DataTypes.JSON,
       team_id: DataTypes.INTEGER,
       created_at: DataTypes.DATE,

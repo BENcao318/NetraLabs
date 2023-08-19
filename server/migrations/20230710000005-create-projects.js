@@ -8,23 +8,16 @@ module.exports = {
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
+        allowIncrement: true,
       },
       name: {
         type: Sequelize.STRING,
       },
       challenge_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'challenges',
-          key: 'id',
-        },
       },
       hackathon_id: {
         type: Sequelize.UUID,
-        references: {
-          model: 'hackathons',
-          key: 'id',
-        },
       },
       story: {
         type: Sequelize.TEXT,

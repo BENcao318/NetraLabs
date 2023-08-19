@@ -11,12 +11,20 @@ module.exports = (sequelize, DataTypes) => {
       })
       User.hasMany(models.Team, { foreignKey: 'team_leader_id' })
       User.hasMany(models.Hackathon, { foreignKey: 'user_id' })
-      User.hasMany(models.Project, { foreignKey: 'user_id' })
+      User.belongsToMany(models.Project, {
+        through: models.Team,
+        foreignKey: 'team_leader_id',
+      })
     }
   }
 
   User.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
       isAdmin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

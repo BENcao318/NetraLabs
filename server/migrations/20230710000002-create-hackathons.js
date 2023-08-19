@@ -5,6 +5,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('hackathons', {
       id: {
+        allowNull: false,
         type: Sequelize.UUID,
         primaryKey: true,
         defaultValue: Sequelize.UUIDV4,
@@ -62,10 +63,6 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
       },
     })
   },
