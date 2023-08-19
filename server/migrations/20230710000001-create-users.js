@@ -52,11 +52,6 @@ module.exports = {
         allowNull: true,
         defaultValue: [],
       },
-      projects: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        defaultValue: [],
-      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

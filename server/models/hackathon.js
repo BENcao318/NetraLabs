@@ -5,15 +5,9 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Hackathon extends Model {
     static associate(models) {
-      Hackathon.hasMany(models.Challenge, {
-        foreignKey: 'hackathon_id',
-      })
-      Hackathon.hasMany(models.Project, {
-        foreignKey: 'hackathon_id',
-      })
-      Hackathon.belongsTo(models.User, {
-        foreignKey: 'user_id',
-      })
+      Hackathon.hasMany(models.Team, { foreignKey: 'hackathon_id' })
+      Hackathon.belongsTo(models.User, { foreignKey: 'user_id' })
+      Hackathon.hasMany(models.Project, { foreignKey: 'hackathon_id' })
     }
   }
 
