@@ -47,7 +47,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      hackathons: {
+      created_hackathons_id: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: [],
