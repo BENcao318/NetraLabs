@@ -1,5 +1,4 @@
 'use strict'
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -62,10 +61,10 @@ module.exports = {
           '<ul><li><span class="ql-size-large">Business innovation </span></li><li><span class="ql-size-large">Contribution to society</span></li><li><span class="ql-size-large">Originality</span></li><li><span class="ql-size-large">End-user experience</span></li><li><span class="ql-size-large">Team collaboration</span></li><li><span class="ql-size-large">Use of technologies provided</span></li></ul>',
         resources: '<h4><strong>TECHNICAL RESOURCES</strong></h4><p>	Links</p>',
         launched: false,
+        company: 'NetraLabs',
         partners:
           '<h2><strong>Lighthouse Labs</strong></h2><h2><a href="https://www.givesome.com/" rel="noopener noreferrer" target="_blank"><strong>Givesome</strong></a></h2>',
         created_at: new Date(),
-        user_id: 2,
       },
       {
         id: '9da07f7a-8f0f-4b3c-b72b-35c4a1eecd8f',
@@ -116,12 +115,39 @@ module.exports = {
           '<ul><li><span class="ql-size-large">Business innovation </span></li><li><span class="ql-size-large">Contribution to society</span></li><li><span class="ql-size-large">Originality</span></li><li><span class="ql-size-large">End-user experience</span></li><li><span class="ql-size-large">Team collaboration</span></li><li><span class="ql-size-large">Use of technologies provided</span></li></ul>',
         resources: '<h4><strong>TECHNICAL RESOURCES</strong></h4><p>	Links</p>',
         launched: false,
+        company: 'NetraLabs',
         partners:
           '<h2><strong>Lighthouse Labs</strong></h2><h2><a href="https://www.givesome.com/" rel="noopener noreferrer" target="_blank"><strong>Givesome</strong></a></h2>',
         created_at: new Date(),
-        user_id: 2,
       },
     ])
+
+    // const users = await queryInterface.sequelize.query('SELECT id FROM Users;')
+    // const userRows = users[0];
+
+    // const hackathons = await queryInterface.sequelize.query(
+    //   'SELECT id from hackathons;'
+    // )
+    // const hackathonRows = hackathons[0]
+
+    // await queryInterface.bulkInsert(
+    //   'userhackathons',
+    //   [
+    //     {
+    //       user_id: 2,
+    //       hackathon_id: hackathonRows[0].id,
+    //       createdAt: new Date(),
+    //       updatedAt: new Date(),
+    //     },
+    //     {
+    //       user_id: 2,
+    //       hackathon_id: hackathonRows[1].id,
+    //       createdAt: new Date(),
+    //       updatedAt: new Date(),
+    //     },
+    //   ],
+    //   {}
+    // )
   },
 
   async down(queryInterface, Sequelize) {
@@ -131,6 +157,7 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('hackathons', null, {})
+    await queryInterface.bulkDelete('Hackathons', null, {})
+    await queryInterface.bulkDelete('UserHackathons', null, {})
   },
 }

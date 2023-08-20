@@ -5,7 +5,7 @@ import { hackathonListContext } from '../../../context/hackathonListContext'
 
 export const HackathonList = () => {
   const { hackathonList, setHackathonList } = useContext(hackathonListContext)
-
+  console.log(hackathonList)
   useEffect(() => {
     serverAPI.get('/hackathons/launched-hackathons').then((response) => {
       setHackathonList(response.data.message2)

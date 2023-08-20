@@ -68,6 +68,10 @@ exports.signIn = async (req, res) => {
       where: {
         email,
       },
+      include: {
+        model: Hackathon,
+        attribute: ['id'],
+      },
     })
 
     if (user) {
@@ -82,7 +86,7 @@ exports.signIn = async (req, res) => {
           role: user.dataValues.role,
           skills: user.dataValues.skills,
           isAdmin: user.dataValues.isAdmin,
-          hackathons: user.dataValues.hackathons,
+          createdHackathons: user.dataValues.created_hackathons_id,
         }
 
         req.session.user = userData
@@ -108,6 +112,7 @@ exports.signIn = async (req, res) => {
       })
     }
   } catch (err) {
+    console.log(err.message)
     res.status(500).send({
       message: `Error retrieving User with email=${email}, ${err}`,
     })
@@ -136,6 +141,7 @@ exports.getHackathonsByUserEmail = async (email) => {
       },
       include: {
         model: Hackathon,
+        as: 'hackathons',
       },
     })
 

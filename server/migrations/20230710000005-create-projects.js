@@ -31,13 +31,13 @@ module.exports = {
       tech_stack: {
         type: Sequelize.JSON,
       },
-      team_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'teams',
-          key: 'id',
-        },
-      },
+      // team_id: {
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'teams',
+      //     key: 'id',
+      //   },
+      // },
       created_at: {
         type: Sequelize.DATE,
       },

@@ -8,21 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Project.belongsTo(models.Hackathon)
+      Project.belongsTo(models.Team)
       Project.belongsToMany(models.User, {
-        through: models.Team,
+        through: models.UserProject,
         foreignKey: 'project_id',
-      })
-      Project.hasMany(models.Team, { foreignKey: 'project_id' })
-      Project.belongsTo(models.Hackathon, {
-        foreignKey: 'hackathon_id',
-        allowNull: false,
       })
     }
   }
   Project.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
         autoIncrement: true,
       },
@@ -32,7 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       pitch: DataTypes.TEXT,
       story: DataTypes.TEXT,
       tech_stack: DataTypes.JSON,
-      team_id: DataTypes.INTEGER,
       created_at: DataTypes.DATE,
     },
     {

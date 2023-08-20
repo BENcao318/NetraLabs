@@ -9,11 +9,13 @@ module.exports = (sequelize, DataTypes) => {
         through: models.UserTeam,
         foreignKey: 'user_id',
       })
-      User.hasMany(models.Team, { foreignKey: 'team_leader_id' })
-      User.hasMany(models.Hackathon, { foreignKey: 'user_id' })
       User.belongsToMany(models.Project, {
-        through: models.Team,
-        foreignKey: 'team_leader_id',
+        through: models.UserProject,
+        foreignKey: 'user_id',
+      })
+      User.belongsToMany(models.Hackathon, {
+        through: models.UserHackathon,
+        foreignKey: 'user_id',
       })
     }
   }
@@ -47,12 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       password: { type: DataTypes.STRING, allowNull: false },
-      hackathons: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true,
-        defaultValue: [],
-      },
-      projects: {
+      created_hackathons_id: {
         type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
         defaultValue: [],
@@ -60,8 +57,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: 'users',
       modelName: 'User',
+      tableName: 'users',
     }
   )
 

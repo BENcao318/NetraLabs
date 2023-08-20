@@ -134,7 +134,7 @@ export const Createhackathon = () => {
             progress: undefined,
             theme: 'light',
           })
-          navigate('/dashboard/hackathons')
+          navigate('/dashboard/admin/hackathons')
         }
       })
       .catch((err) => {

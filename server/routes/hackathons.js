@@ -4,9 +4,9 @@ const hackathons = require('../controller/hackathon.controller')
 
 router.get('/', hackathons.findLatestHackathon)
 
-router.post('/new', hackathons.createHackathon)
+router.post('/new', hackathons.createAHackathon)
 
-router.post('/list', hackathons.getHackathonsByUserEmail)
+router.post('/list', hackathons.getCreatedHackathonsByAdminEmail)
 
 router.post('/update', hackathons.updateHackathonByUUID)
 

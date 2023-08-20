@@ -59,6 +59,7 @@ export const Overview = ({ hackathon }) => {
   }
 
   useEffect(() => {
+    console.log(auth)
     if (Array.isArray(auth.user.hackathons)) {
       if (auth.user.hackathons.includes(hackathon.id)) setHasJoined(true)
     }

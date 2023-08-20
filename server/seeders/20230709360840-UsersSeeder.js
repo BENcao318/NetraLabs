@@ -35,6 +35,10 @@ module.exports = {
         email: 'benc.netrascale@gmail.com',
         password:
           '$2b$10$z2PlLvdppNciH7NWBG0SHOuQmI3BDoRNiBCQgbmz7012L7C9kA6eC', // Replace with the hashed password
+        created_hackathons_id: [
+          'd8f1c0f5-40d0-4f62-8f65-392cbdd049f9',
+          '9da07f7a-8f0f-4b3c-b72b-35c4a1eecd8f',
+        ],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -55,6 +59,6 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     // Delete all rows from the users table when undoing the seeder
-    await queryInterface.bulkDelete('users', null, {})
+    await queryInterface.bulkDelete('Users', null, {})
   },
 }

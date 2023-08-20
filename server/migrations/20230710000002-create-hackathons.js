@@ -58,12 +58,15 @@ module.exports = {
       launched: {
         type: Sequelize.BOOLEAN,
       },
+      company: {
+        type: Sequelize.STRING,
+      },
       created_at: {
         type: Sequelize.DATE,
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-      },
+      // user_id: {
+      //   type: Sequelize.INTEGER,
+      // },
     })
   },
 

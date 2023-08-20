@@ -107,7 +107,7 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
 
           <div className="flex gap-2">
             <BuildingOffice2Icon className="h-6 w-6 text-gray-500" />
-            <p>{hackathon.User.company}</p>
+            <p>{hackathon.company}</p>
           </div>
 
           {/* <div className="">

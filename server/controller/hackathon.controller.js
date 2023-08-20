@@ -1,6 +1,6 @@
 const db = require('../models')
 const hackathon = require('../models/hackathon')
-const { Hackathon, User, Project } = db
+const { Hackathon, User, Project, UserHackathon } = db
 const users = require('./user.controller')
 
 exports.findLatestHackathon = async (req, res) => {
@@ -15,7 +15,7 @@ exports.findLatestHackathon = async (req, res) => {
   }
 }
 
-exports.createHackathon = async (req, res) => {
+exports.createAHackathon = async (req, res) => {
   const hackathonData = req.body
 
   try {
@@ -38,9 +38,23 @@ exports.createHackathon = async (req, res) => {
         requirements: hackathonData.requirements,
         partners: hackathonData.partners,
         launched: false,
-        user_id: user.dataValues.id,
+        company: user.company,
       })
 
+      const updatedUserData = user.created_hackathons_id
+      updatedUserData.push(newHackathon.id)
+
+      const updatedUser = await User.update(
+        {
+          created_hackathons_id: updatedUserData,
+        },
+        {
+          where: {
+            id: user.id,
+          },
+        }
+      )
+      console.log('Updated User:', updatedUser)
       console.log('Hackathon created: ', newHackathon.toJSON())
       res.status(200).send({
         success: true,
@@ -60,21 +74,24 @@ exports.createHackathon = async (req, res) => {
   }
 }
 
-exports.getHackathonsByUserEmail = async (req, res) => {
+exports.getCreatedHackathonsByAdminEmail = async (req, res) => {
   try {
     const user = await User.findOne({
       where: {
         email: req.body.email,
       },
-      include: {
-        model: Hackathon,
+    })
+
+    const createdHackathons = await Hackathon.findAll({
+      where: {
+        id: user.created_hackathons_id,
       },
     })
 
     if (user) {
-      const hackathons = user.Hackathons.map(
-        (hackathonData) => hackathonData.dataValues
-      ).map(({ user_id, ...rest }) => rest)
+      const hackathons = createdHackathons
+        .map((hackathonData) => hackathonData.dataValues)
+        .map(({ user_id, ...rest }) => rest)
       res.status(200).send({
         success: true,
         message: 'success',
@@ -192,10 +209,6 @@ exports.getListOfLaunchedHackathons = async (req, res) => {
       where: {
         launched: true,
       },
-      include: {
-        model: User,
-        attributes: ['firstName', 'lastName'],
-      },
     })
 
     res.status(200).send({
@@ -238,16 +251,25 @@ exports.joinHackathon = async (req, res) => {
       },
     })
 
-    if (user) {
-      if (!user.hackathons.find((hackathon) => (hackathon.id = hackathonId))) {
-        const updatedHackathons = [...user.hackathons, hackathonId]
-        await user.update({ hackathons: updatedHackathons })
-      } else {
-        return res
-          .status(403)
-          .send({ message: 'Hackathon has been signed by you.' })
-      }
+    const hackathon = await Hackathon.findByPk(hackathonId)
+    if (!hackathon) {
+      return res.status(404).json({ message: 'Hackathon not found.' })
     }
+
+    const userhackathon = await UserHackathon.create({
+      user_id: user.id,
+      hackathon_id: hackathonId,
+    })
+    // if (user) {
+    //   if (!user.hackathons.find((hackathon) => (hackathon.id = hackathonId))) {
+    //     const updatedHackathons = [...user.hackathons, hackathonId]
+    //     await user.update({ hackathons: updatedHackathons })
+    //   } else {
+    //     return res
+    //       .status(403)
+    //       .send({ message: 'Hackathon has been signed by you.' })
+    //   }
+    // }
 
     res.status(200).send({
       success: true,
@@ -266,22 +288,30 @@ exports.getProjectByUserEmailAndHackathon = async (req, res) => {
   const { userEmail, hackathonId } = req.body
 
   try {
-    const projects = await Project.findAll({
+    const user = await User.findOne({
       where: {
-        '$user.email$': userEmail,
-        '$hackathon.id$': hackathonId,
+        email: userEmail,
       },
-      include: [
-        {
-          model: User,
-        },
-        {
-          model: Hackathon,
-        },
-      ],
     })
 
-    console.log('projects+++++++++++++++++++', projects)
+    const hackathon = await Hackathon.findByPk(hackathonId)
+
+    if (!user || !hackathon || !user.TeamId) {
+      return null
+    }
+
+    const projects = await Project.findOne({
+      where: {
+        HackathonId: hackathonId,
+        TeamId: user.TeamId, // Assuming the user is associated with a team
+      },
+    })
+      .then((projects) => {
+        console.log('Projects+++++++++++++++++++: ', projects)
+      })
+      .catch((error) => {
+        console.error('Error retrieving projects:', error)
+      })
 
     res.status(200).send({
       success: true,
