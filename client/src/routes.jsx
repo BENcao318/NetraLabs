@@ -1,27 +1,19 @@
 import {
   BriefcaseIcon,
-  DocumentChartBarIcon,
-  PlusCircleIcon,
   Square3Stack3DIcon,
   SquaresPlusIcon,
-  UserGroupIcon,
 } from '@heroicons/react/24/outline'
 import {
   UserCircleIcon,
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/solid'
-import { Overview } from './pages/dashboard/hackathons/overview'
-import { TeamProject } from './pages/dashboard/teamProject'
-import { Rules } from './pages/dashboard/hackathons/rules'
-import { Resources } from './pages/dashboard/hackathons/resources'
-import { Participants } from './pages/dashboard/participants'
-import { Submissions } from './pages/dashboard/submissions'
-import { Myteam } from './pages/dashboard/myteam'
-import { Createhackathon } from './pages/management/createhackathon'
-import { SignIn, Signin } from './pages/auth/signin'
-import { SignUp } from './pages/auth/signup'
-import { HackathonList } from './pages/dashboard/hackathons/hackathonList'
+import { Participants } from 'pages/dashboard/participants'
+import { Submissions } from 'pages/dashboard/submissions'
+import { SignIn, Signin } from 'pages/auth/signin'
+import { SignUp } from 'pages/auth/signup'
+import { HackathonList } from 'pages/dashboard/hackathons/hackathonList'
+import { ProjectList } from 'pages/dashboard/projects/projectList'
 
 const icon = {
   className: 'w-6 h-6 text-inherit',
@@ -60,7 +52,7 @@ export const routes = [
         icon: <BriefcaseIcon {...icon} />,
         name: 'Team Project',
         path: '/team-project',
-        element: <TeamProject />,
+        element: <ProjectList />,
       },
       // {
       //   icon: <UserGroupIcon {...icon} />,

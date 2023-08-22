@@ -64,7 +64,8 @@ module.exports = {
         company: 'NetraLabs',
         partners:
           '<h2><strong>Lighthouse Labs</strong></h2><h2><a href="https://www.givesome.com/" rel="noopener noreferrer" target="_blank"><strong>Givesome</strong></a></h2>',
-        created_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
       {
         id: '9da07f7a-8f0f-4b3c-b72b-35c4a1eecd8f',
@@ -118,7 +119,8 @@ module.exports = {
         company: 'NetraLabs',
         partners:
           '<h2><strong>Lighthouse Labs</strong></h2><h2><a href="https://www.givesome.com/" rel="noopener noreferrer" target="_blank"><strong>Givesome</strong></a></h2>',
-        created_at: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       },
     ])
 

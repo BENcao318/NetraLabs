@@ -15,6 +15,7 @@ const corsOptions = {
 
 const userRouter = require('./routes/users')
 const hackathonRouter = require('./routes/hackathons')
+const projectRouter = require('./routes/projects')
 
 app.use(
   session({
@@ -41,6 +42,7 @@ app.use(cors(corsOptions))
 
 app.use('/hackathons', hackathonRouter)
 app.use('/users', userRouter)
+app.use('/projects', projectRouter)
 
 // app.use(function (req, res, next) {
 //   const allowedDomains = ['http://localhost:3000']

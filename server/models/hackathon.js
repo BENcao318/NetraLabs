@@ -5,8 +5,8 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Hackathon extends Model {
     static associate(models) {
-      Hackathon.hasMany(models.Team)
-      Hackathon.hasMany(models.Project)
+      Hackathon.hasMany(models.Team, { foreignKey: 'hackathon_id' })
+      Hackathon.hasMany(models.Project, { foreignKey: 'hackathon_id' })
       Hackathon.belongsToMany(models.User, {
         through: models.UserHackathon,
         foreignKey: 'hackathon_id',
@@ -38,8 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       resources: DataTypes.TEXT,
       launched: DataTypes.BOOLEAN,
       company: DataTypes.STRING,
-      company: DataTypes.STRING,
-      // user_id: DataTypes.INTEGER,
     },
     {
       sequelize,

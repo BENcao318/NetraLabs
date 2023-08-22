@@ -1,6 +1,6 @@
 const db = require('../models')
 const hackathon = require('../models/hackathon')
-const { Hackathon, User, Project, UserHackathon } = db
+const { Hackathon, User, Project, UserHackathon, UserProject } = db
 const users = require('./user.controller')
 
 exports.findLatestHackathon = async (req, res) => {
@@ -87,7 +87,6 @@ exports.getCreatedHackathonsByAdminEmail = async (req, res) => {
         id: user.created_hackathons_id,
       },
     })
-
     if (user) {
       const hackathons = createdHackathons
         .map((hackathonData) => hackathonData.dataValues)
@@ -204,17 +203,60 @@ exports.launchHackathon = async (req, res) => {
 }
 
 exports.getListOfLaunchedHackathons = async (req, res) => {
+  const { userEmail } = req.body
+
   try {
+    if (!userEmail) return null
+
     const launchedHackathons = await Hackathon.findAll({
       where: {
         launched: true,
       },
     })
 
+    const launchedHackathonsId = launchedHackathons.map(
+      (hackathon) => hackathon.id
+    )
+    let updatedLaunchedHackathons = []
+
+    if (launchedHackathonsId.length !== 0) {
+      const user = await User.findOne({
+        where: {
+          email: userEmail,
+        },
+        include: [
+          {
+            model: Hackathon,
+            attributes: ['id'],
+            where: {
+              id: launchedHackathonsId,
+            },
+          },
+        ],
+      })
+
+      const joinedHackathonIds =
+        user !== null ? user.Hackathons.map((hackathon) => hackathon.id) : []
+
+      updatedLaunchedHackathons = launchedHackathons.map((hackathon) => {
+        let joined = false
+        if (
+          Array.isArray(joinedHackathonIds) &&
+          joinedHackathonIds.includes(hackathon.id)
+        ) {
+          joined = true
+        }
+        return {
+          ...hackathon.dataValues,
+          joined,
+        }
+      })
+    }
+
     res.status(200).send({
       success: true,
       message: 'success',
-      message2: launchedHackathons,
+      message2: updatedLaunchedHackathons,
     })
   } catch (error) {
     console.log('Error retrieving the hackathon:', error)
@@ -240,7 +282,7 @@ const isHackathonNameTaken = async (name) => {
   }
 }
 
-exports.joinHackathon = async (req, res) => {
+exports.joinAHackathon = async (req, res) => {
   const { userEmail, hackathonId } = req.body
 
   try {
@@ -260,6 +302,27 @@ exports.joinHackathon = async (req, res) => {
       user_id: user.id,
       hackathon_id: hackathonId,
     })
+
+    // const updatedUser = await User.findOne({
+    //   where: {
+    //     email: userEmail,
+    //   },
+    //   include: [
+    //     {
+    //       model: Hackathon,
+    //       attributes: ['id'],
+    //     },
+    //   ],
+    // })
+
+    // const joinedHackathonIds = updatedUser.Hackathons.map(
+    //   (hackathon) => hackathon.id
+    // )
+
+    // req.session.user = {
+    //   ...req.session.user,
+    //   joinedHackathons: joinedHackathonIds,
+    // }
     // if (user) {
     //   if (!user.hackathons.find((hackathon) => (hackathon.id = hackathonId))) {
     //     const updatedHackathons = [...user.hackathons, hackathonId]
@@ -296,26 +359,24 @@ exports.getProjectByUserEmailAndHackathon = async (req, res) => {
 
     const hackathon = await Hackathon.findByPk(hackathonId)
 
-    if (!user || !hackathon || !user.TeamId) {
+    if (!user || !hackathon) {
       return null
     }
 
-    const projects = await Project.findOne({
-      where: {
-        HackathonId: hackathonId,
-        TeamId: user.TeamId, // Assuming the user is associated with a team
-      },
+    const projects = await Project.findAll({
+      where: { hackathon_id: hackathonId },
+      include: [
+        {
+          model: User,
+          where: { id: user.id },
+        },
+      ],
     })
-      .then((projects) => {
-        console.log('Projects+++++++++++++++++++: ', projects)
-      })
-      .catch((error) => {
-        console.error('Error retrieving projects:', error)
-      })
 
     res.status(200).send({
       success: true,
       message: 'success',
+      message2: projects,
     })
   } catch (error) {
     console.log('Error joining the hackathon:', error)

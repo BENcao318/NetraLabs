@@ -68,25 +68,32 @@ exports.signIn = async (req, res) => {
       where: {
         email,
       },
-      include: {
-        model: Hackathon,
-        attribute: ['id'],
-      },
+      include: [
+        {
+          model: Hackathon,
+          attributes: ['id'],
+        },
+      ],
     })
 
     if (user) {
       const passwordMatched = await compare(password, user.dataValues.password)
 
+      const joinedHackathonIds = user.Hackathons.map(
+        (hackathon) => hackathon.id
+      )
+
       if (passwordMatched) {
         const userData = {
-          email: user.dataValues.email,
-          firstName: user.dataValues.firstName,
-          lastName: user.dataValues.lastName,
-          avatar: user.dataValues.avatar,
-          role: user.dataValues.role,
-          skills: user.dataValues.skills,
-          isAdmin: user.dataValues.isAdmin,
-          createdHackathons: user.dataValues.created_hackathons_id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          avatar: user.avatar,
+          role: user.role,
+          skills: user.skills,
+          isAdmin: user.isAdmin,
+          createdHackathons: user.created_hackathons_id,
+          joinedHackathons: joinedHackathonIds,
         }
 
         req.session.user = userData

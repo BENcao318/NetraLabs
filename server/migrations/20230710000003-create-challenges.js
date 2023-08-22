@@ -23,7 +23,7 @@ module.exports = {
         type: Sequelize.TEXT,
         comment: 'description of the challenge',
       },
-      created_at: {
+      createdAt: {
         type: Sequelize.DATE,
       },
     })

@@ -1,21 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import * as DOMPurify from 'dompurify'
 import { convertDateString } from '../../../helpers/util'
 import { Button } from '@material-tailwind/react'
 import serverAPI from '../../../hooks/useAxios'
 import { authContext } from '../../../context/authContext'
 import { ToastContainer, toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+import { hackathonListContext } from '../../../context/hackathonListContext'
 
 export const Overview = ({ hackathon }) => {
-  const { auth } = useContext(authContext)
+  const { auth, setAuth } = useContext(authContext)
   const [hasJoined, setHasJoined] = useState(false)
   const [project, setProject] = useState(null)
+  const { hackathonList, setHackathonList } = useContext(hackathonListContext)
+  const navigate = useNavigate()
 
   const sanitizeHTML = (htmlString) => {
     return DOMPurify.sanitize(htmlString)
   }
 
-  const onClick = () => {
+  const joinAHackathon = () => {
     const hackathonSignUpData = {
       userEmail: auth.user.email,
       hackathonId: hackathon.id,
@@ -27,7 +31,17 @@ export const Overview = ({ hackathon }) => {
         if (response.status === 403) {
           console.log(response.data.message)
         } else {
-          setHasJoined(true)
+          const updatedHackathonList = hackathonList.map((item) => {
+            if (hackathon.id === item.id) {
+              return {
+                ...item,
+                joined: true,
+              }
+            } else {
+              return item
+            }
+          })
+          setHackathonList(updatedHackathonList)
           toast.success(
             `You have joined this hackthon. Go ahead create a project!`,
             {
@@ -58,25 +72,33 @@ export const Overview = ({ hackathon }) => {
       })
   }
 
-  useEffect(() => {
-    console.log(auth)
-    if (Array.isArray(auth.user.hackathons)) {
-      if (auth.user.hackathons.includes(hackathon.id)) setHasJoined(true)
-    }
-  }, [auth, setHasJoined])
+  const createAProject = () => {
+    navigate(`/dashboard/projects/create-project/?data=${hackathon.id}`)
+  }
 
-  useEffect(() => {
-    if (hasJoined) {
+  const editAProject = () => {}
+
+  const getProject = useCallback(() => {
+    if (hackathon && hackathon.joined) {
       const userData = {
         userEmail: auth.user.email,
         hackathonId: hackathon.id,
       }
-      console.log('first')
+
       serverAPI.post('/hackathons/get-project', userData).then((response) => {
-        console.log(response.data)
+        const projects = response.data.message2
+        if (projects.length === 0) {
+          setProject(null)
+        } else {
+          setProject(projects[0])
+        }
       })
     }
-  }, [hasJoined, project])
+  })
+
+  useEffect(() => {
+    getProject()
+  }, [getProject])
 
   return (
     hackathon && (
@@ -87,9 +109,17 @@ export const Overview = ({ hackathon }) => {
           </h6>
           <p className="text-lg -mt-3">{hackathon.tagline}</p>
           <div>
-            {!hasJoined && (
-              <Button className="mt-6" onClick={onClick}>
+            {!hackathon.joined ? (
+              <Button className="mt-6" onClick={joinAHackathon}>
                 Join hackathon
+              </Button>
+            ) : project === null ? (
+              <Button className="mt-6 bg-green-600" onClick={createAProject}>
+                Create Project
+              </Button>
+            ) : (
+              <Button className="mt-6 bg-green-600" onClick={editAProject}>
+                Edit Project
               </Button>
             )}
           </div>

@@ -53,11 +53,9 @@ export const EditHackathon = () => {
   } = useForm({ resolver: yupResolver(schema) })
 
   const { hackathonList } = useContext(hackathonListContext)
-  console.log('hackathonList+++++++++++++', hackathonList)
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const objectString = queryParams.get('data')
-  console.log('objectString++++++++++++++++', objectString)
   const hackathon = hackathonList.find(
     (hackathon) => hackathon.id === objectString
   )

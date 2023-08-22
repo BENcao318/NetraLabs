@@ -61,7 +61,10 @@ module.exports = {
       company: {
         type: Sequelize.STRING,
       },
-      created_at: {
+      createdAt: {
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
         type: Sequelize.DATE,
       },
       // user_id: {
