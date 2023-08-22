@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -10,12 +9,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import {
   calculateDaysForHackathon,
   calculateTotalPrize,
-  convertDateString,
   convertStartTimeAndDeadlineToStringForInfoCard,
 } from '../helpers/util'
-import { Link, useNavigate } from 'react-router-dom'
-import { HackathonPreview } from './hackathonPreview'
-import { HackathonLaunchDialog } from './hackathonLaunchDialog'
+import { useNavigate } from 'react-router-dom'
 import { authContext } from '../context/authContext'
 import { MapPinIcon } from '@heroicons/react/24/solid'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'

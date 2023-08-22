@@ -12,9 +12,9 @@ router.post('/update', hackathons.updateHackathonByUUID)
 
 router.post('/launch', hackathons.launchHackathon)
 
-router.get('/launched-hackathons', hackathons.getListOfLaunchedHackathons)
+router.post('/launched-hackathons', hackathons.getListOfLaunchedHackathons)
 
-router.post('/join', hackathons.joinHackathon)
+router.post('/join', hackathons.joinAHackathon)
 
 router.post('/get-project', hackathons.getProjectByUserEmailAndHackathon)
 

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 
-const password = 'test1234'
+const password = 'bensde123'
 const saltRounds = 10
 
 bcrypt.hash(password, saltRounds, function (err, hashedPassword) {

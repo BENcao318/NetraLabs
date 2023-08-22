@@ -1,20 +1,20 @@
 import React, { Profiler, useContext, useEffect, useState } from 'react'
-import { Sidenav } from '../widgets/layout/sidenav'
-import routes from '../routes'
+import { Sidenav } from 'widgets/layout/sidenav'
+import routes from 'routes'
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import { DashboardNavbar } from '../widgets/layout/dashboardNavbar'
-import serverAPI from '../hooks/useAxios'
-import { hackathonListContext } from '../context/hackathonListContext'
-import { authContext } from '../context/authContext'
-import { AdminDashboardNavbar } from '../widgets/layout/adminDashboardNavbar'
-import { HackathonOverview } from '../pages/management/hackathonOverview'
-import { Createhackathon } from '../pages/management/createhackathon'
-import { EditHackathon } from '../pages/management/editHackathon'
-import { HackathonDetail } from '../pages/dashboard/hackathons/hackathonDetail'
-import { Profile } from '../pages/dashboard/profile'
+import { DashboardNavbar } from 'widgets/layout/dashboardNavbar'
+import serverAPI from 'hooks/useAxios'
+import { authContext } from 'context/authContext'
+import { AdminDashboardNavbar } from 'widgets/layout/adminDashboardNavbar'
+import { HackathonOverview } from 'pages/management/hackathonOverview'
+import { Createhackathon } from 'pages/management/createhackathon'
+import { EditHackathon } from 'pages/management/editHackathon'
+import { HackathonDetail } from 'pages/dashboard/hackathons/hackathonDetail'
+import { Profile } from 'pages/dashboard/profile'
+import { CreateProject } from 'pages/dashboard/projects/createProject'
+import { EditProject } from 'pages/dashboard/projects/editProject'
 
 export const Dashboard = () => {
-  const { setHackathonList } = useContext(hackathonListContext)
   const { auth, setAuth } = useContext(authContext)
   const navigate = useNavigate()
   const [dashboardLayout, setDashboardLayout] = useState('userDashboard')
@@ -95,6 +95,11 @@ export const Dashboard = () => {
                   ))
               )}
               <Route path="/hackathons/detail" element={<HackathonDetail />} />
+              <Route
+                path="/projects/create-project"
+                element={<CreateProject />}
+              />
+              <Route path="projects/edit-project" element={<EditProject />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>

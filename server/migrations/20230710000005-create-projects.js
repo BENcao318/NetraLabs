@@ -15,30 +15,46 @@ module.exports = {
       },
       challenge_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
       },
       hackathon_id: {
         type: Sequelize.UUID,
       },
       story: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       submission_video_url: {
         type: Sequelize.STRING,
+        allowNull: true,
       },
       pitch: {
         type: Sequelize.TEXT,
+        allowNull: true,
       },
       tech_stack: {
         type: Sequelize.JSON,
+        allowNull: true,
       },
-      // team_id: {
-      //   type: Sequelize.INTEGER,
-      //   references: {
-      //     model: 'teams',
-      //     key: 'id',
-      //   },
-      // },
-      created_at: {
+      video_url: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      repository_url: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
+      hackathon_id: {
+        type: Sequelize.UUID,
+      },
+      team_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
         type: Sequelize.DATE,
       },
     })

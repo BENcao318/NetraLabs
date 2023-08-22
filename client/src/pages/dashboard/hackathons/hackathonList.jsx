@@ -2,15 +2,22 @@ import React, { useContext, useEffect, useState } from 'react'
 import serverAPI from '../../../hooks/useAxios'
 import { LaunchedHackathonInfoCard } from '../../../components/launchedHackathonInfoCard'
 import { hackathonListContext } from '../../../context/hackathonListContext'
+import { authContext } from '../../../context/authContext'
 
 export const HackathonList = () => {
   const { hackathonList, setHackathonList } = useContext(hackathonListContext)
-  console.log(hackathonList)
+  const { auth } = useContext(authContext)
+
   useEffect(() => {
-    serverAPI.get('/hackathons/launched-hackathons').then((response) => {
-      setHackathonList(response.data.message2)
-    })
-  }, [setHackathonList])
+    const userData = { userEmail: auth.user.email }
+    if (userData) {
+      serverAPI
+        .post('/hackathons/launched-hackathons', userData)
+        .then((response) => {
+          setHackathonList(response.data.message2)
+        })
+    }
+  }, [setHackathonList, hackathonList, auth])
 
   return (
     <>

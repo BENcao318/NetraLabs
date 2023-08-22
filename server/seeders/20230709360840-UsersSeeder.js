@@ -42,6 +42,24 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        id: 3,
+        isAdmin: false,
+        role: 'full-stack engineer',
+        firstName: 'Ben',
+        lastName: 'Cao',
+        company: 'NestraLabs',
+        skills: JSON.stringify([
+          { value: 'javascript', label: 'javascript' },
+          { value: 'java', label: 'Java' },
+          { value: 'Node.js', label: 'Node.js' },
+        ]),
+        email: 'bencao@gmail.com',
+        password:
+          '$2b$10$ud6Qsi2SeXQSCZwM02gVEeSlmc.qiv7Gkt.CU/jpJ.hIkoIfehjVO', // Replace with the hashed password
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       // Add more user data objects as needed
       // For example:
       // {

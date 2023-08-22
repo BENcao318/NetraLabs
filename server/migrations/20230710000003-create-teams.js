@@ -26,10 +26,10 @@ module.exports = {
           key: 'id',
         },
       },
-      // hackathon_id: {
-      //   type: Sequelize.UUID,
-      // },
-      created_at: {
+      hackathon_id: {
+        type: Sequelize.UUID,
+      },
+      createdAt: {
         type: Sequelize.DATE,
       },
     })
