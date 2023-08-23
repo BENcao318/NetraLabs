@@ -47,10 +47,6 @@ module.exports = {
       hackathon_id: {
         type: Sequelize.UUID,
       },
-      team_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
       createdAt: {
         type: Sequelize.DATE,
       },

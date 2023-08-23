@@ -17,7 +17,7 @@ export const CreateProject = () => {
 
   const schema = yup.object().shape({
     name: yup.string().required('Enter project name'),
-    tagline: yup.string(),
+    picth: yup.string(),
     story: yup.string(),
     techStack: yup.array().of(
       yup.object().shape({
@@ -44,6 +44,7 @@ export const CreateProject = () => {
     setValue,
     watch,
     control,
+    setError,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
@@ -64,9 +65,18 @@ export const CreateProject = () => {
       hackathonId,
       userEmail: auth.user.email,
     }
-    serverAPI.post('/projects/create-project', projectData).then((response) => {
-      navigate('/dashboard/team-project')
-    }).catch(err => console.log(err)) 
+    serverAPI
+      .post('/projects/create-project', projectData)
+      .then((response) => {
+        navigate('/dashboard/team-project')
+      })
+      .catch((err) => {
+        if (err.response.status === 400)
+          setError('name', {
+            type: 'manual',
+            message: err.response.data.message,
+          })
+      })
   }
 
   const onCancel = () => {
@@ -74,7 +84,7 @@ export const CreateProject = () => {
   }
 
   return (
-    <div className="flex p-6 h-full justify-between w-[60rem] mx-auto">
+    <div className="flex p-6 h-full w-[60rem] mx-auto justify-center">
       <div className="flex flex-col gap-6 w-2/3">
         <div className="flex flex-col gap-1">
           <h1 className="text-lg font-semibold dark:text-white">
@@ -96,21 +106,18 @@ export const CreateProject = () => {
           <h1 className="text-lg font-semibold dark:text-white">
             Project pitch/tagline
           </h1>
-          <label
-            htmlFor="tagline"
-            className="text-sm text-gray-600 italic block"
-          >
+          <label htmlFor="pitch" className="text-sm text-gray-600 italic block">
             Create a pitch or tagline for your project.
           </label>
           <input
-            {...register('tagline')}
+            {...register('pitch')}
             type="text"
-            id="tagline"
+            id="pitch"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
           />
-          {errors.tagline && (
-            <p className="text-red-500">{errors.tagline.message}</p>
+          {errors.pitch && (
+            <p className="text-red-500">{errors.pitch.message}</p>
           )}
         </div>
         <div name="hackathon_description" className="flex flex-col gap-1">
@@ -215,11 +222,6 @@ export const CreateProject = () => {
             Cancel
           </a>
         </div>
-      </div>
-      <div>
-        <h1 className="text-xl font-bold">My team</h1>
-        <p>Test members</p>
-        <Button>Add new teammate</Button>
       </div>
     </div>
   )

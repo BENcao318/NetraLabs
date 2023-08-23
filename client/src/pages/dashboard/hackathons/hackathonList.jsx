@@ -17,7 +17,7 @@ export const HackathonList = () => {
           setHackathonList(response.data.message2)
         })
     }
-  }, [setHackathonList, hackathonList, auth])
+  }, [setHackathonList, auth])
 
   return (
     <>

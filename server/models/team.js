@@ -10,9 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       //   foreignKey: 'team_leader_id',
       // })
       Team.belongsTo(models.Hackathon, { foreignKey: 'hackathon_id' })
-      Team.belongsTo(models.Project, { foreignKey: 'team_id' })
+      Team.belongsTo(models.Project, { foreignKey: 'project_id' })
       Team.belongsToMany(models.User, {
-        through: models.UserHackathon,
+        through: models.UserTeam,
         foreignKey: 'team_id',
       })
     }
@@ -20,10 +20,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Team.init(
     {
-      name: DataTypes.STRING,
-      created_at: DataTypes.DATE,
+      name: DataTypes.TEXT,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE,
       team_leader_id: DataTypes.INTEGER,
       hackathon_id: DataTypes.UUID,
+      project_id: DataTypes.UUID,
     },
     {
       sequelize,
