@@ -1,4 +1,5 @@
 const { createCanvas } = require('canvas')
+const nodemailer = require('nodemailer')
 
 exports.generateAvatar = async (firstName, lastName) => {
   const canvas = createCanvas(100, 100)
@@ -40,4 +41,43 @@ const getRandomColor = () => {
   const colors = ['#3490dc', '#38c172', '#e3342f', '#9561e2'] // Use your preferred colors
   const randomIndex = Math.floor(Math.random() * colors.length)
   return colors[randomIndex]
+}
+
+const transporter = nodemailer.createTransport({
+  service: process.env.TRANSPORTER_SERVICER,
+  auth: {
+    user: process.env.TRANSPORTER_USERNAME,
+    pass: process.env.TRANSPORTER_PASSWORD,
+  },
+})
+
+exports.sendEmail = (clientUUID, securityCode, email) => {
+  const now = new Date()
+  const date = now.toString()
+
+  const frontendLink = 'http://localhost:3000'
+
+  const mailOptions = {
+    from: process.env.TRANSPORTER_USERNAME,
+    to: 'bc6016@mun.ca',
+    // to: email,
+    subject: `You are invited!`,
+    html: `<html><b>Hey there! </b><br> Ben just invited you to join the hackathon team <p><a href="${frontendLink}">click here to access the page</a></p> <p>Your security code: <b>123</b></p></html>`,
+  }
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error)
+      return {
+        success: false,
+        error,
+      }
+    } else {
+      console.log('Email sent: ' + info.response)
+      return {
+        success: true,
+        error: null,
+      }
+    }
+  })
 }

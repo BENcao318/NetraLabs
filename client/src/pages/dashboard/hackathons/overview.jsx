@@ -76,7 +76,9 @@ export const Overview = ({ hackathon }) => {
     navigate(`/dashboard/projects/create-project/?data=${hackathon.id}`)
   }
 
-  const editAProject = () => {}
+  const editAProject = () => {
+    navigate(`/dashboard/projects/edit-project/?data=${project.id}`)
+  }
 
   const getProject = useCallback(() => {
     if (hackathon && hackathon.joined) {
@@ -98,7 +100,7 @@ export const Overview = ({ hackathon }) => {
 
   useEffect(() => {
     getProject()
-  }, [getProject])
+  }, [setProject])
 
   return (
     hackathon && (

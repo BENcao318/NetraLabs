@@ -11,7 +11,7 @@ module.exports = {
         allowNull: false,
       },
       name: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       team_leader_id: {
         type: Sequelize.INTEGER,
@@ -29,7 +29,13 @@ module.exports = {
       hackathon_id: {
         type: Sequelize.UUID,
       },
+      project_id: {
+        type: Sequelize.UUID,
+      },
       createdAt: {
+        type: Sequelize.DATE,
+      },
+      updatedAt: {
         type: Sequelize.DATE,
       },
     })

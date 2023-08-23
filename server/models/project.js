@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Project.belongsTo(models.Hackathon, { foreignKey: 'hackathon_id' })
-      Project.belongsTo(models.Team, { foreignKey: 'team_id' })
+      Project.hasOne(models.Team, { foreignKey: 'project_id' })
       Project.belongsToMany(models.User, {
         through: models.UserProject,
         foreignKey: 'project_id',
@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       video_url: DataTypes.TEXT,
       repository_url: DataTypes.TEXT,
       hackathon_id: DataTypes.UUID,
-      team_id: DataTypes.INTEGER,
     },
     {
       sequelize,

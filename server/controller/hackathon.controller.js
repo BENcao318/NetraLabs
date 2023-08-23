@@ -1,5 +1,4 @@
 const db = require('../models')
-const hackathon = require('../models/hackathon')
 const { Hackathon, User, Project, UserHackathon, UserProject } = db
 const users = require('./user.controller')
 

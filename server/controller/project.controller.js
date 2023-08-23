@@ -1,12 +1,10 @@
 const db = require('../models')
-const project = require('../models/project')
-const { User, Hackathon, Project, UserProject } = db
+const { User, Hackathon, Project, UserProject, Team, UserTeam } = db
 const Op = db.Sequelize.Op
+const { sendEmail } = require('../helpers/utils')
 
 exports.createProject = async (req, res) => {
   const { projectData, hackathonId, userEmail } = req.body
-
-  console.log(projectData, hackathonId, userEmail)
 
   if (!req.body) {
     res.status(400).send({
@@ -14,9 +12,25 @@ exports.createProject = async (req, res) => {
     })
     return
   }
-  const transaction = await db.sequelize.transaction()
 
   try {
+    const projectValue = await Project.findOne({
+      where: {
+        name: projectData.name,
+        hackathon_id: hackathonId,
+      },
+    })
+
+    if (projectValue !== null) {
+      res.status(400).send({
+        success: false,
+        message: 'Project name exists, please create a new project name',
+        messge2: null,
+      })
+      return null
+    }
+    const transaction = await db.sequelize.transaction()
+
     const user = await User.findOne(
       {
         where: {
@@ -31,7 +45,7 @@ exports.createProject = async (req, res) => {
       const project = await Project.create(
         {
           name: projectData.name,
-          tagline: projectData.tagline,
+          pitch: projectData.pitch,
           tech_stack: projectData.techStack,
           repository_url: projectData.repositoryUrl,
           video_url: projectData.videoUrl,
@@ -110,7 +124,7 @@ exports.getProjectById = async (req, res) => {
     })
     return
   }
-  console.log(projectId)
+
   try {
     if (userEmail !== req.session.user.email) {
       res.status(400).send({
@@ -120,7 +134,7 @@ exports.getProjectById = async (req, res) => {
       return null
     }
 
-    const project = await Project.findOne({
+    let project = await Project.findOne({
       where: {
         id: projectId,
       },
@@ -130,12 +144,22 @@ exports.getProjectById = async (req, res) => {
         'name',
         'pitch',
         'story',
-        'team_id',
         'tech_stack',
+        'video_url',
+        'repository_url',
       ],
     })
 
-    console.log(project)
+    let team = await Team.findOne({
+      where: {
+        project_id: projectId,
+      },
+    })
+
+    project =
+      team === null
+        ? { ...project.dataValues, hasTeam: false }
+        : { ...project.dataValues, hasTeam: true }
 
     res.status(200).send({
       success: true,
@@ -146,6 +170,176 @@ exports.getProjectById = async (req, res) => {
     console.log('err message:', err.message)
     res.status(500).send({
       message: err.message || 'Some error occurred while creating the User',
+    })
+  }
+}
+
+exports.updateProjectById = async (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  const { projectId, projectData, userEmail, hackathonId } = req.body
+
+  try {
+    if (userEmail !== req.session.user.email) {
+      res.status(400).send({
+        message:
+          'Some error occurred while matching the session with user email',
+      })
+      return null
+    }
+
+    const projectValue = await Project.findOne({
+      where: {
+        name: projectData.name,
+        hackathon_id: hackathonId,
+        id: {
+          [Op.ne]: projectId,
+        },
+      },
+    })
+
+    if (projectValue !== null) {
+      res.status(400).send({
+        success: false,
+        message: 'Project name exists, please create a new project name',
+        messge2: null,
+      })
+      return null
+    }
+
+    const project = await Project.update(
+      {
+        name: projectData.name,
+        pitch: projectData.pitch,
+        story: projectData.story,
+        tagline: projectData.tagline,
+        tech_stack: projectData.techStack,
+        video_url: projectData.videoUrl,
+        repository_url: projectData.repositoryUrl,
+      },
+      {
+        where: {
+          id: projectId,
+        },
+      }
+    )
+
+    res.status(200).send({
+      success: true,
+      message: 'Project update success',
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while updating the project',
+    })
+  }
+}
+
+exports.createNewTeam = async (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  const { name, projectId, userEmail } = req.body
+
+  try {
+    if (userEmail !== req.session.user.email) {
+      res.status(400).send({
+        message:
+          'Some error occurred while matching the session with user email',
+      })
+      return null
+    }
+
+    const team = await Team.findOne({
+      where: {
+        name: name,
+      },
+    })
+
+    if (team !== null) {
+      res.status(400).send({
+        message: 'Team name already exists, please create a different name',
+      })
+      return null
+    }
+    const transaction = await db.sequelize.transaction()
+    const user = await User.findOne(
+      {
+        where: {
+          email: userEmail,
+        },
+      },
+      { transaction }
+    )
+
+    let project = await Project.findByPk(projectId, { transaction })
+
+    if (user && project) {
+      const team = await Team.create(
+        {
+          name: name,
+          team_leader_id: user.id,
+          project_id: projectId,
+        },
+        {
+          transaction,
+        }
+      )
+      await UserTeam.create(
+        {
+          user_id: user.id,
+          team_id: team.id,
+        },
+        { transaction }
+      )
+    }
+
+    await transaction.commit()
+
+    project = { ...project.dataValues, hasTeam: true }
+    res.status(200).send({
+      success: true,
+      message: 'Team create success',
+      message2: project,
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while creating the team',
+    })
+  }
+}
+
+exports.inviteNewMember = async (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+  console.log('first++++++++++++++++++++++++')
+  // const { name, projectId, userEmail } = req.body
+
+  try {
+    sendEmail()
+    res.status(200).send({
+      success: true,
+      message: 'Team create success',
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while creating the team',
     })
   }
 }

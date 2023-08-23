@@ -11,14 +11,20 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import serverAPI from 'hooks/useAxios'
 import userEvent from '@testing-library/user-event'
 import { authContext } from 'context/authContext'
+import { ToastContainer, toast } from 'react-toastify'
+import { CreateNewTeamDialog } from 'components/createNewTeamDialog'
+import { InviteNewTeamMemberDialog } from 'components/inviteNewTeamMemberDialog'
 
 export const EditProject = () => {
   const { auth } = useContext(authContext)
   const [project, setProject] = useState(null)
+  const [openCreateNewTeamDialog, setOpenCreateNewTeamDialog] = useState(false)
+  const [openInviteNewTeamMemberDialog, setOpenInviteNewTeamMemberDialog] =
+    useState(false)
 
   const schema = yup.object().shape({
     name: yup.string().required('Enter project name'),
-    tagline: yup.string(),
+    pitch: yup.string(),
     story: yup.string(),
     techStack: yup.array().of(
       yup.object().shape({
@@ -45,6 +51,7 @@ export const EditProject = () => {
     setValue,
     watch,
     control,
+    setError,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) })
 
@@ -61,16 +68,47 @@ export const EditProject = () => {
 
   const onSubmit = (data) => {
     const projectData = {
-      projectData: projectId,
+      projectId: projectId,
+      projectData: data,
       userEmail: auth.user.email,
+      hackathonId: project.hackathon_id,
     }
+
     serverAPI
       .post('/projects/update-project', projectData)
       .then((response) => {
-        navigate('/dashboard/team-project')
+        if (response.data.success) {
+          toast.success(`Update project success`, {
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
+        } else {
+          toast.warning(`Error updating project, please try again`, {
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          })
+        }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        toast.warning(err.message, {
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        })
+        if (err.response.status === 400)
+          setError('name', {
+            type: 'manual',
+            message: err.response.data.message,
+          })
+      })
   }
+
+  const handleOpenCreateNewTeamDialog = () =>
+    setOpenCreateNewTeamDialog(!openCreateNewTeamDialog)
+  const handleOpenInviteNewTeamMemberDialog = () =>
+    setOpenInviteNewTeamMemberDialog(!openInviteNewTeamMemberDialog)
 
   const onCancel = () => {
     navigate('/dashboard/team-project')
@@ -85,7 +123,7 @@ export const EditProject = () => {
       .post('/projects/get-project-data', projectData)
       .then((response) => setProject(response.data.message2))
       .catch((err) => console.log(err.message))
-  }, [])
+  }, [setProject])
 
   console.log(project)
 
@@ -123,21 +161,18 @@ export const EditProject = () => {
           <h1 className="text-lg font-semibold dark:text-white">
             Project pitch/tagline
           </h1>
-          <label
-            htmlFor="tagline"
-            className="text-sm text-gray-600 italic block"
-          >
+          <label htmlFor="pitch" className="text-sm text-gray-600 italic block">
             Create a pitch or tagline for your project.
           </label>
           <input
-            {...register('tagline')}
+            {...register('pitch')}
             type="text"
-            id="tagline"
+            id="pitch"
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
           focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
           />
-          {errors.tagline && (
-            <p className="text-red-500">{errors.tagline.message}</p>
+          {errors.pitch && (
+            <p className="text-red-500">{errors.pitch.message}</p>
           )}
         </div>
         <div name="hackathon_description" className="flex flex-col gap-1">
@@ -231,23 +266,69 @@ export const EditProject = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-6 w-full justify-center">
-          <Button className="w-20 self-center" onClick={handleSubmit(onSubmit)}>
-            Save
-          </Button>
-          <a
-            className="font-medium text-red-600 hover:underline cursor-pointer text-center"
-            onClick={onCancel}
-          >
-            Cancel
-          </a>
+        <div className="flex items-center px-6 w-full justify-between">
+          <div></div>
+          <div className="flex gap-6 items-center">
+            <Button
+              className="w-20 self-center"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Save
+            </Button>
+            <a
+              className="font-medium text-red-600 hover:underline cursor-pointer text-center"
+              onClick={onCancel}
+            >
+              Cancel
+            </a>
+          </div>
+          <div>
+            <Button className="self-center bg-orange-600">Submit</Button>
+          </div>
         </div>
       </div>
-      <div>
-        <h1 className="text-xl font-bold">My team</h1>
-        <p>Test members</p>
-        <Button>Add new teammate</Button>
+      <div className="ml-2">
+        {project && !project.hasTeam ? (
+          <div className="flex flex-col gap-3 items-center justify-center">
+            <h1 className="text-xl font-bold">You don't have team yet</h1>
+            <p>Create a team for this project?</p>
+            <Button onClick={handleOpenCreateNewTeamDialog}>
+              Create new team
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3 items-center justify-center">
+            <h1 className="text-xl font-bold">My team</h1>
+            <p>Test members</p>
+            <Button onClick={handleOpenInviteNewTeamMemberDialog}>
+              Add new teammate
+            </Button>
+          </div>
+        )}
       </div>
+      <ToastContainer
+        position="top-center"
+        autoClose={3600}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+      />
+      <CreateNewTeamDialog
+        open={openCreateNewTeamDialog}
+        handleOpen={handleOpenCreateNewTeamDialog}
+        project={project}
+        setProject={setProject}
+      />
+      <InviteNewTeamMemberDialog
+        open={openInviteNewTeamMemberDialog}
+        handleOpen={handleOpenInviteNewTeamMemberDialog}
+        project={project}
+        setProject={setProject}
+      />
     </div>
   )
 }
