@@ -8,5 +8,6 @@ router.post('/get-project-data', projects.getProjectById)
 router.post('/update-project', projects.updateProjectById)
 router.post('/create-new-team', projects.createNewTeam)
 router.post('/invite-new-member', projects.inviteNewMember)
+router.post('/invite-participant', projects.inviteParticipant)
 
 module.exports = router

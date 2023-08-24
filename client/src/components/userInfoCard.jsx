@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { UserProfileImg } from './userProfileImg'
 import { AcademicCapIcon } from '@heroicons/react/24/solid'
 import { WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
+import { IniviteParticipantDialog } from './iniviteParticipantDialog'
 
 export const UserInfoCard = ({ userData }) => {
-  console.log(userData)
+  const [openInviteParticipantDialog, setOpenInviteParticipantDialog] =
+    useState(false)
+
+  const handleOpenInviteParticipantDialog = () =>
+    setOpenInviteParticipantDialog(!openInviteParticipantDialog)
+
   return (
     <>
       <div className="w-[26rem] h-full border-2 rounded-lg p-2">
@@ -36,7 +42,10 @@ export const UserInfoCard = ({ userData }) => {
                 </div>
               </div>
             </div>
-            <button className="px-4 py-2 bg-teal-400 rounded-lg text-white hover:bg-teal-200  uppercase text-sm font-semibold">
+            <button
+              className="px-4 py-2 bg-teal-400 rounded-lg text-white hover:bg-teal-200  uppercase text-sm font-semibold"
+              onClick={handleOpenInviteParticipantDialog}
+            >
               Invite
             </button>
           </div>
@@ -60,6 +69,12 @@ export const UserInfoCard = ({ userData }) => {
           </div>
         </div>
       </div>
+
+      <IniviteParticipantDialog
+        open={openInviteParticipantDialog}
+        handleOpen={handleOpenInviteParticipantDialog}
+        user={userData}
+      />
     </>
   )
 }

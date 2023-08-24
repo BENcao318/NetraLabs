@@ -236,7 +236,7 @@ exports.getParticipantList = async (req, res) => {
           [Op.ne]: req.session.user.email,
         },
       },
-      attributes: ['role', 'firstName', 'lastName', 'avatar', 'skills'],
+      attributes: ['id', 'role', 'firstName', 'lastName', 'avatar', 'skills'],
     })
 
     res.status(200).send({
