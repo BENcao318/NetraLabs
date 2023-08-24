@@ -13,6 +13,7 @@ import { HackathonDetail } from 'pages/dashboard/hackathons/hackathonDetail'
 import { Profile } from 'pages/dashboard/profile'
 import { CreateProject } from 'pages/dashboard/projects/createProject'
 import { EditProject } from 'pages/dashboard/projects/editProject'
+import { ToastContainer } from 'react-toastify'
 
 export const Dashboard = () => {
   const { auth, setAuth } = useContext(authContext)
@@ -105,6 +106,17 @@ export const Dashboard = () => {
           </div>
         </div>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={3600}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+      />
     </>
   )
 }

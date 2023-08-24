@@ -1,7 +1,8 @@
 const db = require('../models')
-const { User, Hackathon, Project, UserProject, Team, UserTeam } = db
+const { User, Hackathon, Project, UserProject, Team, UserTeam, Invitation } = db
 const Op = db.Sequelize.Op
 const { sendEmail } = require('../helpers/utils')
+const TEAMSIZE = 5
 
 exports.createProject = async (req, res) => {
   const { projectData, hackathonId, userEmail } = req.body
@@ -342,3 +343,74 @@ exports.inviteNewMember = async (req, res) => {
     })
   }
 }
+
+exports.inviteParticipant = async (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  const { projectId, participantId, userEmail } = req.body
+
+  try {
+    const oldInvitation = await Invitation.findOne({
+      where: {
+        project_id: projectId,
+        invitee_id: participantId,
+      },
+    })
+
+    if (oldInvitation !== null) {
+      res.status(200).send({
+        success: false,
+        message: 'You have alreay invited this person to the project.',
+      })
+      return
+    }
+
+    const team = await Team.findOne({
+      where: {
+        project_id: projectId,
+      },
+      include: [{ model: User, through: UserTeam }],
+    })
+
+    if (team.Users.length >= TEAMSIZE) {
+      res.status(200).send({
+        success: false,
+        message: `You have reached team size of ${TEAMSIZE}`,
+      })
+      return
+    }
+
+    await Invitation.create({
+      project_id: projectId,
+      invitee_id: participantId,
+      viewed_by_invitee: false,
+      accepted_offer: false,
+    })
+
+    res.status(200).send({
+      success: true,
+      message: 'Invitation successfully created',
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message:
+        err.message || 'Some error occurred while creating the invitation',
+    })
+  }
+}
+
+// id: {
+//   type: DataTypes.UUID,
+//   primaryKey: true,
+//   defaultValue: DataTypes.UUIDV4,
+// },
+// project_id: DataTypes.UUID,
+// invitee_id: DataTypes.UUID,
+// viewed_by_invitee: DataTypes.BOOLEAN,
+// accepted_offer: DataTypes.BOOLEAN,

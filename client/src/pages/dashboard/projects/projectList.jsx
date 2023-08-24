@@ -22,7 +22,6 @@ export const ProjectList = () => {
 
   useEffect(() => {
     getProjectList()
-    console.log('first')
   }, [setProjectList])
 
   return (
