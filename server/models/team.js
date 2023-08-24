@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.TEXT,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
-      team_leader_id: DataTypes.INTEGER,
+      team_leader_id: DataTypes.UUID,
       hackathon_id: DataTypes.UUID,
       project_id: DataTypes.UUID,
     },

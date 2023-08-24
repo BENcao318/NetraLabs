@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { setOpenSidenav, useThemeController } from '../../context/themeContext'
 import {
-  Avatar,
   Button,
   IconButton,
   Menu,
@@ -15,12 +14,11 @@ import {
   Bars3Icon,
   BellIcon,
   ClockIcon,
-  UserCircleIcon,
   PowerIcon,
   ChevronDownIcon,
   Cog6ToothIcon,
 } from '@heroicons/react/24/outline'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { authContext } from '../../context/authContext'
 import { UserProfileImg } from '../../components/userProfileImg'
 import serverAPI from '../../hooks/useAxios'
@@ -94,10 +92,14 @@ export const DashboardNavbar = () => {
               <Button
                 variant="text"
                 color="blue-gray"
-                className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto ring-1 ring-gray-300"
+                className="flex items-center gap-1 rounded-full py-1 pr-2 pl-1 lg:ml-auto ring-1 ring-gray-300"
               >
                 {auth.user.avatar ? (
-                  <img className="w-12 h-12 mr-6" src={auth.user.avatar} />
+                  <img
+                    className="w-12 h-12 mr-6"
+                    src={auth.user.avatar}
+                    alt="Avatar"
+                  />
                 ) : (
                   <UserProfileImg
                     firstName={auth.user.firstName}
@@ -145,6 +147,36 @@ export const DashboardNavbar = () => {
               })}
             </MenuList>
           </Menu>
+
+          <div className="ml-6">
+            <Menu>
+              <MenuHandler>
+                <IconButton variant="text" color="blue-gray">
+                  <BellIcon className="h-5 w-5 text-blue-gray-500" />
+                </IconButton>
+              </MenuHandler>
+              <MenuList className="w-max border-0">
+                <MenuItem className="flex items-center gap-3">
+                  <div>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="mb-1 font-normal"
+                    >
+                      <strong>New message</strong> from Chris B
+                    </Typography>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="flex items-center gap-1 text-xs font-normal opacity-60"
+                    >
+                      <ClockIcon className="h-3.5 w-3.5" /> 16 minutes ago
+                    </Typography>
+                  </div>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </div>
         </div>
       </div>
     </Navbar>

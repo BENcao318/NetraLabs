@@ -3,14 +3,24 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('userteams', {
+    await queryInterface.createTable('invitations', {
       id: {
         allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.UUID,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        defaultValue: Sequelize.UUIDV4,
       },
-      user_id: {
+      project_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'projects',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
+      },
+      invitee_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -20,26 +30,26 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
-      team_id: {
-        type: Sequelize.INTEGER,
+      viewed_by_invitee: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
-        references: {
-          model: 'teams',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
+      },
+      accepted_offer: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,
+        allowNull: false,
       },
       updatedAt: {
+        allowNull: false,
         type: Sequelize.DATE,
       },
     })
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('userteams')
+    await queryInterface.dropTable('invitations')
   },
 }

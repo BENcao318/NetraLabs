@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         through: models.UserProject,
         foreignKey: 'project_id',
       })
+      Project.hasMany(models.Invitation, { foreignKey: 'project_id' })
     }
   }
   Project.init(

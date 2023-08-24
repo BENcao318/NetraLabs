@@ -5,10 +5,10 @@ module.exports = {
   async up(queryInterface, DataTypes) {
     await queryInterface.createTable('users', {
       id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
+        type: DataTypes.UUID,
+        primaryKey: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,

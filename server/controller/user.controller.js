@@ -217,3 +217,37 @@ exports.signOut = async (req, res) => {
     message2: null,
   })
 }
+
+exports.getParticipantList = async (req, res) => {
+  try {
+    if (!req.session.user) {
+      res.status(200).send({
+        success: false,
+        message: 'Sign in is required',
+        message2: [],
+      })
+      return
+    }
+
+    const users = await User.findAll({
+      where: {
+        isAdmin: false,
+        email: {
+          [Op.ne]: req.session.user.email,
+        },
+      },
+      attributes: ['role', 'firstName', 'lastName', 'avatar', 'skills'],
+    })
+
+    res.status(200).send({
+      success: true,
+      message: 'get participant list success',
+      message2: users,
+    })
+  } catch {
+    res.status(500).send({
+      message: `Error getting User data: ${err}`,
+    })
+    console.log(err.message)
+  }
+}

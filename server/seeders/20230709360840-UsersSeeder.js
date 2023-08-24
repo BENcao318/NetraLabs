@@ -4,7 +4,7 @@ module.exports = {
   up: async (queryInterface, DataTypes) => {
     const usersData = [
       {
-        id: 1,
+        id: 'aa11f12c-1b6a-48a6-bece-b85e7cad601c',
         isAdmin: false,
         role: 'full-stack developer',
         firstName: 'John',
@@ -21,7 +21,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
+        id: '7eff81ca-5f3c-49e2-a53f-81dd58ee3435',
         isAdmin: true,
         role: 'product manager',
         firstName: 'Jane',
@@ -43,7 +43,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 3,
+        id: 'c55b5cc1-e081-4e21-99bf-9be0d3ac8f83',
         isAdmin: false,
         role: 'full-stack engineer',
         firstName: 'Ben',

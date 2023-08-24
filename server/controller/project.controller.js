@@ -331,7 +331,6 @@ exports.inviteNewMember = async (req, res) => {
   // const { name, projectId, userEmail } = req.body
 
   try {
-    sendEmail()
     res.status(200).send({
       success: true,
       message: 'Team create success',

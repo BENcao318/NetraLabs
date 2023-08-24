@@ -14,6 +14,7 @@ import { SignIn, Signin } from 'pages/auth/signin'
 import { SignUp } from 'pages/auth/signup'
 import { HackathonList } from 'pages/dashboard/hackathons/hackathonList'
 import { ProjectList } from 'pages/dashboard/projects/projectList'
+import { ParticipantsList } from 'pages/dashboard/participants/participantsList'
 
 const icon = {
   className: 'w-6 h-6 text-inherit',
@@ -64,7 +65,7 @@ export const routes = [
         icon: <UserCircleIcon {...icon} />,
         name: 'Participants',
         path: '/participants',
-        element: <Participants />,
+        element: <ParticipantsList />,
       },
       {
         icon: <Square3Stack3DIcon {...icon} />,
