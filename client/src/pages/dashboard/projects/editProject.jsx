@@ -9,17 +9,19 @@ import options from 'data/options.json'
 import { Quilleditor } from 'components/quilleditor'
 import { useLocation, useNavigate } from 'react-router-dom'
 import serverAPI from 'hooks/useAxios'
-import userEvent from '@testing-library/user-event'
 import { authContext } from 'context/authContext'
 import { ToastContainer, toast } from 'react-toastify'
 import { CreateNewTeamDialog } from 'components/createNewTeamDialog'
 import { InviteNewTeamMemberDialog } from 'components/inviteNewTeamMemberDialog'
+import { ConfirmSubmitProjectDialog } from 'components/confirmSubmitProjectDialog'
 
 export const EditProject = () => {
   const { auth } = useContext(authContext)
   const [project, setProject] = useState(null)
   const [openCreateNewTeamDialog, setOpenCreateNewTeamDialog] = useState(false)
   const [openInviteNewTeamMemberDialog, setOpenInviteNewTeamMemberDialog] =
+    useState(false)
+  const [openConfirmProjectSubmitDialog, setOpenConfirmProjectSubmitDialog] =
     useState(false)
 
   const schema = yup.object().shape({
@@ -109,6 +111,8 @@ export const EditProject = () => {
     setOpenCreateNewTeamDialog(!openCreateNewTeamDialog)
   const handleOpenInviteNewTeamMemberDialog = () =>
     setOpenInviteNewTeamMemberDialog(!openInviteNewTeamMemberDialog)
+  const handleOpenConfirmProjectSubmitDialog = () =>
+    setOpenConfirmProjectSubmitDialog(!openConfirmProjectSubmitDialog)
 
   const onCancel = () => {
     navigate('/dashboard/team-project')
@@ -123,7 +127,7 @@ export const EditProject = () => {
       .post('/projects/get-project-data', projectData)
       .then((response) => setProject(response.data.message2))
       .catch((err) => console.log(err.message))
-  }, [setProject])
+  }, [setProject, auth.user.email, projectId])
 
   console.log(project)
 
@@ -275,15 +279,20 @@ export const EditProject = () => {
             >
               Save
             </Button>
-            <a
+            <button
               className="font-medium text-red-600 hover:underline cursor-pointer text-center"
               onClick={onCancel}
             >
               Cancel
-            </a>
+            </button>
           </div>
           <div>
-            <Button className="self-center bg-orange-600">Submit</Button>
+            <Button
+              className="self-center bg-orange-600"
+              onClick={handleOpenConfirmProjectSubmitDialog}
+            >
+              Submit
+            </Button>
           </div>
         </div>
       </div>
@@ -328,6 +337,10 @@ export const EditProject = () => {
         handleOpen={handleOpenInviteNewTeamMemberDialog}
         project={project}
         setProject={setProject}
+      />
+      <ConfirmSubmitProjectDialog
+        open={openConfirmProjectSubmitDialog}
+        handleOpen={handleOpenConfirmProjectSubmitDialog}
       />
     </div>
   )

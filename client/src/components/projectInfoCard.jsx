@@ -78,11 +78,11 @@ export const ProjectInfoCard = ({ projectData }) => {
                     } content-['']`}
                   />
                 }
-                className="w-[8rem] mx-auto h-full my-auto"
+                className="w-[8rem] mx-auto my-auto flex items-center"
               />
             </div>
 
-            <div className="flex flex-col grow my-auto mt-6 lg:mt-0">
+            <div className="flex flex-col grow my-auto mt-6 lg:mt-0 w-[20rem]">
               <Typography
                 color="blue-gray"
                 className="text-center text-lg font-bold"

@@ -67,9 +67,6 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE,
       },
-      // user_id: {
-      //   type: Sequelize.INTEGER,
-      // },
     })
   },
 

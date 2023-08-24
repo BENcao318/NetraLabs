@@ -17,15 +17,18 @@ module.exports = (sequelize, DataTypes) => {
         through: models.UserHackathon,
         foreignKey: 'user_id',
       })
+      User.hasMany(models.Invitation, {
+        foreignKey: 'invitee_id',
+      })
     }
   }
 
   User.init(
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
-        autoIncrement: true,
+        defaultValue: DataTypes.UUIDV4,
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
