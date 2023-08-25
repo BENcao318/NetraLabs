@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { authContext } from '../../context/authContext'
 import serverAPI from '../../hooks/useAxios'
 import { HackathonInfoCard } from '../../components/hackathonInfoCard'
@@ -11,21 +11,20 @@ export const HackathonOverview = () => {
   const { auth, setAuth } = useContext(authContext)
   const { hackathonList, setHackathonList } = useContext(hackathonListContext)
 
-  useEffect(() => {
-    getHackathonList()
-  }, [setHackathonList, auth])
-
-  const getHackathonList = () => {
+  const getHackathonList = useCallback(() => {
     serverAPI
       .post('/hackathons/list', auth.user)
       .then((response) => {
-        console.log(response.data.message2)
         setHackathonList(response.data.message2)
       })
       .catch((err) => {
         console.log(err)
       })
-  }
+  }, [setHackathonList, auth])
+
+  useEffect(() => {
+    getHackathonList()
+  }, [getHackathonList])
 
   return (
     <>
@@ -38,9 +37,10 @@ export const HackathonOverview = () => {
           </div>
         )}
         {hackathonList.length !== 0 &&
-          hackathonList.map((hackathon, key) => (
-            <ul key={key} className="h-full">
+          hackathonList.map((hackathon) => (
+            <ul key={hackathon.id} className="h-full">
               <HackathonInfoCard
+                key={hackathon.id}
                 hackathon={hackathon}
                 hackathonList={hackathonList}
               />

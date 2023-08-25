@@ -9,6 +9,8 @@ router.get('/', (req, res) => {
 router.post('/sign-in', users.signIn)
 router.post('/sign-on', users.createUser)
 router.post('/update-user-data', users.updateUserData)
+router.post('/notifications', users.getNotificationsByUserId)
+router.post('/join-a-project', users.joinAProjectByInvitationId)
 router.get('/sign-out', users.signOut)
 router.get('/participant-list', users.getParticipantList)
 

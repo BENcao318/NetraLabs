@@ -9,7 +9,7 @@ export const ProjectList = () => {
 
   const getProjectList = useCallback(() => {
     const userData = {
-      userEmail: auth.user.email,
+      userId: auth.user.id,
     }
 
     serverAPI

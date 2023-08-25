@@ -77,8 +77,8 @@ exports.createProject = async (req, res) => {
   }
 }
 
-exports.getProjectsByUserEmail = async (req, res) => {
-  const { userEmail } = req.body
+exports.getProjectsByUserId = async (req, res) => {
+  const { userId } = req.body
 
   if (!req.body) {
     res.status(400).send({
@@ -90,9 +90,20 @@ exports.getProjectsByUserEmail = async (req, res) => {
   try {
     const user = await User.findOne({
       where: {
-        email: userEmail,
+        id: userId,
       },
-      include: [{ model: Project, include: Hackathon, through: UserProject }],
+      include: [
+        {
+          model: Project,
+          include: [{ model: Hackathon }],
+          through: UserProject,
+        },
+        {
+          model: Project,
+          include: [{ model: Team }],
+          through: UserTeam,
+        },
+      ],
     })
 
     const projectList = user.Projects.map((project) => {
@@ -100,6 +111,11 @@ exports.getProjectsByUserEmail = async (req, res) => {
       return {
         project: project,
         hackathon: hackathon,
+        team: {
+          name: project.Team?.name,
+          hasTeam: project.Team?.name ? true : false,
+          isTeamLeader: project.Team?.team_leader_id === userId,
+        },
       }
     })
 
@@ -116,8 +132,8 @@ exports.getProjectsByUserEmail = async (req, res) => {
   }
 }
 
-exports.getProjectById = async (req, res) => {
-  const { projectId, userEmail } = req.body
+exports.getProjectByProjectId = async (req, res) => {
+  const { projectId, userId } = req.body
 
   if (!req.body) {
     res.status(400).send({
@@ -127,7 +143,7 @@ exports.getProjectById = async (req, res) => {
   }
 
   try {
-    if (userEmail !== req.session.user.email) {
+    if (userId !== req.session.user.id) {
       res.status(400).send({
         message:
           'Some error occurred while matching the session with user email',
@@ -157,10 +173,33 @@ exports.getProjectById = async (req, res) => {
       },
     })
 
-    project =
-      team === null
-        ? { ...project.dataValues, hasTeam: false }
-        : { ...project.dataValues, hasTeam: true }
+    if (team !== null) {
+      const users = await User.findAll({
+        through: {
+          model: UserTeam,
+        },
+        attributes: ['id', 'firstName', 'lastName', 'role', 'skills', 'avatar'],
+        where: {
+          id: {
+            [Op.ne]: userId,
+          },
+        },
+      })
+      project = {
+        ...project.dataValues,
+        team: {
+          name: team.name,
+          members: users,
+        },
+      }
+    }
+
+    // project =
+    //   team === null
+    //     ? { ...project.dataValues, hasTeam: false }
+    //     : { ...project.dataValues, hasTeam: true }
+
+    console.log('project+++++++++++++++++++', project)
 
     res.status(200).send({
       success: true,
@@ -328,8 +367,6 @@ exports.inviteNewMember = async (req, res) => {
     })
     return
   }
-  console.log('first++++++++++++++++++++++++')
-  // const { name, projectId, userEmail } = req.body
 
   try {
     res.status(200).send({
@@ -352,7 +389,7 @@ exports.inviteParticipant = async (req, res) => {
     return
   }
 
-  const { projectId, participantId, userEmail } = req.body
+  const { projectId, participantId, userId } = req.body
 
   try {
     const oldInvitation = await Invitation.findOne({
@@ -374,10 +411,15 @@ exports.inviteParticipant = async (req, res) => {
       where: {
         project_id: projectId,
       },
-      include: [{ model: User, through: UserTeam }],
     })
 
-    if (team.Users.length >= TEAMSIZE) {
+    const users = await UserTeam.findAll({
+      where: {
+        team_id: team.id,
+      },
+    })
+
+    if (users.length >= TEAMSIZE) {
       res.status(200).send({
         success: false,
         message: `You have reached team size of ${TEAMSIZE}`,
@@ -387,6 +429,7 @@ exports.inviteParticipant = async (req, res) => {
 
     await Invitation.create({
       project_id: projectId,
+      inviter_id: userId,
       invitee_id: participantId,
       viewed_by_invitee: false,
       accepted_offer: false,
@@ -405,12 +448,61 @@ exports.inviteParticipant = async (req, res) => {
   }
 }
 
-// id: {
-//   type: DataTypes.UUID,
-//   primaryKey: true,
-//   defaultValue: DataTypes.UUIDV4,
-// },
-// project_id: DataTypes.UUID,
-// invitee_id: DataTypes.UUID,
-// viewed_by_invitee: DataTypes.BOOLEAN,
-// accepted_offer: DataTypes.BOOLEAN,
+exports.getProjectsWithTeamByUserId = async (req, res) => {
+  const { userId } = req.body
+
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  try {
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+      include: [
+        {
+          model: Project,
+          include: [{ model: Hackathon }],
+          through: UserProject,
+        },
+        {
+          model: Project,
+          include: [{ model: Team }],
+          through: UserTeam,
+        },
+      ],
+    })
+
+    const projectList = user.Projects.map((project) => {
+      const hackathon = project.Hackathon
+      if (project.Team !== null) {
+        return {
+          project: project,
+          hackathon: hackathon,
+          team: {
+            name: project.Team?.name,
+          },
+        }
+      }
+    })
+
+    const filteredProjectList = projectList.filter(
+      (project) => project !== undefined
+    )
+
+    res.status(200).send({
+      success: true,
+      message: 'Project create success',
+      message2: filteredProjectList,
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while getting the Projects',
+    })
+  }
+}

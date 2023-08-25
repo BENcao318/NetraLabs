@@ -174,6 +174,7 @@ export const Profile = () => {
                   lastName={auth.user.lastName}
                   width={20}
                   height={20}
+                  textSize={'xl'}
                 />
               ))}
             {avatarImg && <img className="w-20 h-20" src={avatarImg} />}

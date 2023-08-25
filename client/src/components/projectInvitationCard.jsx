@@ -7,7 +7,7 @@ export const ProjectInvitationCard = ({
   selectedProject,
   setSelectedProject,
 }) => {
-  const { project, hackathon } = projectData
+  const { project, hackathon, team } = projectData
 
   const onClick = () => {
     setSelectedProject(project.id)
@@ -23,6 +23,18 @@ export const ProjectInvitationCard = ({
       >
         <table className="w-full text-left">
           <tbody>
+            <tr>
+              <td>
+                <h1 className="text-xs font-semibold text-black font-roboto w-[6rem]">
+                  Team:
+                </h1>
+              </td>
+              <td>
+                <p className="text-sm text-gray-600 font-normal font-roboto break-words overflow-hidden w-[10rem]">
+                  {team.name}
+                </p>
+              </td>
+            </tr>
             <tr>
               <td>
                 <h1 className="text-xs font-semibold text-black font-roboto w-[6rem]">

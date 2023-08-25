@@ -29,6 +29,7 @@ export const UserInfoCard = ({ userData }) => {
                   lastName={userData.lastName}
                   width={12}
                   height={12}
+                  textSize={'xl'}
                 />
               )}
 

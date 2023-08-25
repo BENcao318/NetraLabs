@@ -6,12 +6,8 @@ import {
   DialogFooter,
   DialogHeader,
 } from '@material-tailwind/react'
-import { convertDateString } from '../helpers/util'
 import serverAPI from '../hooks/useAxios'
-import * as yup from 'yup'
 import { ToastContainer, toast } from 'react-toastify'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { authContext } from 'context/authContext'
 import { ProjectInvitationCard } from './projectInvitationCard'
 
@@ -22,11 +18,11 @@ export const IniviteParticipantDialog = ({ open, handleOpen, user }) => {
 
   const getProjectList = useCallback(() => {
     const userData = {
-      userEmail: auth.user.email,
+      userId: auth.user.id,
     }
 
     serverAPI
-      .post('/projects/list', userData)
+      .post('/projects/inivitation-list', userData)
       .then((response) => {
         setProjectList(response.data.message2)
       })
@@ -42,7 +38,7 @@ export const IniviteParticipantDialog = ({ open, handleOpen, user }) => {
       const invitationData = {
         projectId: selectedProject,
         participantId: user.id,
-        userEmail: auth.user.email,
+        userId: auth.user.id,
       }
 
       serverAPI
@@ -81,7 +77,7 @@ export const IniviteParticipantDialog = ({ open, handleOpen, user }) => {
         })
         .catch((err) => {
           console.log(err.message)
-          toast.error(`Error creating team. Please try again!`, {
+          toast.error(err.message, {
             position: 'top-center',
             autoClose: 5000,
             hideProgressBar: false,
@@ -112,11 +108,9 @@ export const IniviteParticipantDialog = ({ open, handleOpen, user }) => {
             ))
           ) : (
             <div className="text-center h-full w-full flex flex-col justify-center">
+              <h1 className="text-2xl">You haven't created a team yet.</h1>
               <h1 className="text-2xl">
-                You haven't created any projects yet.
-              </h1>
-              <h1 className="text-2xl">
-                Pelase go to Hackathons page and create a new project.
+                Pelase go to your project and create a new team.
               </h1>
             </div>
           )}
