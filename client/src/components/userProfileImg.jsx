@@ -1,7 +1,13 @@
 import axios from 'axios'
 import React from 'react'
 
-export const UserProfileImg = ({ firstName, lastName, width, height }) => {
+export const UserProfileImg = ({
+  firstName,
+  lastName,
+  width,
+  height,
+  textSize,
+}) => {
   const getInitials = (firstName, lastName) => {
     return (
       (firstName ? firstName.charAt(0).toUpperCase() : '') +
@@ -26,7 +32,7 @@ export const UserProfileImg = ({ firstName, lastName, width, height }) => {
 
   return (
     <div
-      className={`w-${width} h-${height} rounded-full flex justify-center items-center text-white text-xl font-bold bg-green-600 mr-6`}
+      className={`w-${width} h-${height} rounded-full flex justify-center items-center text-white text-${textSize} font-bold bg-green-600 mr-6`}
     >
       {initials}
     </div>

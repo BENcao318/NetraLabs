@@ -20,6 +20,16 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },
+      inviter_id: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
+      },
       invitee_id: {
         type: Sequelize.UUID,
         allowNull: false,

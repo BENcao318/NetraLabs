@@ -15,9 +15,6 @@ import { useNavigate } from 'react-router-dom'
 import { authContext } from '../context/authContext'
 import { MapPinIcon } from '@heroicons/react/24/solid'
 import { CalendarDaysIcon } from '@heroicons/react/24/solid'
-import { BuildingOffice2Icon } from '@heroicons/react/24/solid'
-import { TrophyIcon } from '@heroicons/react/24/solid'
-import { GlobeAltIcon } from '@heroicons/react/24/solid'
 import { ChevronDoubleRightIcon } from '@heroicons/react/24/solid'
 import blueprintImage from 'img/blueprintImage.png'
 
@@ -47,7 +44,7 @@ export const ProjectInfoCard = ({ projectData }) => {
   return (
     <>
       <Card
-        className="max-w-[44rem] h-full flex hover:shadow-xl cursor-pointer  break-all rounded-xl mx-auto group "
+        className="max-w-[26rem] lg:max-w-[44rem] h-full flex hover:shadow-xl cursor-pointer  break-all rounded-xl mx-auto group "
         onClick={onClick}
       >
         <div className="flex items-center">
@@ -65,24 +62,52 @@ export const ProjectInfoCard = ({ projectData }) => {
               >
                 {project.name}
               </Typography>
-              <Chip
-                color={projectStatus !== 'Not Submitted' ? 'green' : 'gray'}
-                size="sm"
-                value={projectStatus}
-                icon={
-                  <span
-                    className={`mx-auto mt-1.5 block h-2 w-2 rounded-full ${
-                      projectStatus !== 'Not Submitted'
-                        ? 'bg-green-900'
-                        : 'bg-gray-900'
-                    } content-['']`}
+              <div className="flex">
+                <Chip
+                  color={projectStatus !== 'Not Submitted' ? 'green' : 'gray'}
+                  size="sm"
+                  value={projectStatus}
+                  icon={
+                    <span
+                      className={`mx-auto mt-1.5 block h-2 w-2 rounded-full ${
+                        projectStatus !== 'Not Submitted'
+                          ? 'bg-green-900'
+                          : 'bg-gray-900'
+                      } content-['']`}
+                    />
+                  }
+                  className="w-[8rem] mx-auto my-auto flex items-center"
+                />
+
+                {projectData.team.hasTeam ? (
+                  <Chip
+                    color={projectData.team.isTeamLeader ? 'white' : 'indigo'}
+                    size="sm"
+                    value={
+                      projectData.team.isTeamLeader
+                        ? 'As Team Leader'
+                        : 'As Team Member'
+                    }
+                    icon={
+                      <span className="mx-auto mt-1.5 block h-2 w-2 rounded-full  bg-orange-600" />
+                    }
+                    className="w-[9rem] mx-auto my-auto flex items-center"
                   />
-                }
-                className="w-[8rem] mx-auto my-auto flex items-center"
-              />
+                ) : (
+                  <Chip
+                    color="pink"
+                    size="sm"
+                    value="No Team Yet"
+                    icon={
+                      <span className="mx-auto mt-1.5 block h-2 w-2 rounded-full  bg-white" />
+                    }
+                    className="w-[9rem] mx-auto my-auto flex items-center text-center"
+                  />
+                )}
+              </div>
             </div>
 
-            <div className="flex flex-col grow my-auto mt-6 lg:mt-0 w-[20rem]">
+            <div className="flex flex-col grow my-auto mx-auto mt-6 lg:mt-0 w-[22rem]">
               <Typography
                 color="blue-gray"
                 className="text-center text-lg font-bold"

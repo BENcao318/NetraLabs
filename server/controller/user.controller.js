@@ -1,8 +1,9 @@
 const { generateHeadshot, generateAvatar } = require('../helpers/utils')
 const db = require('../models')
-const { User, Hackathon } = db
+const { User, Hackathon, Invitation, Project, Team, UserTeam, UserProject } = db
 const Op = db.Sequelize.Op
 const { hash, compare } = require('bcrypt')
+const TEAMSIZE = 5
 
 exports.createUser = async (req, res) => {
   if (!req.body) {
@@ -38,7 +39,6 @@ exports.createUser = async (req, res) => {
     }
 
     const userData = await User.create(userInfo)
-    console.log('userData+++++++++++++++++ ', userData)
 
     req.session.user = {
       email: userData.email,
@@ -85,6 +85,7 @@ exports.signIn = async (req, res) => {
 
       if (passwordMatched) {
         const userData = {
+          id: user.id,
           email: user.email,
           firstName: user.firstName,
           lastName: user.lastName,
@@ -249,5 +250,141 @@ exports.getParticipantList = async (req, res) => {
       message: `Error getting User data: ${err}`,
     })
     console.log(err.message)
+  }
+}
+
+exports.getNotificationsByUserId = async (req, res) => {
+  const { userId } = req.body
+
+  try {
+    let notifications = []
+
+    const invitations = await Invitation.findAll({
+      where: {
+        invitee_id: userId,
+        accepted_offer: false,
+      },
+      include: [
+        {
+          model: Project,
+          include: [
+            { model: Hackathon },
+            { model: Team, include: [{ model: User }] },
+          ],
+        },
+      ],
+    })
+
+    if (invitations.length !== 0) {
+      notifications = invitations.map((invitation) => {
+        return {
+          invitationId: invitation.id,
+          viewed: invitation.viewed_by_invitee,
+          createdAt: invitation.createdAt,
+          projectName: invitation.Project.name,
+          hackathonId: invitation.Project.hackathon_id,
+          hackathonName: invitation.Project.Hackathon.name,
+          inviterId: invitation.Project.Team.Users[0].id,
+          inviterFirstName: invitation.Project.Team.Users[0].firstName,
+          inviterLastName: invitation.Project.Team.Users[0].lastName,
+          inviterAvatar: invitation.Project.Team.Users[0].avatar,
+        }
+      })
+    }
+
+    res.status(200).send({
+      success: true,
+      message: 'Invitations gather success',
+      message2: notifications,
+    })
+  } catch (err) {
+    console.log(err.message)
+    res.status(500).send({
+      message: `Error retrieving notificaitons with id=${userId}, ${err}`,
+    })
+  }
+}
+
+exports.joinAProjectByInvitationId = async (req, res) => {
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  const { userId, invitationId } = req.body
+
+  try {
+    if (userId !== req.session.user.id) {
+      res.status(400).send({
+        message: 'Some error occurred while matching the session with user id',
+      })
+      return
+    }
+
+    const invitation = await Invitation.findOne({
+      where: {
+        id: invitationId,
+      },
+    })
+
+    const team = await Team.findOne({
+      where: {
+        project_id: invitation.project_id,
+      },
+    })
+
+    const users = await UserTeam.findAll({
+      where: {
+        team_id: team.id,
+      },
+    })
+
+    if (users.length >= TEAMSIZE) {
+      res.status(400).send({
+        message: `Team size over limit - ${TEAMSIZE}, please contact the team lead`,
+      })
+      return
+    }
+
+    const userteam = await UserTeam.findOne({
+      where: {
+        user_id: userId,
+        team_id: team.id,
+      },
+    })
+
+    if (userteam !== null) {
+      res.status(400).send({
+        message: `You have already joined this team`,
+      })
+      return
+    }
+
+    await UserTeam.create({
+      user_id: userId,
+      team_id: team.id,
+    })
+
+    await UserProject.create({
+      user_id: userId,
+      project_id: invitation.project_id,
+    })
+
+    await invitation.update({
+      viewed_by_invitee: true,
+      accepted_offer: true,
+    })
+
+    res.status(200).send({
+      success: true,
+      message: `You have joined the team, enjoy!`,
+    })
+  } catch (err) {
+    console.log(err.message)
+    res.status(500).send({
+      message: `Error retrieving notificaitons with id=${userId}, ${err}`,
+    })
   }
 }

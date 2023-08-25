@@ -89,6 +89,8 @@ export const SignIn = () => {
     const data = {
       email: 'bencao@gmail.com',
       password: 'bensde123',
+      // email: 'john.doe@example.com',
+      // password: 'test1234',
     }
     serverAPI.post('/users/sign-in', data).then((response) => {
       if (!response.data.success) {

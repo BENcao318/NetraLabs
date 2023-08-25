@@ -85,14 +85,14 @@ export const Dashboard = () => {
             brandName={'NetraLabs'}
             routes={routes}
           />
-          <div className="p-3 xl:ml-80">
+          <div className="sm:p-3 xl:ml-80">
             <DashboardNavbar />
             <Routes>
               {routes.map(
                 ({ layout, pages }) =>
                   layout === dashboardLayout &&
-                  pages.map(({ path, element }) => (
-                    <Route exact path={path} element={element} />
+                  pages.map(({ path, element, name }) => (
+                    <Route exact path={path} element={element} key={name} />
                   ))
               )}
               <Route path="/hackathons/detail" element={<HackathonDetail />} />

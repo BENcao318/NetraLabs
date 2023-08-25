@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Invitation.belongsTo(models.User, { foreignKey: 'invitee_id' })
+      Invitation.belongsTo(models.User, { foreignKey: 'inviter_id' })
       Invitation.belongsTo(models.Project, { foreignKey: 'project_id' })
     }
   }
@@ -20,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
       },
       project_id: DataTypes.UUID,
+      inviter_id: DataTypes.UUID,
       invitee_id: DataTypes.UUID,
       viewed_by_invitee: DataTypes.BOOLEAN,
       accepted_offer: DataTypes.BOOLEAN,

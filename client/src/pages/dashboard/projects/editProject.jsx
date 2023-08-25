@@ -14,6 +14,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import { CreateNewTeamDialog } from 'components/createNewTeamDialog'
 import { InviteNewTeamMemberDialog } from 'components/inviteNewTeamMemberDialog'
 import { ConfirmSubmitProjectDialog } from 'components/confirmSubmitProjectDialog'
+import { UserProfileImg } from 'components/userProfileImg'
 
 export const EditProject = () => {
   const { auth } = useContext(authContext)
@@ -121,7 +122,7 @@ export const EditProject = () => {
   useEffect(() => {
     const projectData = {
       projectId: projectId,
-      userEmail: auth.user.email,
+      userId: auth.user.id,
     }
     serverAPI
       .post('/projects/get-project-data', projectData)
@@ -129,7 +130,7 @@ export const EditProject = () => {
       .catch((err) => console.log(err.message))
   }, [setProject, auth.user.email, projectId])
 
-  console.log(project)
+  console.log('project', project)
 
   useEffect(() => {
     if (project) {
@@ -297,23 +298,53 @@ export const EditProject = () => {
         </div>
       </div>
       <div className="ml-2">
-        {project && !project.hasTeam ? (
-          <div className="flex flex-col gap-3 items-center justify-center">
-            <h1 className="text-xl font-bold">You don't have team yet</h1>
-            <p>Create a team for this project?</p>
-            <Button onClick={handleOpenCreateNewTeamDialog}>
-              Create new team
-            </Button>
-          </div>
-        ) : (
-          <div className="flex flex-col gap-3 items-center justify-center">
-            <h1 className="text-xl font-bold">My team</h1>
-            <p>Test members</p>
-            <Button onClick={handleOpenInviteNewTeamMemberDialog}>
-              Add new teammate
-            </Button>
-          </div>
-        )}
+        {project &&
+          (!project.team?.name ? (
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <h1 className="text-xl font-bold">You don't have team yet</h1>
+              <p>Create a team for this project?</p>
+              <Button onClick={handleOpenCreateNewTeamDialog}>
+                Create a new team
+              </Button>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 items-center justify-center">
+              <div className="flex flex-col text-center">
+                <h1 className="text-xl font-bold">{project.team.name}</h1>
+                <p className="cursor-pointer hover:underline text-blue-900 text-sm">
+                  Change Team Name
+                </p>
+              </div>
+              <h1 className="font-bold mt-3">Current team members</h1>
+              <div className="flex flex-col gap-3">
+                {project.team.members.map((member) => {
+                  return (
+                    <div key={member.id} className="flex">
+                      <div>
+                        {member.avatar ? (
+                          <img className="w-6 h-6" src={member.avatar} />
+                        ) : (
+                          <UserProfileImg
+                            firstName={member.firstName}
+                            lastName={member.lastName}
+                            width={6}
+                            height={6}
+                            textSize={'xs'}
+                          />
+                        )}
+                      </div>
+                      <div>{`${member.firstName} ${member.lastName}`}</div>
+                    </div>
+                  )
+                })}
+              </div>
+              {project.team.members.length < 5 && (
+                <Button onClick={handleOpenInviteNewTeamMemberDialog}>
+                  Add new teammate
+                </Button>
+              )}
+            </div>
+          ))}
       </div>
       <ToastContainer
         position="top-center"
