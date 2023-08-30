@@ -174,24 +174,50 @@ exports.getProjectByProjectId = async (req, res) => {
     })
 
     if (team !== null) {
-      const users = await User.findAll({
-        through: {
-          model: UserTeam,
+      // const users = await User.findAll({
+      //   include: [
+      //     {
+      //       model: UserTeam,
+      //       where: {
+      //         team_id: team.id,
+      //       },
+      //     },
+      //   ],
+      //   attributes: ['id', 'firstName', 'lastName', 'role', 'skills', 'avatar'],
+      //   where: {
+      //     id: {
+      //       [Op.ne]: userId,
+      //     },
+      //   },
+      // })
+
+      const usersInTeam = await UserTeam.findAll({
+        where: {
+          team_id: team.id,
         },
-        attributes: ['id', 'firstName', 'lastName', 'role', 'skills', 'avatar'],
+        attributes: ['user_id'],
+      })
+      const userIDsInTeam = usersInTeam.map((userTeam) => userTeam.user_id)
+
+      const usersData = await User.findAll({
         where: {
           id: {
+            [Op.in]: userIDsInTeam,
             [Op.ne]: userId,
           },
         },
+        attributes: ['id', 'firstName', 'lastName', 'role', 'skills', 'avatar'],
       })
+
       project = {
         ...project.dataValues,
         team: {
           name: team.name,
-          members: users,
+          members: usersData,
         },
       }
+
+      // console.log('userInTeam++++++++++++++++++++++', usersInTeam)
     }
 
     // project =

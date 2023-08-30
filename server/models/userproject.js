@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
   UserProject.init(
     {
       // You can define additional attributes here if needed
+      user_id: {
+        type: DataTypes.UUID,
+      },
+      project_id: {
+        type: DataTypes.UUID,
+      },
     },
     {
       sequelize,

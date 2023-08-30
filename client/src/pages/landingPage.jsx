@@ -6,7 +6,6 @@ export const LandingPage = () => {
   return (
     <div>
       landingPage
-      <Button>Signin</Button>
       <Link to="/auth/sign-in">
         <Typography
           as="span"

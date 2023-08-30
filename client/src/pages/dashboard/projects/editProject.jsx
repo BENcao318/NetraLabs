@@ -128,7 +128,7 @@ export const EditProject = () => {
       .post('/projects/get-project-data', projectData)
       .then((response) => setProject(response.data.message2))
       .catch((err) => console.log(err.message))
-  }, [setProject, auth.user.email, projectId])
+  }, [setProject, auth.user.email, projectId, auth.user.id])
 
   console.log('project', project)
 
@@ -146,13 +146,23 @@ export const EditProject = () => {
   return (
     <div className="flex p-6 h-full justify-between w-[60rem] mx-auto">
       <div className="flex flex-col gap-6 w-2/3">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-lg font-semibold dark:text-white">
-            Project name
-          </h1>
-          <label htmlFor="name" className="text-sm text-gray-600 italic block">
-            Enter the name of your project.
-          </label>
+        <div className="flex flex-col ">
+          <div className="flex items-center gap-6">
+            <div className="flex flex-col gap-1">
+              <h1 className="text-lg font-semibold dark:text-white">
+                Project name
+              </h1>
+              <label
+                htmlFor="name"
+                className="text-sm text-gray-600 italic block"
+              >
+                Enter the name of your project.
+              </label>
+            </div>
+            <div>
+              <Button className="bg-green-600">Preview</Button>
+            </div>
+          </div>
           <input
             {...register('name')}
             type="text"
@@ -322,7 +332,11 @@ export const EditProject = () => {
                     <div key={member.id} className="flex">
                       <div>
                         {member.avatar ? (
-                          <img className="w-6 h-6" src={member.avatar} />
+                          <img
+                            className="w-6 h-6"
+                            src={member.avatar}
+                            alt="avatar"
+                          />
                         ) : (
                           <UserProfileImg
                             firstName={member.firstName}
