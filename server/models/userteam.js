@@ -12,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
   UserTeam.init(
     {
       // You can define additional attributes here if needed
+      user_id: {
+        type: DataTypes.UUID,
+      },
+      team_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

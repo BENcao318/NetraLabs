@@ -22,16 +22,16 @@ export const IniviteParticipantDialog = ({ open, handleOpen, user }) => {
     }
 
     serverAPI
-      .post('/projects/inivitation-list', userData)
+      .post('/projects/invitation-list', userData)
       .then((response) => {
         setProjectList(response.data.message2)
       })
       .catch((err) => console.log(err))
-  })
+  }, [setProjectList])
 
   useEffect(() => {
     getProjectList()
-  }, [setProjectList])
+  }, [])
 
   const onSubmit = () => {
     if (selectedProject) {

@@ -81,7 +81,7 @@ export const ProjectInfoCard = ({ projectData }) => {
 
                 {projectData.team.hasTeam ? (
                   <Chip
-                    color={projectData.team.isTeamLeader ? 'white' : 'indigo'}
+                    color={projectData.team.isTeamLeader ? 'blue' : 'indigo'}
                     size="sm"
                     value={
                       projectData.team.isTeamLeader
