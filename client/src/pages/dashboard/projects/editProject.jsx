@@ -15,27 +15,50 @@ import { CreateNewTeamDialog } from 'components/createNewTeamDialog'
 import { InviteNewTeamMemberDialog } from 'components/inviteNewTeamMemberDialog'
 import { ConfirmSubmitProjectDialog } from 'components/confirmSubmitProjectDialog'
 import { UserProfileImg } from 'components/userProfileImg'
+import { ProjectPreviewDialog } from 'components/projectPreviewDialog'
 
 export const EditProject = () => {
   const { auth } = useContext(authContext)
   const [project, setProject] = useState(null)
+  const [projectPreview, setProjectPreview] = useState(null)
   const [openCreateNewTeamDialog, setOpenCreateNewTeamDialog] = useState(false)
   const [openInviteNewTeamMemberDialog, setOpenInviteNewTeamMemberDialog] =
     useState(false)
   const [openConfirmProjectSubmitDialog, setOpenConfirmProjectSubmitDialog] =
     useState(false)
+  const [openProjectPreviewDialog, setOpenProjectPreviewDialog] =
+    useState(false)
 
   const schema = yup.object().shape({
     name: yup.string().required('Enter project name'),
     pitch: yup.string(),
-    story: yup.string(),
+    story: yup.string().notRequired(),
     techStack: yup.array().of(
       yup.object().shape({
         value: yup.string().required('Please select a tag.'),
         label: yup.string().required('Please select a tag.'),
       })
     ),
-    videoUrl: yup.string(),
+    videoUrl: yup
+      .string()
+      .url('Please enter a valid URL')
+      .notRequired()
+      .test({
+        name: 'video-url',
+        message: 'Invalid video URL, must be a youtube or vimeo link',
+        test: (value) => {
+          if (!value) {
+            return true // If the URL is empty, return false
+          }
+
+          // Check if it's a YouTube or Vimeo URL
+          if (value.includes('youtube.com') || value.includes('vimeo.com')) {
+            return true
+          }
+
+          return false // If it's not YouTube or Vimeo, return false
+        },
+      }),
     // .required('Please enter website'),
     repositoryUrl: yup
       .string()
@@ -114,6 +137,10 @@ export const EditProject = () => {
     setOpenInviteNewTeamMemberDialog(!openInviteNewTeamMemberDialog)
   const handleOpenConfirmProjectSubmitDialog = () =>
     setOpenConfirmProjectSubmitDialog(!openConfirmProjectSubmitDialog)
+  const handleOpenProjectPreviewDialog = (data) => {
+    setProjectPreview(data)
+    setOpenProjectPreviewDialog(!openProjectPreviewDialog)
+  }
 
   const onCancel = () => {
     navigate('/dashboard/team-project')
@@ -129,8 +156,6 @@ export const EditProject = () => {
       .then((response) => setProject(response.data.message2))
       .catch((err) => console.log(err.message))
   }, [setProject, auth.user.email, projectId, auth.user.id])
-
-  console.log('project', project)
 
   useEffect(() => {
     if (project) {
@@ -160,7 +185,12 @@ export const EditProject = () => {
               </label>
             </div>
             <div>
-              <Button className="bg-green-600">Preview</Button>
+              <Button
+                className="bg-green-600"
+                onClick={handleSubmit(handleOpenProjectPreviewDialog)}
+              >
+                Preview
+              </Button>
             </div>
           </div>
           <input
@@ -387,6 +417,13 @@ export const EditProject = () => {
         open={openConfirmProjectSubmitDialog}
         handleOpen={handleOpenConfirmProjectSubmitDialog}
       />
+      {projectPreview && (
+        <ProjectPreviewDialog
+          open={openProjectPreviewDialog}
+          handleOpen={handleOpenProjectPreviewDialog}
+          projectPreview={projectPreview}
+        />
+      )}
     </div>
   )
 }

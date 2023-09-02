@@ -4,7 +4,7 @@ import { AcademicCapIcon } from '@heroicons/react/24/solid'
 import { WrenchScrewdriverIcon } from '@heroicons/react/24/solid'
 import { IniviteParticipantDialog } from './iniviteParticipantDialog'
 
-export const UserInfoCard = ({ userData }) => {
+export const UserInfoCard = ({ userData, projectList }) => {
   const [openInviteParticipantDialog, setOpenInviteParticipantDialog] =
     useState(false)
 
@@ -75,6 +75,7 @@ export const UserInfoCard = ({ userData }) => {
         open={openInviteParticipantDialog}
         handleOpen={handleOpenInviteParticipantDialog}
         user={userData}
+        projectList={projectList}
       />
     </>
   )

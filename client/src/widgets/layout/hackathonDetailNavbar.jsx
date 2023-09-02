@@ -13,13 +13,12 @@ export const HackathonDetailNavbar = ({ page, setPage }) => {
           page === 'overview' && 'bg-orange-600 text-white'
         }`}
       >
-        <a
-          href="#"
-          className="flex items-center"
+        <div
+          className="flex items-center cursor-pointer"
           onClick={() => setPage('overview')}
         >
           Overview
-        </a>
+        </div>
       </Typography>
       <Typography
         as="li"
@@ -28,13 +27,12 @@ export const HackathonDetailNavbar = ({ page, setPage }) => {
           page === 'rules' && 'bg-orange-600 text-white'
         }`}
       >
-        <a
-          href="#"
-          className="flex items-center"
+        <div
+          className="flex items-center cursor-pointer"
           onClick={() => setPage('rules')}
         >
           Rules
-        </a>
+        </div>
       </Typography>
       <Typography
         as="li"
@@ -43,13 +41,12 @@ export const HackathonDetailNavbar = ({ page, setPage }) => {
           page === 'resources' && 'bg-orange-600 text-white'
         }`}
       >
-        <a
-          href="#"
-          className="flex items-center"
+        <div
+          className="flex items-center cursor-pointer"
           onClick={() => setPage('resources')}
         >
           Resources
-        </a>
+        </div>
       </Typography>
     </ul>
   )
@@ -62,7 +59,11 @@ export const HackathonDetailNavbar = ({ page, setPage }) => {
             <div>{navList}</div>
           </div>
         </div>
-        <MobileNav open={open} className="rounded-none ring-none">
+        <MobileNav
+          open={open}
+          setOpen={setOpen}
+          className="rounded-none ring-none"
+        >
           {navList}
         </MobileNav>
       </Navbar>

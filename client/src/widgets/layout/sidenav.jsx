@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { setOpenSidenav, useThemeController } from '../../context/themeContext'
 import { Link, NavLink } from 'react-router-dom'
 import {
-  Alert,
   Avatar,
   Button,
   Card,
@@ -12,7 +11,6 @@ import {
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { authContext } from '../../context/authContext'
-import { CubeTransparentIcon } from '@heroicons/react/24/solid'
 import netrachainImg from '../../img/NetraChain.png'
 
 export const Sidenav = ({ brandImg, brandName, routes }) => {
@@ -20,12 +18,6 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
   const { sidenavColor, sidenavType, openSidenav } = controller
   const [dashboardLayout, setDashboardLayout] = useState('userDashboard')
   const { auth } = useContext(authContext)
-  const [open, setOpen] = useState(0)
-  const [openAlert, setOpenAlert] = useState(true)
-
-  const handleOpen = (value) => {
-    setOpen(open === value ? 0 : value)
-  }
 
   useEffect(() => {
     setDashboardLayout(auth.user.isAdmin ? 'adminDashboard' : 'userDashboard')
@@ -113,7 +105,11 @@ export const Sidenav = ({ brandImg, brandName, routes }) => {
       <Card className="mt-auto mx-4 mb-4">
         <CardBody className="flex flex-col">
           <a href="https://www.netrascale.com/">
-            <img src={netrachainImg} className="w-3/4 h-3/4 mx-auto" />
+            <img
+              src={netrachainImg}
+              className="w-3/4 h-3/4 mx-auto"
+              alt="img"
+            />
           </a>
           <Typography variant="h6" className="mb-1 mt-2 text-center">
             Join NetraChain for more

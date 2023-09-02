@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { authContext } from '../../context/authContext'
 import serverAPI from '../../hooks/useAxios'
 import { HackathonInfoCard } from '../../components/hackathonInfoCard'
@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { hackathonListContext } from '../../context/hackathonListContext'
 
 export const HackathonOverview = () => {
-  const { auth, setAuth } = useContext(authContext)
+  const { auth } = useContext(authContext)
   const { hackathonList, setHackathonList } = useContext(hackathonListContext)
 
   const getHackathonList = useCallback(() => {
