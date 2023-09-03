@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Button,
   Dialog,
@@ -11,27 +11,14 @@ import { ToastContainer, toast } from 'react-toastify'
 import { authContext } from 'context/authContext'
 import { ProjectInvitationCard } from './projectInvitationCard'
 
-export const IniviteParticipantDialog = ({ open, handleOpen, user }) => {
-  const { auth } = useContext(authContext)
+export const IniviteParticipantDialog = ({
+  open,
+  handleOpen,
+  user,
+  projectList,
+}) => {
   const [selectedProject, setSelectedProject] = useState(null)
-  const [projectList, setProjectList] = useState([])
-
-  const getProjectList = useCallback(() => {
-    const userData = {
-      userId: auth.user.id,
-    }
-
-    serverAPI
-      .post('/projects/invitation-list', userData)
-      .then((response) => {
-        setProjectList(response.data.message2)
-      })
-      .catch((err) => console.log(err))
-  }, [setProjectList])
-
-  useEffect(() => {
-    getProjectList()
-  }, [])
+  const { auth } = useContext(authContext)
 
   const onSubmit = () => {
     if (selectedProject) {

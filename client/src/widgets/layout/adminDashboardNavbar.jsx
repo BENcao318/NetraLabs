@@ -1,5 +1,4 @@
-import React, { useContext } from 'react'
-import { setOpenSidenav, useThemeController } from '../../context/themeContext'
+import React from 'react'
 import {
   Avatar,
   Button,
@@ -12,15 +11,11 @@ import {
   Typography,
 } from '@material-tailwind/react'
 import {
-  Bars3Icon,
   BellIcon,
-  CalendarIcon,
   ClockIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
-import { hackathonListContext } from '../../context/hackathonListContext'
-import { convertDateString } from '../../helpers/util'
 
 export const AdminDashboardNavbar = () => {
   return (
