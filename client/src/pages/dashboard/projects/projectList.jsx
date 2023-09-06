@@ -18,7 +18,7 @@ export const ProjectList = () => {
         setProjectList(response.data.message2)
       })
       .catch((err) => console.log(err))
-  })
+  }, [projectList])
 
   useEffect(() => {
     getProjectList()

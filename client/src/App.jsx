@@ -14,10 +14,6 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
-        {/* <Route
-          path="*"
-          element={<Navigate to="/dashboard/overview" replace />}
-        /> */}
         <Route path="/auth/*" element={<Auth />} />
       </Routes>
     </Router>

@@ -8,7 +8,7 @@ import {
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
 } from '@heroicons/react/24/solid'
-import { Submissions } from 'pages/dashboard/submissions'
+import { Submissions } from 'pages/dashboard/submissions/submissions'
 import { SignIn } from 'pages/auth/signin'
 import { SignUp } from 'pages/auth/signup'
 import { HackathonList } from 'pages/dashboard/hackathons/hackathonList'

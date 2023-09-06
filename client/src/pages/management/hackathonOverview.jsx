@@ -24,7 +24,7 @@ export const HackathonOverview = () => {
 
   useEffect(() => {
     getHackathonList()
-  }, [getHackathonList])
+  }, [getHackathonList, hackathonList])
 
   return (
     <>

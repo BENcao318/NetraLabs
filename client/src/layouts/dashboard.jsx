@@ -14,9 +14,12 @@ import { Profile } from 'pages/dashboard/profile'
 import { CreateProject } from 'pages/dashboard/projects/createProject'
 import { EditProject } from 'pages/dashboard/projects/editProject'
 import { ToastContainer } from 'react-toastify'
+import { hackathonListContext } from 'context/hackathonListContext'
+import { SubmissionList } from 'pages/dashboard/submissions/submissionList'
 
 export const Dashboard = () => {
   const { auth, setAuth } = useContext(authContext)
+  const { setHackathonList } = useContext(hackathonListContext)
   const navigate = useNavigate()
   const [dashboardLayout, setDashboardLayout] = useState('userDashboard')
 
@@ -34,6 +37,17 @@ export const Dashboard = () => {
       }
     })
   }, [setAuth])
+
+  useEffect(() => {
+    const userData = { userEmail: auth.user.email }
+    if (userData) {
+      serverAPI
+        .post('/hackathons/launched-hackathons', userData)
+        .then((response) => {
+          setHackathonList(response.data.message2)
+        })
+    }
+  }, [setHackathonList, auth])
 
   useEffect(() => {
     setDashboardLayout(auth.user.isAdmin ? 'adminDashboard' : 'userDashboard')
@@ -96,6 +110,7 @@ export const Dashboard = () => {
                   ))
               )}
               <Route path="/hackathons/detail" element={<HackathonDetail />} />
+              <Route path="/submissions/list" element={<SubmissionList />} />
               <Route
                 path="/projects/create-project"
                 element={<CreateProject />}

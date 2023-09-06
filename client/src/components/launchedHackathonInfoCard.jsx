@@ -19,13 +19,19 @@ import { BuildingOffice2Icon } from '@heroicons/react/24/solid'
 import { TrophyIcon } from '@heroicons/react/24/solid'
 import { GlobeAltIcon } from '@heroicons/react/24/solid'
 
-export const LaunchedHackathonInfoCard = ({ hackathon }) => {
+export const LaunchedHackathonInfoCard = ({ hackathon, navigation }) => {
   const { auth } = useContext(authContext)
   const navigate = useNavigate()
   const [progressStatus, setProgressStatus] = useState('')
 
   const onClick = () => {
-    navigate(`/dashboard/hackathons/detail/?data=${hackathon.id}`)
+    if (navigation === 'hackathon') {
+      navigate(`/dashboard/hackathons/detail/?data=${hackathon.id}`)
+    } else if (navigation === 'submissions') {
+      navigate(
+        `/dashboard/submissions/list/?id=${hackathon.id}&name=${hackathon.name}`
+      )
+    }
   }
 
   useEffect(() => {
@@ -85,7 +91,6 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
           <div className="mt-4 border border-solid border-1 border-gray-200"></div>
         </CardBody>
         <CardFooter className="pt-0 flex justify-between gap-16 h-full mx-auto px-12 items-center -my-2">
-          {/* <div className="flex gap-6 items-center">{hackathon.start_time}</div> */}
           <Chip
             color={progressStatus !== 'hackathon has ended' ? 'green' : 'gray'}
             size="sm"
@@ -105,14 +110,6 @@ export const LaunchedHackathonInfoCard = ({ hackathon }) => {
             <BuildingOffice2Icon className="h-6 w-6 text-gray-500" />
             <p>{hackathon.company}</p>
           </div>
-
-          {/* <div className="">
-            {calculateDaysForHackathon(
-              hackathon.start_time,
-              hackathon.deadline,
-              auth.timeZone ? auth.timeZone : hackathon.time_zone.value
-            )}
-          </div> */}
         </CardFooter>
       </Card>
     </>

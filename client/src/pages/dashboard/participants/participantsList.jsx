@@ -34,7 +34,7 @@ export const ParticipantsList = () => {
         setProjectList(response.data.message2)
       })
       .catch((err) => console.log(err))
-  }, [setProjectList, auth.user.id])
+  }, [setProjectList, auth.user.id, projectList])
 
   const handleRoleChange = (role) => {
     if (selectedRoles.includes(role)) {

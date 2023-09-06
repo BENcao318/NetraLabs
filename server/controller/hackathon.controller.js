@@ -385,3 +385,44 @@ exports.getProjectByUserEmailAndHackathon = async (req, res) => {
     })
   }
 }
+
+exports.getSubmissions = async (req, res) => {
+  const { userId, hackathonId } = req.body
+
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  try {
+    if (userId !== req.session.user.id) {
+      res.status(400).send({
+        message: 'Some error occurred while matching the session with user id',
+      })
+      return null
+    }
+
+    const projects = await Project.findAll({
+      where: { hackathon_id: hackathonId, submitted: true },
+      include: [
+        {
+          model: User,
+        },
+      ],
+    })
+
+    res.status(200).send({
+      success: true,
+      message: 'success',
+      message2: projects,
+    })
+  } catch (error) {
+    console.log('Error joining the hackathon:', error)
+    res.status(500).send({
+      message:
+        error.message || 'Some error occurred while joining the hackathon',
+    })
+  }
+}

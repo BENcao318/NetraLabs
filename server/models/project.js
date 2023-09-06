@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       video_url: DataTypes.TEXT,
       repository_url: DataTypes.TEXT,
       hackathon_id: DataTypes.UUID,
+      submitted: DataTypes.BOOLEAN,
     },
     {
       sequelize,
