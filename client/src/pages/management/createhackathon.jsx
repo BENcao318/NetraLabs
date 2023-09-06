@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import 'react-quill/dist/quill.snow.css'
 import { Button } from '@material-tailwind/react'
 import { Quilleditor } from '../../components/quilleditor'

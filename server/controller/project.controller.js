@@ -3,6 +3,8 @@ const { User, Hackathon, Project, UserProject, Team, UserTeam, Invitation } = db
 const Op = db.Sequelize.Op
 const { sendEmail } = require('../helpers/utils')
 const TEAMSIZE = 5
+const axios = require('axios')
+const youtubeThumbnail = require('youtube-thumbnail')
 
 exports.createProject = async (req, res) => {
   const { projectData, hackathonId, userEmail } = req.body
@@ -164,6 +166,7 @@ exports.getProjectByProjectId = async (req, res) => {
         'tech_stack',
         'video_url',
         'repository_url',
+        'submitted',
       ],
     })
 
@@ -174,23 +177,6 @@ exports.getProjectByProjectId = async (req, res) => {
     })
 
     if (team !== null) {
-      // const users = await User.findAll({
-      //   include: [
-      //     {
-      //       model: UserTeam,
-      //       where: {
-      //         team_id: team.id,
-      //       },
-      //     },
-      //   ],
-      //   attributes: ['id', 'firstName', 'lastName', 'role', 'skills', 'avatar'],
-      //   where: {
-      //     id: {
-      //       [Op.ne]: userId,
-      //     },
-      //   },
-      // })
-
       const usersInTeam = await UserTeam.findAll({
         where: {
           team_id: team.id,
@@ -216,16 +202,7 @@ exports.getProjectByProjectId = async (req, res) => {
           members: usersData,
         },
       }
-
-      // console.log('userInTeam++++++++++++++++++++++', usersInTeam)
     }
-
-    // project =
-    //   team === null
-    //     ? { ...project.dataValues, hasTeam: false }
-    //     : { ...project.dataValues, hasTeam: true }
-
-    console.log('project+++++++++++++++++++', project)
 
     res.status(200).send({
       success: true,
@@ -525,6 +502,88 @@ exports.getProjectsWithTeamByUserId = async (req, res) => {
       message: 'Project create success',
       message2: filteredProjectList,
     })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while getting the Projects',
+    })
+  }
+}
+
+exports.submitAProject = async (req, res) => {
+  const { userId, projectId } = req.body
+
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  try {
+    const project = await Project.findOne({
+      where: {
+        id: projectId,
+      },
+    })
+    const team = await Team.findOne({
+      where: {
+        project_id: projectId,
+      },
+    })
+
+    if (project) {
+      if (team !== null && team.team_leader_id !== userId) {
+        res.status(400).send({
+          success: false,
+          message: 'Team leader id does not match with the requesting user id',
+        })
+        return null
+      }
+      await Project.update(
+        {
+          submitted: true,
+        },
+        {
+          where: {
+            id: projectId,
+          },
+        }
+      )
+    }
+
+    res.status(200).send({
+      success: true,
+      message: 'Project submit success',
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while getting the Projects',
+    })
+  }
+}
+
+exports.getYoutubeThumbnail = async (req, res) => {
+  const { videoUrl } = req.body
+
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  try {
+    const urlParts = videoUrl.split('v=')
+
+    if (urlParts.length >= 2) {
+      const videoId = urlParts[1].split('&')[0]
+      const youtubeThumbnailUrl = `http://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+
+      const thumbnail = youtubeThumbnail(youtubeThumbnailUrl)
+      res.json({ thumbnailUrl: thumbnail.high.url })
+    }
   } catch (err) {
     console.log('err message:', err.message)
     res.status(500).send({

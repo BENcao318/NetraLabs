@@ -5,11 +5,58 @@ import {
   DialogFooter,
   DialogHeader,
 } from '@material-tailwind/react'
+import serverAPI from 'hooks/useAxios'
 import React from 'react'
+import { toast } from 'react-toastify'
 
-export const ConfirmSubmitProjectDialog = ({ open, handleOpen }) => {
+export const ConfirmSubmitProjectDialog = ({
+  open,
+  handleOpen,
+  projectId,
+  auth,
+  setProject,
+}) => {
   const onSubmit = () => {
     console.log('onSubmit')
+    console.log('onSubmit', projectId)
+    const data = {
+      userId: auth.user.id,
+      projectId,
+    }
+
+    console.log(data)
+    serverAPI.post('/projects/submit', data).then((response) => {
+      if (response.data.success) {
+        handleOpen()
+        toast.success(`Your project is submitted. Good luck! 😊 `, {
+          position: 'top-center',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'light',
+        })
+        setProject((prev) => {
+          return { ...prev, submitted: true }
+        })
+      } else {
+        toast.warning(
+          `Error submitting project. Please try again! ${response.data.message}`,
+          {
+            position: 'top-center',
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'light',
+          }
+        )
+      }
+    })
   }
 
   return (

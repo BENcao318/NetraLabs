@@ -47,6 +47,10 @@ module.exports = {
       hackathon_id: {
         type: Sequelize.UUID,
       },
+      submitted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       createdAt: {
         type: Sequelize.DATE,
       },

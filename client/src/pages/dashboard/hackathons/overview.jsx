@@ -96,7 +96,7 @@ export const Overview = ({ hackathon }) => {
         }
       })
     }
-  })
+  }, [project])
 
   useEffect(() => {
     getProject()
