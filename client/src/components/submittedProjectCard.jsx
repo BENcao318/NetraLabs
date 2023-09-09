@@ -1,9 +1,14 @@
 import { Card, CardBody, Typography } from '@material-tailwind/react'
 import React from 'react'
 import VideoThumbnail from './videoThumbnail'
+import { useNavigate } from 'react-router-dom'
 
 export const SubmittedProjectCard = ({ project }) => {
-  const onClick = () => {}
+  const navigate = useNavigate()
+
+  const onClick = () => {
+    navigate(`/dashboard/projects/view-project/?data=${project.id}`)
+  }
 
   return (
     <>

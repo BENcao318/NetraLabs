@@ -16,6 +16,7 @@ import { EditProject } from 'pages/dashboard/projects/editProject'
 import { ToastContainer } from 'react-toastify'
 import { hackathonListContext } from 'context/hackathonListContext'
 import { SubmissionList } from 'pages/dashboard/submissions/submissionList'
+import { ViewSubmittedProject } from 'pages/dashboard/submissions/viewSubmittedProject'
 
 export const Dashboard = () => {
   const { auth, setAuth } = useContext(authContext)
@@ -61,25 +62,6 @@ export const Dashboard = () => {
     }
   }, [auth])
 
-  // useEffect(() => {
-  //   if (dashboardLayout === 'adminDashboard') {
-  //     console.log('yessssssssssssss')
-  //     serverAPI
-  //       .post('/hackathons/list', auth.user)
-  //       .then((res) => {
-  //         if (res.status === 200) {
-  //           console.log('res++++++++++++', res.data)
-  //           setHackathonList(res.data.message2)
-  //         } else {
-  //           throw new Error('Request failed.')
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err)
-  //       })
-  //   }
-  // }, [setHackathonList, auth])
-
   return (
     <>
       {dashboardLayout === 'adminDashboard' && (
@@ -116,6 +98,10 @@ export const Dashboard = () => {
                 element={<CreateProject />}
               />
               <Route path="projects/edit-project" element={<EditProject />} />
+              <Route
+                path="projects/view-project"
+                element={<ViewSubmittedProject />}
+              />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </div>
