@@ -23,7 +23,6 @@ export const ProjectInfoCard = ({ projectData }) => {
   const navigate = useNavigate()
   const [progressStatus, setProgressStatus] = useState('')
   const { project, hackathon } = projectData
-  const [projectStatus, setProjectStatus] = useState('Not Submitted')
 
   const onClick = () => {
     navigate(`/dashboard/projects/edit-project/?data=${project.id}`)
@@ -64,15 +63,13 @@ export const ProjectInfoCard = ({ projectData }) => {
               </Typography>
               <div className="flex">
                 <Chip
-                  color={projectStatus !== 'Not Submitted' ? 'green' : 'gray'}
+                  color={project.submitted ? 'green' : 'gray'}
                   size="sm"
-                  value={projectStatus}
+                  value={project.submitted ? 'SUBMITTED' : 'NOT SUBMITTED'}
                   icon={
                     <span
                       className={`mx-auto mt-1.5 block h-2 w-2 rounded-full ${
-                        projectStatus !== 'Not Submitted'
-                          ? 'bg-green-900'
-                          : 'bg-gray-900'
+                        project.submitted ? 'bg-green-900' : 'bg-gray-900'
                       } content-['']`}
                     />
                   }

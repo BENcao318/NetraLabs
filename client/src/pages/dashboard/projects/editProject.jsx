@@ -155,7 +155,7 @@ export const EditProject = () => {
       .post('/projects/get-project-data', projectData)
       .then((response) => setProject(response.data.message2))
       .catch((err) => console.log(err.message))
-  }, [setProject, auth.user.email, projectId, auth.user.id])
+  }, [setProject, projectId, auth.user.id])
 
   useEffect(() => {
     if (project) {

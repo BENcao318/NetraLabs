@@ -23,7 +23,6 @@ import { authContext } from '../../context/authContext'
 import { UserProfileImg } from '../../components/userProfileImg'
 import serverAPI from '../../hooks/useAxios'
 import { InvitationNotificationDialog } from 'components/invitationNotificationDialog'
-import { ToastContainer } from 'react-toastify'
 
 export const DashboardNavbar = () => {
   const [controller, dispatch] = useThemeController()
@@ -60,20 +59,22 @@ export const DashboardNavbar = () => {
   }
 
   const getNotificationList = useCallback(() => {
-    const userData = {
-      userId: auth.user.id,
+    if (auth.user && auth.user.id) {
+      const userData = {
+        userId: auth.user.id,
+      }
+      serverAPI
+        .post('/users/notifications', userData)
+        .then((response) => {
+          if (response.data.success) {
+            setNotifications((prev) => [...response.data.message2])
+          }
+        })
+        .catch((err) => {
+          console.log(err.message)
+        })
     }
-    serverAPI
-      .post('/users/notifications', userData)
-      .then((response) => {
-        if (response.data.success) {
-          setNotifications((prev) => [...response.data.message2])
-        }
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
-  }, [auth.user.id, setNotifications])
+  }, [auth.user.id])
 
   useEffect(() => {
     getNotificationList()

@@ -591,3 +591,77 @@ exports.getYoutubeThumbnail = async (req, res) => {
     })
   }
 }
+
+exports.getSubmittedProjectByProjectId = async (req, res) => {
+  const { projectId } = req.body
+
+  if (!req.body) {
+    res.status(400).send({
+      message: 'Content can not be empty!',
+    })
+    return
+  }
+
+  try {
+    let project = await Project.findOne({
+      where: {
+        id: projectId,
+      },
+      attributes: [
+        'id',
+        'hackathon_id',
+        'name',
+        'pitch',
+        'story',
+        'tech_stack',
+        'video_url',
+        'repository_url',
+        'submitted',
+      ],
+    })
+
+    let team = await Team.findOne({
+      where: {
+        project_id: projectId,
+      },
+    })
+
+    if (team !== null) {
+      const usersInTeam = await UserTeam.findAll({
+        where: {
+          team_id: team.id,
+        },
+        attributes: ['user_id'],
+      })
+      const userIDsInTeam = usersInTeam.map((userTeam) => userTeam.user_id)
+
+      const usersData = await User.findAll({
+        where: {
+          id: {
+            [Op.in]: userIDsInTeam,
+          },
+        },
+        attributes: ['id', 'firstName', 'lastName', 'role', 'skills', 'avatar'],
+      })
+
+      project = {
+        ...project.dataValues,
+        team: {
+          name: team.name,
+          members: usersData,
+        },
+      }
+    }
+
+    res.status(200).send({
+      success: true,
+      message: 'Project get success',
+      message2: project,
+    })
+  } catch (err) {
+    console.log('err message:', err.message)
+    res.status(500).send({
+      message: err.message || 'Some error occurred while creating the User',
+    })
+  }
+}

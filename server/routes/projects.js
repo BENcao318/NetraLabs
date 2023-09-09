@@ -12,5 +12,6 @@ router.post('/invite-new-member', projects.inviteNewMember)
 router.post('/invite-participant', projects.inviteParticipant)
 router.post('/submit', projects.submitAProject)
 router.post('/get-youtube-thumbnail', projects.getYoutubeThumbnail)
+router.post('/get-submitted-project', projects.getSubmittedProjectByProjectId)
 
 module.exports = router
