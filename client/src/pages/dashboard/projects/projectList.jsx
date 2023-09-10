@@ -1,7 +1,7 @@
-import { authContext } from 'context/authContext'
-import serverAPI from 'hooks/useAxios'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { ProjectInfoCard } from '../../../components/projectInfoCard'
+import { authContext } from "context/authContext"
+import serverAPI from "hooks/useAxios"
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import { ProjectInfoCard } from "../../../components/projectInfoCard"
 
 export const ProjectList = () => {
   const { auth } = useContext(authContext)
@@ -13,7 +13,7 @@ export const ProjectList = () => {
     }
 
     serverAPI
-      .post('/projects/list', userData)
+      .post("/projects/list", userData)
       .then((response) => {
         setProjectList(response.data.message2)
       })
@@ -26,10 +26,10 @@ export const ProjectList = () => {
 
   return (
     <>
-      <div className="text-center mt-6 bg-green-600 text-white font-bold text-2xl py-4 rounded-lg w-full h-full">
+      <div className=" mt-6 h-full w-full rounded-lg bg-green-600 py-4 text-center text-2xl font-bold text-white">
         <h6 className="uppercase">Your projects</h6>
       </div>
-      <div className=" mt-16 mx-auto h-full w-full grid lg:grid-cols-1  gap-6">
+      <div className=" mx-auto mt-16 grid h-full w-full gap-6  lg:grid-cols-1">
         {Array.isArray(projectList) && projectList.length !== 0 ? (
           projectList.map((project, key) => (
             <ul key={key}>
@@ -37,7 +37,7 @@ export const ProjectList = () => {
             </ul>
           ))
         ) : (
-          <div className="text-center h-full w-full flex flex-col justify-center">
+          <div className="flex h-full w-full flex-col justify-center text-center">
             <h1 className="text-2xl">You haven't created any projects yet.</h1>
             <h1 className="text-2xl">
               Pelase go to Hackathons page and create a new project.

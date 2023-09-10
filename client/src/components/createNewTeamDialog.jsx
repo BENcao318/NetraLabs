@@ -4,15 +4,15 @@ import {
   DialogBody,
   DialogFooter,
   DialogHeader,
-} from '@material-tailwind/react'
-import React, { useContext } from 'react'
-import { convertDateString } from '../helpers/util'
-import serverAPI from '../hooks/useAxios'
-import * as yup from 'yup'
-import { toast } from 'react-toastify'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { authContext } from 'context/authContext'
+} from "@material-tailwind/react"
+import React, { useCallback, useContext } from "react"
+import { convertDateString } from "../helpers/util"
+import serverAPI from "../hooks/useAxios"
+import * as yup from "yup"
+import { toast } from "react-toastify"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { authContext } from "context/authContext"
 
 export const CreateNewTeamDialog = ({
   open,
@@ -21,7 +21,7 @@ export const CreateNewTeamDialog = ({
   setProject,
 }) => {
   const schema = yup.object().shape({
-    name: yup.string().required('A team name is needed to create your team'),
+    name: yup.string().required("A team name is needed to create your team"),
   })
 
   const { auth } = useContext(authContext)
@@ -41,44 +41,42 @@ export const CreateNewTeamDialog = ({
     }
 
     serverAPI
-      .post('/projects/create-new-team', teamData)
+      .post("/projects/create-new-team", teamData)
       .then((response) => {
         if (response) {
           handleOpen()
           toast.success(`${teamData.name} is created! 🚀🚀🚀 `, {
-            position: 'top-center',
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: "light",
           })
-          setProject((prev) => {
-            return { ...prev, hasTeam: true }
-          })
-          console.log(response.data)
+          const newProject = { ...project, hasTeam: true }
+          setProject(newProject)
         }
       })
       .catch((err) => {
         console.log(err)
 
         if (err.response.status === 400) {
-          setError('name', {
-            type: 'manual',
+          setError("name", {
+            type: "manual",
             message: err.response.data.message,
           })
         } else {
           toast.error(`Error creating team. Please try again!`, {
-            position: 'top-center',
+            position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            theme: 'light',
+            theme: "light",
           })
         }
       })
@@ -92,16 +90,16 @@ export const CreateNewTeamDialog = ({
           <div>
             <label
               htmlFor="name"
-              className="text-sm text-gray-600 italic block"
+              className="block text-sm italic text-gray-600"
             >
               Enter the name of your team.
             </label>
             <input
-              {...register('name')}
+              {...register("name")}
               type="text"
               id="name"
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-600 rounded-md text-sm 
-          focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
+              className="mt-1 block w-full rounded-md border border-gray-600 bg-white px-3 py-2 text-sm 
+          focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
             />
             {errors.name && (
               <p className="text-red-500">{errors.name.message}</p>
