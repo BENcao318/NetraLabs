@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { setOpenSidenav, useThemeController } from '../../context/themeContext'
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import { setOpenSidenav, useThemeController } from "../../context/themeContext"
 import {
   Button,
   IconButton,
@@ -9,7 +9,7 @@ import {
   MenuList,
   Navbar,
   Typography,
-} from '@material-tailwind/react'
+} from "@material-tailwind/react"
 import {
   Bars3Icon,
   BellIcon,
@@ -17,12 +17,13 @@ import {
   PowerIcon,
   ChevronDownIcon,
   Cog6ToothIcon,
-} from '@heroicons/react/24/outline'
-import { useNavigate } from 'react-router-dom'
-import { authContext } from '../../context/authContext'
-import { UserProfileImg } from '../../components/userProfileImg'
-import serverAPI from '../../hooks/useAxios'
-import { InvitationNotificationDialog } from 'components/invitationNotificationDialog'
+} from "@heroicons/react/24/outline"
+import { useNavigate } from "react-router-dom"
+import { authContext } from "../../context/authContext"
+import { UserProfileImg } from "../../components/userProfileImg"
+import serverAPI from "../../hooks/useAxios"
+import { InvitationNotificationDialog } from "components/invitationNotificationDialog"
+import { timeAgo } from "helpers/util"
 
 export const DashboardNavbar = () => {
   const [controller, dispatch] = useThemeController()
@@ -40,12 +41,12 @@ export const DashboardNavbar = () => {
   const closeProfileMenu = () => setIsProfileMenuOpen(false)
 
   const goToMyProfile = () => {
-    navigate('/dashboard/profile')
+    navigate("/dashboard/profile")
     closeProfileMenu()
   }
 
   const signout = () => {
-    serverAPI.get('/users/sign-out').then((response) => {
+    serverAPI.get("/users/sign-out").then((response) => {
       if (response.data.success) {
         setAuth((prev) => ({
           ...prev,
@@ -53,18 +54,18 @@ export const DashboardNavbar = () => {
           isLoggedIn: false,
           user: {},
         }))
-        navigate('/')
+        navigate("/")
       }
     })
   }
 
   const getNotificationList = useCallback(() => {
-    if (auth.user && auth.user.id) {
+    if (auth.user && auth.user.email) {
       const userData = {
-        userId: auth.user.id,
+        userEmail: auth.user.email,
       }
       serverAPI
-        .post('/users/notifications', userData)
+        .post("/users/notifications", userData)
         .then((response) => {
           if (response.data.success) {
             setNotifications((prev) => [...response.data.message2])
@@ -90,12 +91,12 @@ export const DashboardNavbar = () => {
 
   const profileMenuItems = [
     {
-      label: 'My Profile',
+      label: "My Profile",
       icon: Cog6ToothIcon,
       action: goToMyProfile,
     },
     {
-      label: 'Sign Out',
+      label: "Sign Out",
       icon: PowerIcon,
       action: signout,
     },
@@ -106,7 +107,7 @@ export const DashboardNavbar = () => {
       <Navbar
         color="transparent"
         variant="gradient"
-        className="sticky top rounded-lg transition-all px-0 py-0"
+        className="top sticky rounded-lg px-0 py-0 transition-all"
         fullWidth
       >
         <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
@@ -133,11 +134,11 @@ export const DashboardNavbar = () => {
                 <Button
                   variant="text"
                   color="blue-gray"
-                  className="flex items-center gap-1 rounded-full py-1 pr-2 pl-1 lg:ml-auto ring-1 ring-gray-300"
+                  className="flex items-center gap-1 rounded-full py-1 pl-1 pr-2 ring-1 ring-gray-300 lg:ml-auto"
                 >
                   {auth.user.avatar ? (
                     <img
-                      className="w-12 h-12 mr-6"
+                      className="mr-6 h-12 w-12"
                       src={auth.user.avatar}
                       alt="Avatar"
                     />
@@ -147,14 +148,14 @@ export const DashboardNavbar = () => {
                       lastName={auth.user.lastName}
                       width={8}
                       height={8}
-                      textSize={'lg'}
+                      textSize={"lg"}
                     />
                   )}
 
                   <ChevronDownIcon
                     strokeWidth={2.5}
                     className={`h-3 w-3 transition-transform ${
-                      isProfileMenuOpen ? 'rotate-180' : ''
+                      isProfileMenuOpen ? "rotate-180" : ""
                     }`}
                   />
                 </Button>
@@ -168,13 +169,13 @@ export const DashboardNavbar = () => {
                       onClick={action}
                       className={`flex items-center gap-2 rounded ${
                         isLastItem
-                          ? 'hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10'
-                          : ''
+                          ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                          : ""
                       }`}
                     >
                       {React.createElement(icon, {
                         className: `h-4 w-4 ${
-                          isLastItem ? 'text-red-500' : ''
+                          isLastItem ? "text-red-500" : ""
                         }`,
                         strokeWidth: 2,
                       })}
@@ -182,7 +183,7 @@ export const DashboardNavbar = () => {
                         as="span"
                         variant="small"
                         className="font-normal"
-                        color={isLastItem ? 'red' : 'inherit'}
+                        color={isLastItem ? "red" : "inherit"}
                       >
                         {label}
                       </Typography>
@@ -200,9 +201,9 @@ export const DashboardNavbar = () => {
                       notifications.find(
                         (notification) => notification.viewed === false
                       ) && (
-                        <span className="relative flex h-2 w-2  translate-y-1 translate-x-4">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        <span className="relative flex h-2 w-2  translate-x-4 translate-y-1">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-blue-400 opacity-75"></span>
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-blue-500"></span>
                         </span>
                       )}
 
@@ -221,7 +222,7 @@ export const DashboardNavbar = () => {
                           <div className="-mr-6">
                             {notification.inviterAvatar ? (
                               <img
-                                className="w-8 h-8"
+                                className="h-8 w-8"
                                 src={notification.inviterAvatar}
                               />
                             ) : (
@@ -230,7 +231,7 @@ export const DashboardNavbar = () => {
                                 lastName={notification.inviterLastName}
                                 width={8}
                                 height={8}
-                                textSize={'lg'}
+                                textSize={"lg"}
                               />
                             )}
                           </div>
@@ -240,8 +241,8 @@ export const DashboardNavbar = () => {
                               color="blue-gray"
                               className="mb-1 font-normal"
                             >
-                              <strong>New Invitation</strong> from{' '}
-                              {notification.inviterFirstName}{' '}
+                              <strong>New Invitation</strong> from{" "}
+                              {notification.inviterFirstName}{" "}
                               {notification.inviterLastName}
                             </Typography>
                             <Typography
@@ -249,8 +250,8 @@ export const DashboardNavbar = () => {
                               color="blue-gray"
                               className="flex items-center gap-1 text-xs font-normal opacity-60"
                             >
-                              <ClockIcon className="h-3.5 w-3.5" /> 16 minutes
-                              ago
+                              <ClockIcon className="h-3.5 w-3.5" />{" "}
+                              {timeAgo(notification.createdAt)}
                             </Typography>
                           </div>
                         </MenuItem>

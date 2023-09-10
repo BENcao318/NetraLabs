@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       project_id: DataTypes.UUID,
       inviter_id: DataTypes.UUID,
       invitee_id: DataTypes.UUID,
+      invitee_email: DataTypes.TEXT,
       viewed_by_invitee: DataTypes.BOOLEAN,
       accepted_offer: DataTypes.BOOLEAN,
     },

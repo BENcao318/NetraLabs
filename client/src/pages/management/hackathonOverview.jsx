@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useEffect } from 'react'
-import { authContext } from '../../context/authContext'
-import serverAPI from '../../hooks/useAxios'
-import { HackathonInfoCard } from '../../components/hackathonInfoCard'
-import { CreateAHackathonCard } from '../../components/createAHackathonCard'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import { hackathonListContext } from '../../context/hackathonListContext'
+import React, { useCallback, useContext, useEffect } from "react"
+import { authContext } from "../../context/authContext"
+import serverAPI from "../../hooks/useAxios"
+import { HackathonInfoCard } from "../../components/hackathonInfoCard"
+import { CreateAHackathonCard } from "../../components/createAHackathonCard"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { hackathonListContext } from "../../context/hackathonListContext"
 
 export const HackathonOverview = () => {
   const { auth } = useContext(authContext)
@@ -13,7 +13,7 @@ export const HackathonOverview = () => {
 
   const getHackathonList = useCallback(() => {
     serverAPI
-      .post('/hackathons/list', auth.user)
+      .post("/hackathons/list", auth.user)
       .then((response) => {
         setHackathonList(response.data.message2)
       })
@@ -24,11 +24,11 @@ export const HackathonOverview = () => {
 
   useEffect(() => {
     getHackathonList()
-  }, [getHackathonList, hackathonList])
+  }, [getHackathonList])
 
   return (
     <>
-      <div className="mt-36 flex flex-wrap gap-12 items-center">
+      <div className="mt-36 flex flex-wrap items-center gap-12">
         {hackathonList.length === 0 && (
           <div>
             <h3 className="text-center text-2xl">

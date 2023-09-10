@@ -253,15 +253,15 @@ exports.getParticipantList = async (req, res) => {
   }
 }
 
-exports.getNotificationsByUserId = async (req, res) => {
-  const { userId } = req.body
+exports.getNotificationsByUserEmail = async (req, res) => {
+  const { userEmail } = req.body
 
   try {
     let notifications = []
 
     const invitations = await Invitation.findAll({
       where: {
-        invitee_id: userId,
+        invitee_email: userEmail,
         accepted_offer: false,
       },
       include: [
@@ -300,7 +300,7 @@ exports.getNotificationsByUserId = async (req, res) => {
   } catch (err) {
     console.log(err.message)
     res.status(500).send({
-      message: `Error retrieving notificaitons with id=${userId}, ${err}`,
+      message: `Error retrieving notificaitons with email=${userEmail}, ${err}`,
     })
   }
 }

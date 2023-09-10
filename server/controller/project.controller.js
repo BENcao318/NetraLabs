@@ -255,7 +255,7 @@ exports.updateProjectById = async (req, res) => {
       return null
     }
 
-    const project = await Project.update(
+    await Project.update(
       {
         name: projectData.name,
         pitch: projectData.pitch,
@@ -363,7 +363,7 @@ exports.createNewTeam = async (req, res) => {
   }
 }
 
-exports.inviteNewMember = async (req, res) => {
+exports.inviteNewMemberByEmail = async (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: 'Content can not be empty!',
@@ -371,20 +371,79 @@ exports.inviteNewMember = async (req, res) => {
     return
   }
 
+  const { email, project, inviterId } = req.body
+
   try {
+    const oldInvitation = await Invitation.findOne({
+      where: {
+        project_id: project.id,
+        invitee_email: email,
+      },
+    })
+
+    const team = await Team.findOne({
+      where: {
+        project_id: project.id,
+      },
+    })
+
+    const users = await UserTeam.findAll({
+      where: {
+        team_id: team.id,
+      },
+    })
+
+    const leader = await User.findOne({
+      where: {
+        id: team.team_leader_id,
+      },
+    })
+
+    const hackathon = await Hackathon.findOne({
+      where: {
+        id: project.hackathon_id,
+      },
+    })
+
+    if (users.length >= TEAMSIZE) {
+      res.status(200).send({
+        success: false,
+        message: `You have reached team size of ${TEAMSIZE}`,
+      })
+      return
+    }
+
+    if (oldInvitation === null) {
+      await Invitation.create({
+        project_id: project.id,
+        inviter_id: inviterId,
+        invitee_email: email,
+        viewed_by_invitee: false,
+        accepted_offer: false,
+      })
+    }
+
+    sendEmail(
+      email,
+      leader.firstName,
+      leader.lastName,
+      hackathon.name,
+      project.name
+    )
+
     res.status(200).send({
       success: true,
-      message: 'Team create success',
+      message: 'Successfully sent email',
     })
   } catch (err) {
     console.log('err message:', err.message)
     res.status(500).send({
-      message: err.message || 'Some error occurred while creating the team',
+      message: err.message || 'Some error occurred while sending the email',
     })
   }
 }
 
-exports.inviteParticipant = async (req, res) => {
+exports.inviteParticipantByUserId = async (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: 'Content can not be empty!',

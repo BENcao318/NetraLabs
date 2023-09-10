@@ -32,11 +32,17 @@ module.exports = {
       },
       invitee_id: {
         type: Sequelize.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'users',
           key: 'id',
         },
+        onUpdate: 'cascade',
+        onDelete: 'cascade',
+      },
+      invitee_email: {
+        type: Sequelize.TEXT,
+        allowNull: true,
         onUpdate: 'cascade',
         onDelete: 'cascade',
       },

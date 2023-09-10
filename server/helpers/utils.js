@@ -43,15 +43,25 @@ const getRandomColor = () => {
   return colors[randomIndex]
 }
 
-const transporter = nodemailer.createTransport({
-  service: process.env.TRANSPORTER_SERVICER,
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
   auth: {
-    user: process.env.TRANSPORTER_USERNAME,
-    pass: process.env.TRANSPORTER_PASSWORD,
+    type: 'OAuth2',
+    user: process.env.MAIL_USERNAME,
+    pass: process.env.MAIL_PASSWORD,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
   },
 })
 
-exports.sendEmail = (clientUUID, securityCode, email) => {
+exports.sendEmail = (
+  email,
+  leaderFirstName,
+  leaderLastName,
+  hackathonName,
+  projectName
+) => {
   const now = new Date()
   const date = now.toString()
 
@@ -59,10 +69,9 @@ exports.sendEmail = (clientUUID, securityCode, email) => {
 
   const mailOptions = {
     from: process.env.TRANSPORTER_USERNAME,
-    to: 'bc6016@mun.ca',
-    // to: email,
+    to: 'cby204@gmail.com',
     subject: `You are invited!`,
-    html: `<html><b>Hey there! </b><br> Ben just invited you to join the hackathon team <p><a href="${frontendLink}">click here to access the page</a></p> <p>Your security code: <b>123</b></p></html>`,
+    html: `<html><b>Hey there! </b><br> ${leaderFirstName} ${leaderLastName} just invited you to join the project ${projectName} for the hackathon ${hackathonName} <p><a href="${frontendLink}">click here to access the page</a></p></html>`,
   }
 
   transporter.sendMail(mailOptions, (error, info) => {
